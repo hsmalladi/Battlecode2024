@@ -1,0 +1,7 @@
+-classpath '/Users/havish/Desktop/Battlecode2024/build/classes:/Users/havish/Desktop/Battlecode2024/build/resources/main:/Users/havish/.gradle/caches/modules-2/files-2.1/org.battlecode/battlecode24/1.1.0/db0acf389a7c53dfd4e8202042782dd934a8e67a/battlecode24-1.1.0.jar:/Users/havish/.gradle/caches/modules-2/files-2.1/org.scala-lang/scala-library/2.11.7/f75e7acabd57b213d6f61483240286c07213ec0e/scala-library-2.11.7.jar'
+-d '/Users/havish/Desktop/Battlecode2024/build/docs/javadoc'
+-doctitle 'Battlecode2024 API'
+-notimestamp 
+-quiet 
+-windowtitle 'Battlecode2024 API'
+'/Users/havish/Desktop/Battlecode2024/src/examplefuncsplayer/RobotPlayer.java'

@@ -15,7 +15,8 @@ public class BotDuck {
 
     void initTurn() throws GameActionException {
         if (!rc.isSpawned()){
-            trySpawn(rc);
+             PathFind.resetDuck();
+             trySpawn(rc);
         }
 
         if (rc.isSpawned()) {

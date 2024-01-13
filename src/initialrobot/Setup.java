@@ -7,7 +7,7 @@ public class Setup {
 
     public static void init(RobotController rc) throws GameActionException {
         FlagDuck.init(rc);
-        ExplorerDuck.init(rc);
+        // ExplorerDuck.init(rc);
     }
 
     public static void initTurn(RobotController rc) throws GameActionException {
@@ -33,7 +33,7 @@ public class Setup {
 
             }
             else {
-                PathFind.random(rc);
+                // PathFind.random(rc);
                 if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
                     PathFind.moveTowards(rc, Map.center);
                     buildStunTrapsAtDam(rc);
@@ -83,7 +83,7 @@ public class Setup {
             rc.dig(water);
         }
         else {
-            PathFind.random(rc);
+           // PathFind.random(rc);
         }
 
     }
@@ -126,9 +126,12 @@ public class Setup {
     //potential improvement: communicate who is getting crumb, so not all ducks go to the same crumb
     private static void explore(RobotController rc) throws GameActionException {
         RobotPlayer.isExploring = true;
-        retrieveCrumbs(rc, rc.senseNearbyCrumbs(-1));
+        if (RobotPlayer.flagDuck == 0)
+            retrieveCrumbs(rc, rc.senseNearbyCrumbs(-1));
         if (RobotPlayer.isExploring) {
-            PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
+            if (rc.isMovementReady()) {
+                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
+            }
         }
     }
 
@@ -190,7 +193,9 @@ public class Setup {
         if (crumbLocations.length > 0) {
             MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
             rc.setIndicatorString("Getting Crumb");
-            PathFind.moveTowards(rc, closestCrumb);
+            if (rc.isMovementReady()) {
+                PathFind.moveTowards(rc, closestCrumb);
+            }
             RobotPlayer.isExploring = false;
         }
     }

@@ -2,6 +2,7 @@ package initialrobot;
 
 import battlecode.common.*;
 
+import java.nio.file.Path;
 import java.util.Random;
 
 /**
@@ -56,14 +57,25 @@ public strictfp class RobotPlayer {
     public static void run(RobotController rc) throws GameActionException {
         init(rc);
         BotDuck botDuck = new BotDuck(rc);
-
         while(true) {
-            turnCount += 1;
-            botDuck.initTurn();
-            botDuck.play();
-            botDuck.endTurn();
-            Clock.yield();
+            try {
+                turnCount += 1;
+                botDuck.initTurn();
+                botDuck.play();
+                botDuck.endTurn();
+            } catch (GameActionException e) {
+                System.out.println("GameActionException");
+                e.printStackTrace();
+
+            } catch (Exception e) {
+                System.out.println("Exception");
+                e.printStackTrace();
+
+            } finally {
+                Clock.yield();
+            }
         }
+
 
     }
 

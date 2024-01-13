@@ -17,6 +17,10 @@ public class BotDuck {
         if (!rc.isSpawned()){
             trySpawn(rc);
         }
+
+        if (rc.isSpawned()) {
+            Setup.initTurn(rc);
+        }
     }
 
     void play() throws GameActionException {

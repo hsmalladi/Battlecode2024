@@ -13,7 +13,7 @@ public class Map {
     static MapLocation center;
     static MapLocation[] corners;
     static MapLocation[] flagLocations;
-    static ArrayList<MapInfo> neutralCrumbs;
+    static ArrayList<MapLocation> neutralCrumbs;
 
 
     public static void init(RobotController rc) {

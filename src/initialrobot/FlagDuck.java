@@ -17,6 +17,7 @@ public class FlagDuck {
             if (rc.canSpawn(Map.flagSpawnLocations[0])) {
                 rc.spawn(Map.flagSpawnLocations[0]);
                 RobotPlayer.flagDuck = 1;
+                RobotPlayer.exploreLocation = Map.flagLocations[0];
                 rc.writeSharedArray(0, 1);
                 return true;
             }
@@ -25,6 +26,7 @@ public class FlagDuck {
             if (rc.canSpawn(Map.flagSpawnLocations[1])) {
                 rc.spawn(Map.flagSpawnLocations[1]);
                 RobotPlayer.flagDuck = 2;
+                RobotPlayer.exploreLocation = Map.flagLocations[1];
                 rc.writeSharedArray(0, 2);
                 return true;
             }
@@ -33,6 +35,7 @@ public class FlagDuck {
             if (rc.canSpawn(Map.flagSpawnLocations[2])) {
                 rc.spawn(Map.flagSpawnLocations[2]);
                 RobotPlayer.flagDuck = 3;
+                RobotPlayer.exploreLocation = Map.flagLocations[2];
                 rc.writeSharedArray(0, 3);
                 return true;
             }

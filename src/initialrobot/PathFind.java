@@ -2,8 +2,6 @@ package initialrobot;
 
 import battlecode.common.*;
 
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class PathFind {
     static Direction direction;
@@ -38,6 +36,13 @@ public class PathFind {
             else {
                 direction = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];
             }
+        }
+    }
+
+    public static void reallyRandom(RobotController rc) throws GameActionException {
+        Direction dir = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];
+        if (rc.canMove(dir)){
+            rc.move(dir);
         }
     }
 }

@@ -5,51 +5,41 @@ import battlecode.common.*;
 public class Setup {
     private static final int EXPLORE_ROUNDS = 150;
 
-
     public static void init(RobotController rc) throws GameActionException {
         FlagDuck.init(rc);
         ExplorerDuck.init(rc);
     }
 
+    public static void initTurn(RobotController rc) throws GameActionException {
+        if (!RobotPlayer.reachedTarget && rc.getLocation().equals(RobotPlayer.exploreLocation)) {
+            RobotPlayer.reachedTarget = true;
+        }
+    }
     public static void run(RobotController rc) throws GameActionException {
-        if (RobotPlayer.turnCount < EXPLORE_ROUNDS) {
-            if (!rc.hasFlag()) { //not a flag holding duck so exploring
-                if (!RobotPlayer.reachedTarget) {
-                    explore(rc);
-                }
-                else {
-                    PathFind.random(rc);
-                }
-            }
-            else {
-                if (RobotPlayer.flagDuck == 1) {
-                    PathFind.moveTowards(rc, Map.flagLocations[0]);
-                }
-                else if (RobotPlayer.flagDuck == 2) {
-                    PathFind.moveTowards(rc, Map.flagLocations[1]);
-                }
-                else if (RobotPlayer.flagDuck == 3) {
-                    PathFind.moveTowards(rc, Map.flagLocations[2]);
-                }
-            }
+        if (!RobotPlayer.reachedTarget) {
+            explore(rc);
         }
         else {
-            if (RobotPlayer.flagDuck != 0 ) {
+            if (rc.hasFlag()) {
                 dropFlag(rc);
-                buildDefenses(rc);
-                if (RobotPlayer.flagDuck == 2 || RobotPlayer.flagDuck == 3) {
+            }
+
+            if (RobotPlayer.flagDuck != 0) {
+                if (!checkDefenses(rc)) {
                     buildDefenses(rc);
-                    if (RobotPlayer.turnCount % 10 == 0) {
-                        PathFind.moveTowards(rc, Map.center);
-                    }
                 }
+                else {
+                }
+
             }
             else {
-                PathFind.moveTowards(rc, Map.center);
+                PathFind.random(rc);
+                if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
+                    PathFind.moveTowards(rc, Map.center);
+                    buildStunTrapsAtDam(rc);
+                }
             }
-
         }
-
     }
 
 
@@ -57,6 +47,28 @@ public class Setup {
     public static void exit(RobotController rc) throws GameActionException {
         rc.writeSharedArray(0, 0);
         rc.writeSharedArray(1, 0);
+    }
+
+    public static void buildStunTrapsAtDam(RobotController rc) throws GameActionException {
+        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+        int adjDam = 0;
+        for (MapLocation loc : adj){
+            if (rc.onTheMap(loc)) {
+                MapInfo info = rc.senseMapInfo(loc);
+                if (info.getTrapType() == TrapType.STUN) {
+                    adjDam = 0;
+                    break;
+                }
+                if (info.isDam()) {
+                    adjDam += 1;
+                }
+            }
+        }
+        if (adjDam >= 2) {
+            if(rc.canBuild(TrapType.STUN, rc.getLocation())) {
+                rc.build(TrapType.STUN, rc.getLocation());
+            }
+        }
     }
 
     private static void dropFlag(RobotController rc) throws GameActionException {
@@ -76,29 +88,45 @@ public class Setup {
 
     }
 
+    private static boolean checkDefenses(RobotController rc) throws GameActionException {
+        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+
+        for (MapLocation loc : adj){
+            if (rc.onTheMap(loc)) {
+                MapInfo info = rc.senseMapInfo(loc);
+                if (info.getTrapType() != TrapType.EXPLOSIVE) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private static void buildDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
-        if(rc.canBuild(TrapType.EXPLOSIVE, rc.getLocation())) {
-            rc.build(TrapType.EXPLOSIVE, rc.getLocation());
+        if(rc.canBuild(TrapType.STUN, rc.getLocation())) {
+            rc.build(TrapType.STUN, rc.getLocation());
         }
         for (MapLocation loc : adj){
             if(rc.canBuild(TrapType.EXPLOSIVE, loc)) {
                 rc.build(TrapType.EXPLOSIVE, loc);
             }
         }
+    }
 
+    private static void digMoat(RobotController rc) throws GameActionException {
+        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+        for (MapLocation loc : adj){
+            if(rc.canDig(loc)) {
+                rc.dig(loc);
+            }
+        }
     }
 
     //potential improvement: communicate who is getting crumb, so not all ducks go to the same crumb
     private static void explore(RobotController rc) throws GameActionException {
         RobotPlayer.isExploring = true;
         retrieveCrumbs(rc, rc.senseNearbyCrumbs(-1));
-        MapLocation me = rc.getLocation();
-        if (me.equals(RobotPlayer.exploreLocation)) {
-            RobotPlayer.reachedTarget = true;
-            RobotPlayer.isExploring = false;
-        }
-
         if (RobotPlayer.isExploring) {
             PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
         }

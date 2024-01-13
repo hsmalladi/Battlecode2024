@@ -24,7 +24,7 @@ public strictfp class RobotPlayer {
      * import at the top of this file. Here, we *seed* the RNG with a constant number (6147); this makes sure
      * we get the same sequence of numbers every time this code is run. This is very useful for debugging!
      */
-    static final Random rng = new Random(6147);
+    static Random rng;
 
     /** Array containing all the possible movement directions. */
     static final Direction[] directions = {
@@ -38,6 +38,13 @@ public strictfp class RobotPlayer {
         Direction.NORTHWEST,
     };
 
+
+    static int id;
+    static int flagDuck = 0; //0 for not a flag duck, 1-3 to represent the flags.
+    static MapLocation exploreLocation;
+    static boolean isExploring = false;
+    static boolean reachedTarget = false;
+
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.
      * It is like the main function for your robot. If this method returns, the robot dies!
@@ -47,14 +54,23 @@ public strictfp class RobotPlayer {
      **/
     @SuppressWarnings("unused")
     public static void run(RobotController rc) throws GameActionException {
+        init(rc);
         BotDuck botDuck = new BotDuck(rc);
 
-        while(true){
+        while(true) {
+            turnCount += 1;
             botDuck.initTurn();
             botDuck.play();
             botDuck.endTurn();
             Clock.yield();
         }
 
+    }
+
+    private static void init(RobotController rc) {
+        Map.init(rc);
+        rng = new Random(rc.getID());
+        id = rc.getID();
+        exploreLocation = new MapLocation(0, 0);
     }
 }

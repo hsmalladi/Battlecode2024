@@ -1,22 +1,45 @@
 package initialrobot;
 
-import battlecode.common.RobotController;
+import battlecode.common.*;
 
 public class BotDuck {
 
-    public BotDuck(RobotController rc){
 
+    private final RobotController rc;
+
+
+    public BotDuck(RobotController rc) throws GameActionException {
+        this.rc = rc;
+        Setup.init(rc);
     }
 
-    void initTurn(){
-
+    void initTurn() throws GameActionException {
+        if (!rc.isSpawned()){
+            trySpawn(rc);
+        }
     }
 
-    void play(){
-
+    void play() throws GameActionException {
+        if (rc.isSpawned()) {
+            if (RobotPlayer.turnCount <= GameConstants.SETUP_ROUNDS) {
+                Setup.run(rc);
+            }
+            else if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
+                Setup.exit(rc);
+            }
+        }
     }
 
     void endTurn(){
 
+    }
+
+    void trySpawn(RobotController rc) throws GameActionException {
+        for (MapLocation loc : Map.allySpawnLocations) {
+            if (rc.canSpawn(loc)) {
+                rc.spawn(loc);
+                break;
+            }
+        }
     }
 }

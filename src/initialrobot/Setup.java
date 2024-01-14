@@ -7,7 +7,7 @@ public class Setup {
 
     public static void init(RobotController rc) throws GameActionException {
         FlagDuck.init(rc);
-        // ExplorerDuck.init(rc);
+        ExplorerDuck.init(rc);
     }
 
     public static void initTurn(RobotController rc) throws GameActionException {

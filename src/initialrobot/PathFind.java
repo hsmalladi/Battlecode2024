@@ -21,8 +21,8 @@ public class PathFind {
     public static void resetDuck() {
         duckState = 0; // 0 head to target, 1 circle obstacle
         obstacleStartDist = 10000;
-        MapLocation prevDest = null;
-        HashSet<MapLocation> line = null;
+        prevDest = null;
+        line = null;
         duckDir = null;
     }
 
@@ -92,7 +92,10 @@ public class PathFind {
 
         if (duckState == 0) {
             duckDir = rc.getLocation().directionTo(destination);
-            if (rc.canMove(duckDir)) {
+            if (rc.canFill(rc.getLocation().add(duckDir))) {
+                rc.fill(rc.getLocation().add(duckDir));
+            }
+            else if (rc.canMove(duckDir)) {
                 rc.move(duckDir);
             } else {
                 duckState = 1;

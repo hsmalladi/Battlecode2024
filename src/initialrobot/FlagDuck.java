@@ -15,15 +15,9 @@ public class FlagDuck {
     }
 
     public static void protectFlag(RobotController rc) throws GameActionException {
-        Team enemyTeam;
-        if (rc.getTeam() == Team.A) {
-            enemyTeam = Team.B;
-        }
-        else {
-            enemyTeam = Team.A;
-        }
 
-        RobotInfo[] enemies = rc.senseNearbyRobots(-1, enemyTeam);
+
+        RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
 
         if (enemies.length > 0) {
             if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {

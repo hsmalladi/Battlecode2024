@@ -1,19 +1,48 @@
 package initialrobot;
 
 import battlecode.common.*;
+import battlecode.world.Flag;
+import battlecode.world.control.TeamControlProvider;
 
 public class MainRound {
+
     private static final int EXPLORE_ROUNDS = 150;
+    private static MapLocation currentLocation = null;
 
     public static void init(RobotController rc) throws GameActionException {
-        AttackDuck.init(rc);
+        // AttackDuck.init(rc);
     }
 
     public static void initTurn(RobotController rc) throws GameActionException {
 
     }
-    public static void run(RobotController rc) throws GameActionException {
 
+    public static void run(RobotController rc) throws GameActionException {
+        tryAttack(rc);
+        tryMove(rc);
+        tryAttack(rc);
+    }
+
+    private static void tryAttack(RobotController rc) throws GameActionException {
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
+        if (oppRobotInfos.length > 0 && rc.canAttack(oppRobotInfos[0].getLocation())) {
+            rc.attack(oppRobotInfos[0].getLocation());
+        }
+    }
+
+    private static void tryMove(RobotController rc) throws GameActionException {
+        Micro m = new Micro(rc);
+        if (m.doMicro()) return;
+        PathFind.moveTowards(rc, closestFlag(rc));
+    }
+
+    private static MapLocation closestFlag(RobotController rc) throws GameActionException {
+         FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+         if (flags.length > 0) {
+             return flags[0].getLocation();
+         } else {
+             return rc.senseBroadcastFlagLocations()[0];
+         }
     }
 
 

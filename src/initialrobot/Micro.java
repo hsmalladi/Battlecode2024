@@ -44,6 +44,13 @@ public class Micro {
         RobotInfo[] units = rc.senseNearbyRobots(myVisionRange, rc.getTeam().opponent());
         canAttack = rc.isActionReady();
 
+        int uIndex = units.length;
+        if (uIndex > 0){
+            shouldPlaySafe = true;
+        }
+        if (!shouldPlaySafe) return false;
+
+
         alwaysInRange = false;
         if(!canAttack) alwaysInRange = true;
         if(severelyHurt) alwaysInRange = true;
@@ -52,8 +59,7 @@ public class Micro {
         for (int i = 0; i < 9; ++i) microInfo[i] = new MicroInfo(dirs[i]);
 
         for (RobotInfo unit : units) {
-            if (Clock.getBytecodeNum() > MAX_MICRO_BYTECODE) break;
-            currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
+            currentDPS = DPS[unit.getAttackLevel()];
             if (currentDPS <= 0) continue;
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
@@ -69,8 +75,7 @@ public class Micro {
         if (myDPS > 0) {
             units = rc.senseNearbyRobots(myVisionRange, rc.getTeam());
             for (RobotInfo unit : units) {
-                if (Clock.getBytecodeNum() > MAX_MICRO_BYTECODE) break;
-                currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
+                currentDPS = DPS[unit.getAttackLevel()];
                 microInfo[0].updateAlly(unit);
                 microInfo[1].updateAlly(unit);
                 microInfo[2].updateAlly(unit);
@@ -119,8 +124,8 @@ public class Micro {
             else{
                 if(!hurt){
                     if(canAttack){
-                        this.DPSreceived -= myDPS / myAttackCooldown;
-                        this.alliesTargeting += myDPS / myAttackCooldown;
+                        this.DPSreceived -= myDPS;
+                        this.alliesTargeting += myDPS;
                     }
                     minDistanceToEnemy = VISION_RADIUS_SQUARED;
                 } else minDistanceToEnemy = INF;

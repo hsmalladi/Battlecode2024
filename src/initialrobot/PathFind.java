@@ -9,6 +9,8 @@ public class PathFind {
 
     static Direction direction;
 
+    static MapLocation prevLocation = null;
+
     private static int duckState = 0; // 0 head to target, 1 circle obstacle
 
     private static Direction duckDir = null;
@@ -21,9 +23,10 @@ public class PathFind {
     public static void resetDuck() {
         duckState = 0; // 0 head to target, 1 circle obstacle
         obstacleStartDist = 10000;
-        MapLocation prevDest = null;
-        HashSet<MapLocation> line = null;
+        prevDest = null;
+        line = null;
         duckDir = null;
+        prevLocation = null;
     }
 
     public static void duckNav0(RobotController rc, MapLocation location) throws GameActionException {
@@ -81,10 +84,11 @@ public class PathFind {
 //    }
 
     public static void moveTowards(RobotController rc, MapLocation destination) throws GameActionException {
-        if (!destination.equals(prevDest)) {
-            prevDest = destination;
-            line = createLine(rc.getLocation(), destination);
-        }
+        prevDest = destination;
+        line = createLine(rc.getLocation(), destination);
+
+
+
 
         for(MapLocation loc : line) {
             rc.setIndicatorDot(loc, 255, 0, 0);
@@ -92,7 +96,8 @@ public class PathFind {
 
         if (duckState == 0) {
             duckDir = rc.getLocation().directionTo(destination);
-            if (rc.canMove(duckDir)) {
+            if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
+                prevLocation = rc.getLocation();
                 rc.move(duckDir);
             } else {
                 duckState = 1;
@@ -105,7 +110,8 @@ public class PathFind {
             }
 
             for (int i = 0; i < 9; i++) {
-                if (rc.canMove(duckDir)) {
+                if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
+                    prevLocation = rc.getLocation();
                     rc.move(duckDir);
                     duckDir = duckDir.rotateRight();
                     duckDir = duckDir.rotateRight();

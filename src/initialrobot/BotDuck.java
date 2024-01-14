@@ -31,6 +31,8 @@ public class BotDuck {
             }
             else if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
                 Setup.exit(rc);
+            } else if (RobotPlayer.turnCount > GameConstants.SETUP_ROUNDS && RobotPlayer.flagDuck == 0 ) {
+                MainRound.run(rc);
             }
         }
     }

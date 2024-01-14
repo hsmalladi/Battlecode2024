@@ -2,6 +2,8 @@ package initialrobot;
 
 import battlecode.common.*;
 
+import java.nio.file.Path;
+
 
 public class FlagDuck {
 
@@ -11,6 +13,41 @@ public class FlagDuck {
             holdFlag(rc, flags);
         }
     }
+
+    public static void protectFlag(RobotController rc) throws GameActionException {
+        Team enemyTeam;
+        if (rc.getTeam() == Team.A) {
+            enemyTeam = Team.B;
+        }
+        else {
+            enemyTeam = Team.A;
+        }
+
+        RobotInfo[] enemies = rc.senseNearbyRobots(-1, enemyTeam);
+
+        if (enemies.length > 0) {
+            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
+                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
+            }
+            //do attack
+            //do heal
+            //do micro
+        }
+        else {
+            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
+                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
+            }
+            if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {
+                if (!Setup.checkDefenses(rc)) {
+                    Setup.buildDefenses(rc);
+                }
+            }
+            else {
+                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
+            }
+        }
+    }
+
 
     private static boolean spawnFlagDuck(RobotController rc) throws GameActionException {
         if (rc.readSharedArray(0) == 0) {
@@ -53,6 +90,8 @@ public class FlagDuck {
             }
         }
     }
+
+
 
 
 }

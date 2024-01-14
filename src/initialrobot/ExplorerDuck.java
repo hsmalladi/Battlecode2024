@@ -12,46 +12,21 @@ public class ExplorerDuck {
     }
 
     private static boolean spawnExplorerDuck(RobotController rc) throws GameActionException {
-        if (rc.readSharedArray(1) == 0) { //top left corner
+        int val = rc.readSharedArray(Communication.EXPLORER_COMM);
+        if (val < 4) { //top left corner
             if (trySpawn(rc)) {
-                RobotPlayer.exploreLocation = Map.corners[0];
-                rc.writeSharedArray(1, 1);
+                RobotPlayer.exploreLocation = Map.corners[val];
+                rc.writeSharedArray(Communication.EXPLORER_COMM, val + 1);
                 RobotPlayer.isExploring = true;
-                rc.setIndicatorString("TopLeft " + RobotPlayer.exploreLocation);
+                rc.setIndicatorString(String.valueOf(RobotPlayer.exploreLocation));
                 return true;
             }
         }
-        else if (rc.readSharedArray(1) == 1) { // top right corner
-            if (trySpawn(rc)) {
-                RobotPlayer.exploreLocation = Map.corners[1];
-                rc.writeSharedArray(1, 2);
-                RobotPlayer.isExploring = true;
-                rc.setIndicatorString("TopRight " + RobotPlayer.exploreLocation);
-                return true;
-            }
-        }
-        else if (rc.readSharedArray(1) == 2) { //bottom left corner
-            if (trySpawn(rc)) {
-                RobotPlayer.exploreLocation = Map.corners[2];
-                rc.writeSharedArray(1, 3);
-                RobotPlayer.isExploring = true;
-                rc.setIndicatorString("BotLeft " + RobotPlayer.exploreLocation);
-                return true;
-            }
-        }
-        else if (rc.readSharedArray(1) == 3) { //bottom right corner
-            if (trySpawn(rc)) {
-                RobotPlayer.exploreLocation = Map.corners[3];
-                rc.writeSharedArray(1, 4);
-                RobotPlayer.isExploring = true;
-                rc.setIndicatorString("BotRight " + RobotPlayer.exploreLocation);
-                return true;
-            }
-        }
-        else if (rc.readSharedArray(1) == 4) { //center
+
+        else if (val == 4) { //center
             if (trySpawn(rc)) {
                 RobotPlayer.exploreLocation = Map.center;
-                rc.writeSharedArray(1, 5);
+                rc.writeSharedArray(Communication.EXPLORER_COMM, val + 1);
                 RobotPlayer.isExploring = true;
                 rc.setIndicatorString("Center " + RobotPlayer.exploreLocation);
                 return true;

@@ -16,7 +16,7 @@ public class Setup {
         }
     }
     public static void run(RobotController rc) throws GameActionException {
-        if (!RobotPlayer.reachedTarget) {
+        if (!RobotPlayer.reachedTarget && RobotPlayer.turnCount <= EXPLORE_ROUNDS) {
             explore(rc);
         }
         else {
@@ -29,11 +29,10 @@ public class Setup {
                     buildDefenses(rc);
                 }
                 else {
+                    //do something after built defenses.
                 }
-
             }
             else {
-                // PathFind.random(rc);
                 PathFind.moveTowards(rc, Map.center);
                 if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
                     buildStunTrapsAtDam(rc);

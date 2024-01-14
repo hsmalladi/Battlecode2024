@@ -8,9 +8,10 @@ public class MainRound {
 
     private static final int EXPLORE_ROUNDS = 150;
     private static MapLocation currentLocation = null;
+    private static Micro m = null;
 
     public static void init(RobotController rc) throws GameActionException {
-        // AttackDuck.init(rc);
+        m = new Micro(rc);
     }
 
     public static void initTurn(RobotController rc) throws GameActionException {
@@ -31,7 +32,6 @@ public class MainRound {
     }
 
     private static void tryMove(RobotController rc) throws GameActionException {
-        Micro m = new Micro(rc);
         if (m.doMicro()) return;
         PathFind.moveTowards(rc, closestFlag(rc));
     }

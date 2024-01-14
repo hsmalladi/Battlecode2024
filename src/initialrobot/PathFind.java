@@ -9,6 +9,8 @@ public class PathFind {
 
     static Direction direction;
 
+    static MapLocation prevLocation = null;
+
     private static int duckState = 0; // 0 head to target, 1 circle obstacle
 
     private static Direction duckDir = null;
@@ -24,6 +26,7 @@ public class PathFind {
         prevDest = null;
         line = null;
         duckDir = null;
+        prevLocation = null;
     }
 
     public static void duckNav0(RobotController rc, MapLocation location) throws GameActionException {
@@ -81,10 +84,9 @@ public class PathFind {
 //    }
 
     public static void moveTowards(RobotController rc, MapLocation destination) throws GameActionException {
-        if (!destination.equals(prevDest)) {
-            prevDest = destination;
-            line = createLine(rc.getLocation(), destination);
-        }
+        prevDest = destination;
+        line = createLine(rc.getLocation(), destination);
+
 
 
         for(MapLocation loc : line) {
@@ -93,11 +95,12 @@ public class PathFind {
 
         if (duckState == 0) {
             duckDir = rc.getLocation().directionTo(destination);
-            if (rc.canFill(rc.getLocation().add(duckDir))) {
-                rc.fill(rc.getLocation().add(duckDir));
-            }
-            else if (rc.canMove(duckDir)) {
+            if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
+                prevLocation = rc.getLocation();
                 rc.move(duckDir);
+            }
+            else if (rc.canFill(rc.getLocation().add(duckDir))) {
+                rc.fill(rc.getLocation().add(duckDir));
             } else {
                 duckState = 1;
                 obstacleStartDist = rc.getLocation().distanceSquaredTo(destination);
@@ -108,12 +111,15 @@ public class PathFind {
                 duckState = 0;
             }
 
-            for (int i = 0; i < 9; i++) {
-                if (rc.canMove(duckDir)) {
+            for (int i = 0; i < 8; i++) {
+                if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
+                    prevLocation = rc.getLocation();
                     rc.move(duckDir);
                     duckDir = duckDir.rotateRight();
-                    duckDir = duckDir.rotateRight();
                     break;
+                } else if (rc.canFill(rc.getLocation().add(duckDir))) {
+                    rc.setIndicatorString("FILLING");
+                    rc.fill(rc.getLocation().add(duckDir));
                 } else {
                     duckDir = duckDir.rotateLeft();
                 }

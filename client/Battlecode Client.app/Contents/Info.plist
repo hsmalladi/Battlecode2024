@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.battlecode.client</string>
+	<string>com.battlecode.client.2024</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -21,7 +21,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>24.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>20240113.002812</string>
+	<string>20240114.214245</string>
 	<key>CSResourcesFileMapped</key>
 	<true/>
 	<key>LSApplicationCategoryType</key>

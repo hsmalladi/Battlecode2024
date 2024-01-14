@@ -34,8 +34,8 @@ public class Setup {
             }
             else {
                 // PathFind.random(rc);
+                PathFind.moveTowards(rc, Map.center);
                 if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
-                    PathFind.moveTowards(rc, Map.center);
                     buildStunTrapsAtDam(rc);
                 }
             }

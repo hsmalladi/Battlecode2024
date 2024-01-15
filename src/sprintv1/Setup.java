@@ -26,7 +26,14 @@ public class Setup {
 
             if (RobotPlayer.flagDuck != 0) {
                 if (farmToLvl6Build(rc)) {
-                    buildDefenses(rc);
+                    if (!checkDefenses(rc) && !RobotPlayer.buildDefenses) {
+                        buildDefenses(rc);
+                    }
+                    else {
+                        if (buildTrapsWithin3Tiles(rc, RobotPlayer.flagDuck)) {
+                            PathFind.moveTowards(rc, Map.flagLocations[RobotPlayer.flagDuck-1]);
+                        }
+                    }
                 }
             }
             else {
@@ -34,7 +41,7 @@ public class Setup {
                 if (!RobotPlayer.gettingCrumb)
                     PathFind.moveTowards(rc, Map.center);
                 if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
-                    buildStunTrapsAtDam(rc);
+                    //buildStunTrapsAtDam(rc);
                 }
             }
         }
@@ -67,6 +74,29 @@ public class Setup {
             return true;
         }
         return false;
+    }
+
+    public static boolean buildTrapsWithin3Tiles(RobotController rc, int flagDuck) throws GameActionException {
+       MapInfo[] trapsLocations = rc.senseNearbyMapInfos(Map.flagLocations[flagDuck-1], 6);
+        if (trapsLocations.length > 0) {
+            for (MapInfo trapLoc : trapsLocations) {
+                if (trapLoc.getTrapType() == TrapType.NONE) {
+                    if (rc.canBuild(TrapType.EXPLOSIVE, trapLoc.getMapLocation())) {
+                        rc.build(TrapType.EXPLOSIVE, trapLoc.getMapLocation());
+                        return false;
+                    }
+                }
+            }
+
+            for (MapInfo trapLoc : trapsLocations) {
+                if (trapLoc.getTrapType() == TrapType.NONE && trapLoc.isPassable()) {
+                    PathFind.moveTowards(rc, trapLoc.getMapLocation());
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
 
@@ -104,11 +134,12 @@ public class Setup {
         for (MapLocation loc : adj){
             if (rc.onTheMap(loc)) {
                 MapInfo info = rc.senseMapInfo(loc);
-                if (info.getTrapType() != TrapType.EXPLOSIVE) {
+                if (info.getTrapType() == TrapType.NONE) {
                     return false;
                 }
             }
         }
+        RobotPlayer.buildDefenses = true;
         return true;
     }
 

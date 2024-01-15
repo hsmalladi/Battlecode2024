@@ -4,8 +4,10 @@ import battlecode.common.*;
 
 public class FlagDuck {
 
+    private static Micro m = null;
     public static void init(RobotController rc) throws GameActionException {
         if (spawnFlagDuck(rc)) {
+            m = new Micro(rc);
             FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
             holdFlag(rc, flags);
         }
@@ -21,15 +23,16 @@ public class FlagDuck {
         }
 
 
-        if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {
-            Setup.buildDefenses(rc);
-        }
-        else {
-            PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
-        }
+
         MainRound.tryAttack(rc);
         MainRound.tryHeal(rc);
+        if (m.doMicro()) return;
+        if (Setup.buildTrapsWithin3Tiles(rc, RobotPlayer.flagDuck)) {
+            PathFind.moveTowards(rc, Map.flagLocations[RobotPlayer.flagDuck-1]);
+        }
     }
+
+
 
 
     private static boolean spawnFlagDuck(RobotController rc) throws GameActionException {

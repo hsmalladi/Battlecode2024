@@ -10,13 +10,13 @@ public class Setup {
         ExplorerDuck.init(rc);
     }
 
-    public static void initTurn(RobotController rc) throws GameActionException {
+    public static void initTurn(RobotController rc) {
         if (!RobotPlayer.reachedTarget && rc.getLocation().equals(RobotPlayer.exploreLocation)) {
             RobotPlayer.reachedTarget = true;
         }
     }
     public static void run(RobotController rc) throws GameActionException {
-        if (!RobotPlayer.reachedTarget) {
+        if (!RobotPlayer.reachedTarget && RobotPlayer.turnCount <= EXPLORE_ROUNDS) {
             explore(rc);
         }
         else {
@@ -29,11 +29,10 @@ public class Setup {
                     buildDefenses(rc);
                 }
                 else {
+                    //do something after built defenses.
                 }
-
             }
             else {
-                // PathFind.random(rc);
                 PathFind.moveTowards(rc, Map.center);
                 if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
                     buildStunTrapsAtDam(rc);
@@ -88,7 +87,7 @@ public class Setup {
 
     }
 
-    private static boolean checkDefenses(RobotController rc) throws GameActionException {
+    public static boolean checkDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
 
         for (MapLocation loc : adj){
@@ -102,7 +101,7 @@ public class Setup {
         return true;
     }
 
-    private static void buildDefenses(RobotController rc) throws GameActionException {
+    public static void buildDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
         if(rc.canBuild(TrapType.STUN, rc.getLocation())) {
             rc.build(TrapType.STUN, rc.getLocation());

@@ -3,10 +3,7 @@ package initialrobot;
 import battlecode.common.*;
 
 public class BotDuck {
-
-
     private final RobotController rc;
-
 
     public BotDuck(RobotController rc) throws GameActionException {
         this.rc = rc;
@@ -30,16 +27,13 @@ public class BotDuck {
             if (RobotPlayer.turnCount <= GameConstants.SETUP_ROUNDS) {
                 Setup.run(rc);
             }
-            else if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
-                Setup.exit(rc);
-            } else if (RobotPlayer.turnCount > GameConstants.SETUP_ROUNDS && RobotPlayer.flagDuck == 0 ) {
-                MainRound.run(rc);
-            }
         }
     }
 
-    void endTurn(){
-
+    void endTurn() throws GameActionException {
+        if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS) {
+            Setup.exit(rc);
+        }
     }
 
     void trySpawn(RobotController rc) throws GameActionException {

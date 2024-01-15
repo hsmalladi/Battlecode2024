@@ -13,28 +13,22 @@ public class FlagDuck {
 
     public static void protectFlag(RobotController rc) throws GameActionException {
         RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        rc.setIndicatorString("ENEMIES: " + enemies.length);
 
-        if (enemies.length > 0) {
-            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
-                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
-            }
-            //do attack
-            //do heal
-            //do micro
+
+        if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
+            rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
+        }
+
+
+        if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {
+            Setup.buildDefenses(rc);
         }
         else {
-            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
-                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
-            }
-            if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {
-                if (Setup.checkDefenses(rc)) {
-                    Setup.buildDefenses(rc);
-                }
-            }
-            else {
-                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
-            }
+            PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
         }
+        MainRound.tryAttack(rc);
+        MainRound.tryHeal(rc);
     }
 
 

@@ -155,4 +155,14 @@ public class Map {
         }
         return adjacentLocations;
     }
+
+    public static int locationToInt(MapLocation location) {
+        return location.x * Map.mapWidth + location.y;
+    }
+
+    public static MapLocation intToLocation(int num) {
+        int x = num / Map.mapWidth;
+        int y = num % Map.mapWidth;
+        return new MapLocation(x, y);
+    }
 }

@@ -44,6 +44,7 @@ public strictfp class RobotPlayer {
     static int flagDuck = 0; //0 for not a flag duck, 1-3 to represent the flags.
     static MapLocation exploreLocation;
     static boolean isExploring = false;
+    static boolean gettingCrumb = false;
     static boolean reachedTarget = false;
 
     /**

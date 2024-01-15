@@ -129,24 +129,6 @@ public class PathFind {
         }
     }
 
-//    public static void random(RobotController rc) throws GameActionException {
-//        if (rc.isMovementReady()) {
-//            if (direction != null && rc.canMove(direction)) {
-//                rc.move(direction);
-//            }
-//            else {
-//                direction = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];
-//            }
-//        }
-//    }
-
-    public static void reallyRandom(RobotController rc) throws GameActionException {
-        Direction dir = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];
-        if (rc.canMove(dir)){
-            rc.move(dir);
-        }
-    }
-
     private static HashSet<MapLocation> createLine(MapLocation a, MapLocation b) {
         HashSet<MapLocation> locs = new HashSet<>();
         int x = a.x, y = a.y;

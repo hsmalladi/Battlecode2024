@@ -1,13 +1,8 @@
 package initialrobot;
 
 import battlecode.common.*;
-import battlecode.world.Flag;
-import battlecode.world.control.TeamControlProvider;
 
 public class MainRound {
-
-    private static final int EXPLORE_ROUNDS = 150;
-    private static MapLocation currentLocation = null;
     private static Micro m = null;
     private static boolean goingToFlag = true;
     private static boolean amHoldingFlag = false;
@@ -108,17 +103,8 @@ public class MainRound {
         PathFind.moveTowards(rc, closestSpawn(rc));
     }
 
-    private static MapLocation closestSpawn(RobotController rc) throws GameActionException {
-//        MapLocation closest = null;
-//        for (MapLocation loc : rc.getAllySpawnLocations()) {
-//            if (closest == null) {
-//                closest = loc;
-//            }
-//            else if (loc.distanceSquaredTo(rc.getLocation()) < closest.distanceSquaredTo(rc.getLocation())) {
-//                closest = loc;
-//            }
-//        }
-        return rc.getAllySpawnLocations()[0];
+    private static MapLocation closestSpawn(RobotController rc) {
+        return Map.getClosestLocation(rc.getLocation(), Map.allySpawnLocations);
     }
 
 
@@ -141,6 +127,7 @@ public class MainRound {
 
     public static void tryAttack(RobotController rc) throws GameActionException {
         RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
+        focusFlagAttack(rc, oppRobotInfos);
         for (RobotInfo opps : oppRobotInfos) {
             if (rc.canAttack(opps.getLocation())) {
                 rc.attack(opps.getLocation());
@@ -149,8 +136,22 @@ public class MainRound {
         }
     }
 
+    public static void focusFlagAttack(RobotController rc, RobotInfo[] robotInfos) throws GameActionException {
+        for (RobotInfo robotInfo : robotInfos) {
+            if (robotInfo.hasFlag()) {
+                if (rc.canAttack(robotInfo.getLocation())) {
+                    rc.attack(robotInfo.getLocation());
+                    break;
+                }
+            }
+        }
+    }
+
+
+
     public static void tryHeal(RobotController rc) throws GameActionException {
         RobotInfo[] allyRobots = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
+        focusFlagHeal(rc, allyRobots);
         for (RobotInfo r : allyRobots) {
             if (rc.canHeal(r.getLocation())) {
                 rc.heal(r.getLocation());
@@ -158,6 +159,18 @@ public class MainRound {
             }
         }
     }
+
+    public static void focusFlagHeal(RobotController rc, RobotInfo[] robotInfos) {
+        for (RobotInfo robotInfo : robotInfos) {
+            if (robotInfo.hasFlag()) {
+                if (rc.canHeal(robotInfo.getLocation())) {
+                    rc.canHeal(robotInfo.getLocation());
+                    break;
+                }
+            }
+        }
+    }
+
 
     private static void tryMove(RobotController rc) throws GameActionException {
         if (m.doMicro()) return;

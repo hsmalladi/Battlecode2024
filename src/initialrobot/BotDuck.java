@@ -40,7 +40,7 @@ public class BotDuck {
     }
 
     void endTurn() throws GameActionException {
-        if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
+        if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS) {
             Setup.exit(rc);
         }
     }

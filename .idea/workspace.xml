@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment=".">
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="stun traps during main + other improvements">
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
@@ -17,15 +17,10 @@
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId1" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/RobotPlayer.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/matches/initialrobot-vs-examplefuncsplayer-on-DefaultLarge.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/initialrobot-vs-examplefuncsplayer-on-DefaultLarge.bc24" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId1" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/matches/initialrobot-vs-initialrobot-on-DefaultLarge.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/initialrobot-vs-initialrobot-on-DefaultLarge.bc24" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/initialrobot/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/BotDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/initialrobot/FlagDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/FlagDuck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/initialrobot/MainRound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/MainRound.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/initialrobot/PathFind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/PathFind.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/initialrobot/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/Setup.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +70,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="main" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -94,28 +92,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;Gradle.Battlecode2024 [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Battlecode2024 [run].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Battlecode2024 [update].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Battlecode2024 [verify].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/colinzhu/Documents/College/Senior/Spring/battlecode/Battlecode2024&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Gradle.Battlecode2024 [build].executor": "Run",
+    "Gradle.Battlecode2024 [run].executor": "Run",
+    "Gradle.Battlecode2024 [update].executor": "Run",
+    "Gradle.Battlecode2024 [verify].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "improvements",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/colinzhu/Documents/College/Senior/Spring/battlecode/Battlecode2024",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -331,7 +329,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705286616181</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="stun traps during main + other improvements">
+      <option name="closed" value="true" />
+      <created>1705300210820</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1705300210820</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -357,7 +363,19 @@
     <MESSAGE value="improved code quality" />
     <MESSAGE value="fixed merge conflicts" />
     <MESSAGE value="." />
-    <option name="LAST_COMMIT_MESSAGE" value="." />
+    <MESSAGE value="stun traps during main + other improvements" />
+    <option name="LAST_COMMIT_MESSAGE" value="stun traps during main + other improvements" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/initialrobot/Map.java</url>
+          <line>101</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

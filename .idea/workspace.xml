@@ -5,6 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="smart spawning to spawn near flags if getting attacked; prio for crumbs in main phase; flag ducks farm to lv 6 build before building.">
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/BotDuck.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/Communication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/ExplorerDuck.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/FlagDuck.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/GlobalUpgrades.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/MainRound.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/Map.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/Micro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/MicroFlag.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/PathFind.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/RobotPlayer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/Setup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/sprintv2/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
@@ -12,23 +28,14 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId0" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId0" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/FlagDuck.class.uniqueId4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/GlobalUpgrades.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/MainRound.class.uniqueId1" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/MainRound.class.uniqueId1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/PathFind.class.uniqueId3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/Setup.class.uniqueId2" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/jar/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/jar/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matches/initialrobot-vs-examplefuncsplayer-on-DefaultLarge.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/initialrobot-vs-examplefuncsplayer-on-DefaultLarge.bc24" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matches/initialrobot-vs-initialrobot-on-DefaultLarge.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/initialrobot-vs-initialrobot-on-DefaultLarge.bc24" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/initialrobot/MainRound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/MainRound.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,7 +75,7 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="Battlecode2024" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
+                <item name="build setup" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -105,6 +112,18 @@
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "last_opened_file_path": "/Users/louishu/Battlecode2024/src/sprintv2",
+    "node.js.selected.package.tslint": "(autodetect)"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/sprintv2" />
+      <recent name="$PROJECT_DIR$/src" />
+    </key>
   </component>
   <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">

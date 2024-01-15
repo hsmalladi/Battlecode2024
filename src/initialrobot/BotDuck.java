@@ -2,6 +2,9 @@ package initialrobot;
 
 import battlecode.common.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BotDuck {
 
 
@@ -17,7 +20,13 @@ public class BotDuck {
     void initTurn() throws GameActionException {
         if (!rc.isSpawned()){
              PathFind.resetDuck();
-             trySpawn(rc);
+             if (RobotPlayer.turnCount < GameConstants.SETUP_ROUNDS) {
+                 trySpawn(rc);
+             }
+             else {
+                 smartSpawn(rc);
+             }
+
         }
 
         if (rc.isSpawned()) {
@@ -50,6 +59,25 @@ public class BotDuck {
             if (rc.canSpawn(loc)) {
                 rc.spawn(loc);
                 break;
+            }
+        }
+    }
+
+    void smartSpawn(RobotController rc) throws GameActionException {
+        for (int i = 1; i < 4; i++) {
+            int numEnemies = rc.readSharedArray(i);
+            if (numEnemies >= 1) {
+                List<MapLocation> sorted = Arrays.asList(Map.allySpawnLocations);
+                Map.sortCoordinatesByDistance(sorted, Map.flagLocations[i-1]);
+                for (MapLocation loc : sorted) {
+                    if (rc.canSpawn(loc)) {
+                        rc.spawn(loc);
+                        break;
+                    }
+                }
+            }
+            else {
+                trySpawn(rc);
             }
         }
     }

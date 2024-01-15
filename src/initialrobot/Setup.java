@@ -10,13 +10,13 @@ public class Setup {
         ExplorerDuck.init(rc);
     }
 
-    public static void initTurn(RobotController rc) throws GameActionException {
+    public static void initTurn(RobotController rc) {
         if (!RobotPlayer.reachedTarget && rc.getLocation().equals(RobotPlayer.exploreLocation)) {
             RobotPlayer.reachedTarget = true;
         }
     }
     public static void run(RobotController rc) throws GameActionException {
-        if (!RobotPlayer.reachedTarget) {
+        if (!RobotPlayer.reachedTarget && RobotPlayer.turnCount < EXPLORE_ROUNDS) {
             explore(rc);
         }
         else {
@@ -25,16 +25,14 @@ public class Setup {
             }
 
             if (RobotPlayer.flagDuck != 0) {
-                if (!checkDefenses(rc)) {
+                if (farmToLvl6Build(rc)) {
                     buildDefenses(rc);
                 }
-                else {
-                }
-
             }
             else {
-                // PathFind.random(rc);
-                PathFind.moveTowards(rc, Map.center);
+                retrieveCrumbs(rc);
+                if (!RobotPlayer.gettingCrumb)
+                    PathFind.moveTowards(rc, Map.center);
                 if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
                     buildStunTrapsAtDam(rc);
                 }
@@ -48,6 +46,29 @@ public class Setup {
         rc.writeSharedArray(0, 0);
         rc.writeSharedArray(1, 0);
     }
+
+
+    public static boolean farmToLvl6Build(RobotController rc) throws GameActionException {
+        int currentLvl = rc.getLevel(SkillType.BUILD);
+        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+        if (currentLvl < 6) {
+            for (MapLocation location : adj) {
+                if (rc.onTheMap(location)) {
+                    if (rc.canDig(location)) {
+                        rc.dig(location);
+                    }
+                    if (rc.canFill(location)) {
+                        rc.fill(location);
+                    }
+                }
+            }
+        }
+        else {
+            return true;
+        }
+        return false;
+    }
+
 
     public static void buildStunTrapsAtDam(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
@@ -121,10 +142,14 @@ public class Setup {
         if (crumbLocations.length > 0) {
             MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
             rc.setIndicatorString("Getting Crumb");
+            RobotPlayer.gettingCrumb = true;
             if (rc.isMovementReady()) {
                 PathFind.moveTowards(rc, closestCrumb);
             }
             RobotPlayer.isExploring = false;
+        }
+        else {
+            RobotPlayer.gettingCrumb = false;
         }
     }
 

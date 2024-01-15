@@ -1,0 +1,513 @@
+Index: src/initialrobot/PathFind.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package initialrobot;\n\nimport battlecode.common.*;\n\nimport java.util.HashSet;\n\n\npublic class PathFind {\n\n    static Direction direction;\n\n    static MapLocation prevLocation = null;\n\n    private static int duckState = 0; // 0 head to target, 1 circle obstacle\n\n    private static Direction duckDir = null;\n\n    private static MapLocation prevDest = null;\n    private static HashSet<MapLocation> line = null;\n    private static int obstacleStartDist = 10000;\n\n\n    public static void resetDuck() {\n        duckState = 0; // 0 head to target, 1 circle obstacle\n        obstacleStartDist = 10000;\n        prevDest = null;\n        line = null;\n        duckDir = null;\n        prevLocation = null;\n    }\n\n    public static void duckNav0(RobotController rc, MapLocation location) throws GameActionException {\n        Direction dir = rc.getLocation().directionTo(location);\n        if (rc.canMove(dir)) {\n            rc.move(dir);\n        }\n        else if (rc.canFill(rc.getLocation().add(dir))) {\n            rc.fill(rc.getLocation().add(dir));\n        }\n        else {\n            for (int i = 0; i < 8; i++) {\n                if (rc.canMove(dir)) {\n                    rc.move(dir);\n                    break;\n                }\n                else {\n                    dir = dir.rotateLeft();\n                }\n            }\n        }\n\n    }\n\n//    public static void duckNav1(RobotController rc, MapLocation destination) throws GameActionException{\n//        if (duckState == 0) {\n//            duckDir = rc.getLocation().directionTo(destination);\n//            if (rc.canMove(duckDir)) {\n//                rc.move(duckDir);\n//            } else {\n//                duckState = 1;\n//                closestObstacle = null;\n//                closestObstacleDist = 10000;\n//            }\n//        } else {\n//            if (rc.getLocation().equals(closestObstacle)) {\n//                duckState = 0;\n//            }\n//\n//            if (rc.getLocation().distanceSquaredTo(destination) < closestObstacleDist) {\n//                closestObstacleDist = rc.getLocation().distanceSquaredTo(destination);\n//                closestObstacle = rc.getLocation();\n//            }\n//\n//            for (int i = 0; i < 8; i++) {\n//                if (rc.canMove(duckDir)) {\n//                    rc.move(duckDir);\n//                    duckDir = duckDir.rotateRight();\n//                    break;\n//                } else {\n//                    duckDir = duckDir.rotateLeft();\n//                }\n//            }\n//        }\n//    }\n\n    public static void moveTowards(RobotController rc, MapLocation destination) throws GameActionException {\n        prevDest = destination;\n        line = createLine(rc.getLocation(), destination);\n\n\n\n        for(MapLocation loc : line) {\n            rc.setIndicatorDot(loc, 255, 0, 0);\n        }\n\n        if (duckState == 0) {\n            duckDir = rc.getLocation().directionTo(destination);\n            if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {\n                prevLocation = rc.getLocation();\n                rc.move(duckDir);\n            }\n            else if (rc.canFill(rc.getLocation().add(duckDir))) {\n                rc.fill(rc.getLocation().add(duckDir));\n            } else {\n                duckState = 1;\n                obstacleStartDist = rc.getLocation().distanceSquaredTo(destination);\n                duckDir = rc.getLocation().directionTo(destination);\n            }\n        } else {\n            if (line.contains(rc.getLocation()) && rc.getLocation().distanceSquaredTo(destination) <= obstacleStartDist) {\n                duckState = 0;\n            }\n\n            for (int i = 0; i < 8; i++) {\n                if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {\n                    prevLocation = rc.getLocation();\n                    rc.move(duckDir);\n                    duckDir = duckDir.rotateRight();\n                    break;\n                } else if (rc.canFill(rc.getLocation().add(duckDir))) {\n                    rc.setIndicatorString(\"FILLING\");\n                    rc.fill(rc.getLocation().add(duckDir));\n                } else {\n                    duckDir = duckDir.rotateLeft();\n                }\n            }\n        }\n    }\n\n//    public static void random(RobotController rc) throws GameActionException {\n//        if (rc.isMovementReady()) {\n//            if (direction != null && rc.canMove(direction)) {\n//                rc.move(direction);\n//            }\n//            else {\n//                direction = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];\n//            }\n//        }\n//    }\n\n    public static void reallyRandom(RobotController rc) throws GameActionException {\n        Direction dir = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];\n        if (rc.canMove(dir)){\n            rc.move(dir);\n        }\n    }\n\n    private static HashSet<MapLocation> createLine(MapLocation a, MapLocation b) {\n        HashSet<MapLocation> locs = new HashSet<>();\n        int x = a.x, y = a.y;\n        int dx = b.x - a.x;\n        int dy = b.y - a.y;\n        int sx = (int) Math.signum(dx);\n        int sy = (int) Math.signum(dy);\n        dx = Math.abs(dx);\n        dy = Math.abs(dy);\n        int d = Math.max(dx, dy);\n        int r = d/2;\n        if (dx > dy) {\n            for (int i = 0; i < d; i++) {\n                locs.add(new MapLocation(x, y));\n                x += sx;\n                r += dy;\n                if (r >= dx) {\n                    locs.add(new MapLocation(x, y));\n                    y += sy;\n                    r -= dx;\n                }\n            }\n        } else {\n            for (int i = 0; i < d; i++) {\n                locs.add(new MapLocation(x, y));\n                y += sy;\n                r += dx;\n                if (r >= dy) {\n                    locs.add(new MapLocation(x, y));\n                    x += sx;\n                    r -= dy;\n                }\n            }\n        }\n        locs.add(new MapLocation(x, y));\n        return locs;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/initialrobot/PathFind.java b/src/initialrobot/PathFind.java
+--- a/src/initialrobot/PathFind.java	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/src/initialrobot/PathFind.java	(date 1705288461936)
+@@ -127,24 +127,6 @@
+         }
+     }
+ 
+-//    public static void random(RobotController rc) throws GameActionException {
+-//        if (rc.isMovementReady()) {
+-//            if (direction != null && rc.canMove(direction)) {
+-//                rc.move(direction);
+-//            }
+-//            else {
+-//                direction = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];
+-//            }
+-//        }
+-//    }
+-
+-    public static void reallyRandom(RobotController rc) throws GameActionException {
+-        Direction dir = Direction.allDirections()[RobotPlayer.rng.nextInt(8)];
+-        if (rc.canMove(dir)){
+-            rc.move(dir);
+-        }
+-    }
+-
+     private static HashSet<MapLocation> createLine(MapLocation a, MapLocation b) {
+         HashSet<MapLocation> locs = new HashSet<>();
+         int x = a.x, y = a.y;
+Index: src/initialrobot/BotDuck.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package initialrobot;\n\nimport battlecode.common.*;\n\npublic class BotDuck {\n\n\n    private final RobotController rc;\n\n\n    public BotDuck(RobotController rc) throws GameActionException {\n        this.rc = rc;\n        Setup.init(rc);\n        MainRound.init(rc);\n    }\n\n    void initTurn() throws GameActionException {\n        if (!rc.isSpawned()){\n             PathFind.resetDuck();\n             trySpawn(rc);\n        }\n\n        if (rc.isSpawned()) {\n            Setup.initTurn(rc);\n        }\n    }\n\n    void play() throws GameActionException {\n        if (rc.isSpawned()) {\n            if (RobotPlayer.turnCount <= GameConstants.SETUP_ROUNDS) {\n                Setup.run(rc);\n            }\n            else if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {\n                Setup.exit(rc);\n            } else if (RobotPlayer.turnCount > GameConstants.SETUP_ROUNDS && RobotPlayer.flagDuck == 0 ) {\n                MainRound.run(rc);\n            }\n        }\n    }\n\n    void endTurn(){\n\n    }\n\n    void trySpawn(RobotController rc) throws GameActionException {\n        for (MapLocation loc : Map.allySpawnLocations) {\n            if (rc.canSpawn(loc)) {\n                rc.spawn(loc);\n                break;\n            }\n        }\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/initialrobot/BotDuck.java b/src/initialrobot/BotDuck.java
+--- a/src/initialrobot/BotDuck.java	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/src/initialrobot/BotDuck.java	(date 1705290709956)
+@@ -30,16 +30,19 @@
+             if (RobotPlayer.turnCount <= GameConstants.SETUP_ROUNDS) {
+                 Setup.run(rc);
+             }
+-            else if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
+-                Setup.exit(rc);
+-            } else if (RobotPlayer.turnCount > GameConstants.SETUP_ROUNDS && RobotPlayer.flagDuck == 0 ) {
++            else if (RobotPlayer.flagDuck == 0) {
+                 MainRound.run(rc);
+             }
++            else {
++                FlagDuck.protectFlag(rc);
++            }
+         }
+     }
+ 
+-    void endTurn(){
+-
++    void endTurn() throws GameActionException {
++        if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
++            Setup.exit(rc);
++        }
+     }
+ 
+     void trySpawn(RobotController rc) throws GameActionException {
+Index: src/initialrobot/MainRound.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package initialrobot;\n\nimport battlecode.common.*;\nimport battlecode.world.Flag;\nimport battlecode.world.control.TeamControlProvider;\n\npublic class MainRound {\n\n    private static final int EXPLORE_ROUNDS = 150;\n    private static MapLocation currentLocation = null;\n    private static Micro m = null;\n    private static boolean goingToFlag = true;\n    private static boolean amHoldingFlag = false;\n\n    public static void init(RobotController rc) throws GameActionException {\n        m = new Micro(rc);\n        goingToFlag = true;\n    }\n\n    public static void initTurn(RobotController rc) throws GameActionException {\n\n    }\n\n    public static void run(RobotController rc) throws GameActionException {\n        tryFlagPickUp(rc);\n        tryFlagDropOff(rc);\n        if (rc.readSharedArray(10) == 1) {\n            goingToFlag = false;\n        } else {\n           goingToFlag = true;\n        }\n        if (goingToFlag) {\n            goToFlag(rc);\n        } else {\n            retreat(rc);\n        }\n    }\n\n    private static void tryFlagPickUp(RobotController rc) throws GameActionException {\n        for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {\n            if (rc.canPickupFlag(loc.getLocation())) {\n                rc.pickupFlag(loc.getLocation());\n                goingToFlag = false;\n                amHoldingFlag = true;\n                System.out.println(\"PICKED UP FLAG\");\n                rc.writeSharedArray(10, 1);\n                break;\n            }\n        }\n    }\n\n    private static void tryFlagDropOff(RobotController rc) throws GameActionException {\n        if (!rc.hasFlag() && amHoldingFlag) {\n            rc.writeSharedArray(10, 0);\n            amHoldingFlag = false;\n            goingToFlag = true;\n        }\n    }\n\n    private static void goToFlag(RobotController rc) throws GameActionException {\n        rc.setIndicatorString(\"ATTACK\");\n        tryAttack(rc);\n        tryHeal(rc);\n        tryMove(rc);\n        tryAttack(rc);\n        tryHeal(rc);\n    }\n\n    private static void retreat(RobotController rc) throws GameActionException {\n        rc.setIndicatorString(\"RETREAT\");\n        if (!rc.hasFlag()) {\n            tryAttack(rc);\n            tryHeal(rc);\n            tryMove(rc);\n            tryAttack(rc);\n            tryHeal(rc);\n        } else {\n            tryMoveBack(rc);\n        }\n    }\n\n    private static void tryMoveBack(RobotController rc) throws GameActionException {\n        if (!rc.hasFlag()) {\n            if (m.doMicro()) return;\n        }\n        PathFind.moveTowards(rc, closestSpawn(rc));\n    }\n\n    private static MapLocation closestSpawn(RobotController rc) throws GameActionException {\n//        MapLocation closest = null;\n//        for (MapLocation loc : rc.getAllySpawnLocations()) {\n//            if (closest == null) {\n//                closest = loc;\n//            }\n//            else if (loc.distanceSquaredTo(rc.getLocation()) < closest.distanceSquaredTo(rc.getLocation())) {\n//                closest = loc;\n//            }\n//        }\n        return rc.getAllySpawnLocations()[0];\n    }\n\n\n    private static void tryAttack(RobotController rc) throws GameActionException {\n        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());\n        if (oppRobotInfos.length > 0) {\n            for (RobotInfo opps : oppRobotInfos) {\n                if (rc.canAttack(opps.getLocation())) {\n                    rc.attack(opps.getLocation());\n                    break;\n                }\n            }\n        }\n    }\n\n    private static void tryHeal(RobotController rc) throws GameActionException {\n        RobotInfo[] allyRobots = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());\n        for (RobotInfo r : allyRobots) {\n            if (rc.canHeal(r.getLocation())) {\n                rc.heal(r.getLocation());\n                break;\n            }\n        }\n    }\n\n    private static void tryMove(RobotController rc) throws GameActionException {\n        if (m.doMicro()) return;\n        PathFind.moveTowards(rc, closestFlag(rc));\n    }\n\n    private static MapLocation closestFlag(RobotController rc) throws GameActionException {\n         FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());\n         if (flags.length > 0) {\n             return flags[0].getLocation();\n         } else {\n            if (rc.senseBroadcastFlagLocations().length > 0)\n                return rc.senseBroadcastFlagLocations()[0];\n            else\n                return rc.getAllySpawnLocations()[0];\n         }\n    }\n\n\n\n    public static void exit(RobotController rc) throws GameActionException {\n\n    }\n\n    //potential improvement: communicate who is getting crumb, so not all ducks go to the same crumb\n    private static void explore(RobotController rc) throws GameActionException {\n        RobotPlayer.isExploring = true;\n\n        if (RobotPlayer.isExploring) {\n            if (rc.isMovementReady()) {\n                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);\n            }\n        }\n    }\n\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/initialrobot/MainRound.java b/src/initialrobot/MainRound.java
+--- a/src/initialrobot/MainRound.java	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/src/initialrobot/MainRound.java	(date 1705297074715)
+@@ -22,19 +22,39 @@
+     }
+ 
+     public static void run(RobotController rc) throws GameActionException {
++        GlobalUpgrades.useGlobalUpgrade(rc);
++
+         tryFlagPickUp(rc);
+         tryFlagDropOff(rc);
+-        if (rc.readSharedArray(10) == 1) {
+-            goingToFlag = false;
+-        } else {
+-           goingToFlag = true;
+-        }
++        Setup.retrieveCrumbs(rc);
++
++        goingToFlag = rc.readSharedArray(10) != 1;
+         if (goingToFlag) {
+             goToFlag(rc);
+         } else {
+             retreat(rc);
+         }
++
++
+     }
++
++    private static int protectFlag(RobotController rc) throws GameActionException {
++        for (int i = 1; i < 4; i++) {
++            int numEnemies = rc.readSharedArray(i);
++            if (numEnemies >= 3) {
++                System.out.println("FLAG IN DANGER");
++                return i;
++            }
++        }
++        return 0;
++    }
++
++    private static void retreatToFlag(RobotController rc, int flag) throws GameActionException {
++        if (!rc.hasFlag()) {
++            PathFind.moveTowards(rc, Map.flagLocations[flag]);
++        }
++    }
++
+ 
+     private static void tryFlagPickUp(RobotController rc) throws GameActionException {
+         for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {
+@@ -64,6 +84,7 @@
+         tryMove(rc);
+         tryAttack(rc);
+         tryHeal(rc);
++        tryTrap(rc);
+     }
+ 
+     private static void retreat(RobotController rc) throws GameActionException {
+@@ -74,6 +95,7 @@
+             tryMove(rc);
+             tryAttack(rc);
+             tryHeal(rc);
++            tryTrap(rc);
+         } else {
+             tryMoveBack(rc);
+         }
+@@ -100,19 +122,34 @@
+     }
+ 
+ 
+-    private static void tryAttack(RobotController rc) throws GameActionException {
++    public static void tryTrap(RobotController rc) throws GameActionException {
++        if (rc.getCrumbs() > 500) {
++            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
++            if (oppRobotInfos.length > 0) {
++                MapLocation me = rc.getLocation();
++                Direction dir = me.directionTo(oppRobotInfos[0].getLocation());
++                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
++                    rc.build(TrapType.STUN, me.add(dir));
++                }
++                else if (rc.canBuild(TrapType.STUN, me)) {
++                    rc.build(TrapType.STUN, me);
++                }
++
++            }
++        }
++    }
++
++    public static void tryAttack(RobotController rc) throws GameActionException {
+         RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
+-        if (oppRobotInfos.length > 0) {
+-            for (RobotInfo opps : oppRobotInfos) {
+-                if (rc.canAttack(opps.getLocation())) {
+-                    rc.attack(opps.getLocation());
+-                    break;
+-                }
++        for (RobotInfo opps : oppRobotInfos) {
++            if (rc.canAttack(opps.getLocation())) {
++                rc.attack(opps.getLocation());
++                break;
+             }
+         }
+     }
+ 
+-    private static void tryHeal(RobotController rc) throws GameActionException {
++    public static void tryHeal(RobotController rc) throws GameActionException {
+         RobotInfo[] allyRobots = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
+         for (RobotInfo r : allyRobots) {
+             if (rc.canHeal(r.getLocation())) {
+Index: src/initialrobot/FlagDuck.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package initialrobot;\n\nimport battlecode.common.*;\n\npublic class FlagDuck {\n\n    public static void init(RobotController rc) throws GameActionException {\n        if (spawnFlagDuck(rc)) {\n            FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());\n            holdFlag(rc, flags);\n        }\n    }\n\n    public static void protectFlag(RobotController rc) throws GameActionException {\n        RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());\n\n        if (enemies.length > 0) {\n            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {\n                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);\n            }\n            //do attack\n            //do heal\n            //do micro\n        }\n        else {\n            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {\n                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);\n            }\n            if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {\n                if (Setup.checkDefenses(rc)) {\n                    Setup.buildDefenses(rc);\n                }\n            }\n            else {\n                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);\n            }\n        }\n    }\n\n\n    private static boolean spawnFlagDuck(RobotController rc) throws GameActionException {\n        int val = rc.readSharedArray(Communication.FLAG_COMM);\n        if (val < 3) {\n            if (rc.canSpawn(Map.flagSpawnLocations[val])) {\n                rc.spawn(Map.flagSpawnLocations[val]);\n                RobotPlayer.flagDuck = val + 1;\n                RobotPlayer.exploreLocation = Map.flagLocations[val];\n                rc.writeSharedArray(Communication.FLAG_COMM, RobotPlayer.flagDuck);\n                return true;\n            }\n        }\n        return false;\n    }\n\n    private static void holdFlag(RobotController rc, FlagInfo[] flags) throws GameActionException {\n        for (FlagInfo flag : flags) {\n            MapLocation flagLocation = flag.getLocation();\n            if (rc.canPickupFlag(flagLocation)) {\n                rc.pickupFlag(flagLocation);\n                rc.setIndicatorString(\"Holding a flag! \" + RobotPlayer.flagDuck);\n                break;\n            }\n        }\n    }\n\n\n\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/initialrobot/FlagDuck.java b/src/initialrobot/FlagDuck.java
+--- a/src/initialrobot/FlagDuck.java	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/src/initialrobot/FlagDuck.java	(date 1705299849985)
+@@ -13,28 +13,22 @@
+ 
+     public static void protectFlag(RobotController rc) throws GameActionException {
+         RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
++        rc.setIndicatorString("ENEMIES: " + enemies.length);
+ 
+-        if (enemies.length > 0) {
+-            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
+-                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
+-            }
+-            //do attack
+-            //do heal
+-            //do micro
++
++        if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
++            rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
+         }
+-        else {
+-            if (rc.canWriteSharedArray(RobotPlayer.flagDuck, enemies.length)) {
+-                rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
+-            }
+-            if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {
+-                if (Setup.checkDefenses(rc)) {
+-                    Setup.buildDefenses(rc);
+-                }
+-            }
+-            else {
+-                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
+-            }
++
++
++        if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {
++            Setup.buildDefenses(rc);
++        }
++        else {
++            PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
+         }
++        MainRound.tryAttack(rc);
++        MainRound.tryHeal(rc);
+     }
+ 
+ 
+Index: src/initialrobot/Setup.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package initialrobot;\n\nimport battlecode.common.*;\n\npublic class Setup {\n    private static final int EXPLORE_ROUNDS = 150;\n\n    public static void init(RobotController rc) throws GameActionException {\n        FlagDuck.init(rc);\n        ExplorerDuck.init(rc);\n    }\n\n    public static void initTurn(RobotController rc) throws GameActionException {\n        if (!RobotPlayer.reachedTarget && rc.getLocation().equals(RobotPlayer.exploreLocation)) {\n            RobotPlayer.reachedTarget = true;\n        }\n    }\n    public static void run(RobotController rc) throws GameActionException {\n        if (!RobotPlayer.reachedTarget) {\n            explore(rc);\n        }\n        else {\n            if (rc.hasFlag()) {\n                dropFlag(rc);\n            }\n\n            if (RobotPlayer.flagDuck != 0) {\n                if (!checkDefenses(rc)) {\n                    buildDefenses(rc);\n                }\n                else {\n                }\n\n            }\n            else {\n                // PathFind.random(rc);\n                PathFind.moveTowards(rc, Map.center);\n                if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {\n                    buildStunTrapsAtDam(rc);\n                }\n            }\n        }\n    }\n\n\n\n    public static void exit(RobotController rc) throws GameActionException {\n        rc.writeSharedArray(0, 0);\n        rc.writeSharedArray(1, 0);\n    }\n\n    public static void buildStunTrapsAtDam(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n        int adjDam = 0;\n        for (MapLocation loc : adj){\n            if (rc.onTheMap(loc)) {\n                MapInfo info = rc.senseMapInfo(loc);\n                if (info.getTrapType() == TrapType.STUN) {\n                    adjDam = 0;\n                    break;\n                }\n                if (info.isDam()) {\n                    adjDam += 1;\n                }\n            }\n        }\n        if (adjDam >= 2) {\n            if(rc.canBuild(TrapType.STUN, rc.getLocation())) {\n                rc.build(TrapType.STUN, rc.getLocation());\n            }\n        }\n    }\n\n    private static void dropFlag(RobotController rc) throws GameActionException {\n        if(rc.senseLegalStartingFlagPlacement(rc.getLocation())) {\n            if(rc.canDropFlag(rc.getLocation())) rc.dropFlag(rc.getLocation());\n        }\n    }\n\n    public static void moveAndDig(RobotController rc) throws GameActionException {\n        MapLocation water = rc.getLocation().add(Direction.allDirections()[RobotPlayer.rng.nextInt(8)]);\n        if (rc.canDig(water)) {\n            rc.dig(water);\n        }\n        else {\n           // PathFind.random(rc);\n        }\n\n    }\n\n    public static boolean checkDefenses(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n\n        for (MapLocation loc : adj){\n            if (rc.onTheMap(loc)) {\n                MapInfo info = rc.senseMapInfo(loc);\n                if (info.getTrapType() != TrapType.EXPLOSIVE) {\n                    return false;\n                }\n            }\n        }\n        return true;\n    }\n\n    public static void buildDefenses(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n        if(rc.canBuild(TrapType.STUN, rc.getLocation())) {\n            rc.build(TrapType.STUN, rc.getLocation());\n        }\n        for (MapLocation loc : adj){\n            if(rc.canBuild(TrapType.EXPLOSIVE, loc)) {\n                rc.build(TrapType.EXPLOSIVE, loc);\n            }\n        }\n    }\n\n    private static void digMoat(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n        for (MapLocation loc : adj){\n            if(rc.canDig(loc)) {\n                rc.dig(loc);\n            }\n        }\n    }\n\n    //potential improvement: communicate who is getting crumb, so not all ducks go to the same crumb\n    private static void explore(RobotController rc) throws GameActionException {\n        RobotPlayer.isExploring = true;\n        if (RobotPlayer.flagDuck == 0)\n            retrieveCrumbs(rc, rc.senseNearbyCrumbs(-1));\n        if (RobotPlayer.isExploring) {\n            if (rc.isMovementReady()) {\n                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);\n            }\n        }\n    }\n\n    private static void calculateSymmetry(RobotController rc) throws GameActionException {\n    }\n\n    private static void communicateMap(RobotController rc) throws GameActionException {\n\n        MapInfo[] mapInfos = rc.senseNearbyMapInfos();\n        for (int i = 0; i < mapInfos.length; i++) {\n            if (rc.canWriteSharedArray(i, covertMapLocationToInt(mapInfos[i]))) {\n                rc.writeSharedArray(i, covertMapLocationToInt(mapInfos[i]));\n            }\n        }\n    }\n\n    private static void updateMap(RobotController rc) throws GameActionException {\n        for (int i = 0; i < 64; i++) {\n            int info = rc.readSharedArray(i);\n            if (info > 0) {\n                int[] array = covertIntToMapInfo(info);\n\n                Map.map[array[0]][array[1]] = array[2];\n                rc.writeSharedArray(i, 0);\n            }\n        }\n    }\n\n    private static int covertMapLocationToInt(MapInfo info) {\n        MapLocation location = info.getMapLocation();\n\n        int ret = 0;\n        ret += location.x * Map.mapWidth + location.y;\n        ret += 10000 * convertTileTypeToInt(info);\n\n        return ret;\n    }\n\n    private static int[] covertIntToMapInfo(int num) {\n        int firstDigit = Integer.parseInt(Integer.toString(num).substring(0, 1));\n        num -= firstDigit * 10000;\n        int x = num / Map.mapWidth;\n        int y = num % Map.mapWidth;\n        return new int[]{x,y,firstDigit};\n    }\n\n    private static int convertTileTypeToInt(MapInfo info) {\n        if (info.isPassable()) {\n            return 1;\n        }\n        if (info.isWall()) {\n            return 2;\n        }\n        return 1;\n    }\n\n    private static void retrieveCrumbs(RobotController rc, MapLocation[] crumbLocations) throws GameActionException {\n        //Retrieve all crumb locations within robot vision radius\n        if (crumbLocations.length > 0) {\n            MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);\n            rc.setIndicatorString(\"Getting Crumb\");\n            if (rc.isMovementReady()) {\n                PathFind.moveTowards(rc, closestCrumb);\n            }\n            RobotPlayer.isExploring = false;\n        }\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/initialrobot/Setup.java b/src/initialrobot/Setup.java
+--- a/src/initialrobot/Setup.java	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/src/initialrobot/Setup.java	(date 1705291653852)
+@@ -77,17 +77,6 @@
+         }
+     }
+ 
+-    public static void moveAndDig(RobotController rc) throws GameActionException {
+-        MapLocation water = rc.getLocation().add(Direction.allDirections()[RobotPlayer.rng.nextInt(8)]);
+-        if (rc.canDig(water)) {
+-            rc.dig(water);
+-        }
+-        else {
+-           // PathFind.random(rc);
+-        }
+-
+-    }
+-
+     public static boolean checkDefenses(RobotController rc) throws GameActionException {
+         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+ 
+@@ -114,20 +103,11 @@
+         }
+     }
+ 
+-    private static void digMoat(RobotController rc) throws GameActionException {
+-        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+-        for (MapLocation loc : adj){
+-            if(rc.canDig(loc)) {
+-                rc.dig(loc);
+-            }
+-        }
+-    }
+-
+     //potential improvement: communicate who is getting crumb, so not all ducks go to the same crumb
+     private static void explore(RobotController rc) throws GameActionException {
+         RobotPlayer.isExploring = true;
+         if (RobotPlayer.flagDuck == 0)
+-            retrieveCrumbs(rc, rc.senseNearbyCrumbs(-1));
++            retrieveCrumbs(rc);
+         if (RobotPlayer.isExploring) {
+             if (rc.isMovementReady()) {
+                 PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
+@@ -135,61 +115,9 @@
+         }
+     }
+ 
+-    private static void calculateSymmetry(RobotController rc) throws GameActionException {
+-    }
+-
+-    private static void communicateMap(RobotController rc) throws GameActionException {
+-
+-        MapInfo[] mapInfos = rc.senseNearbyMapInfos();
+-        for (int i = 0; i < mapInfos.length; i++) {
+-            if (rc.canWriteSharedArray(i, covertMapLocationToInt(mapInfos[i]))) {
+-                rc.writeSharedArray(i, covertMapLocationToInt(mapInfos[i]));
+-            }
+-        }
+-    }
+-
+-    private static void updateMap(RobotController rc) throws GameActionException {
+-        for (int i = 0; i < 64; i++) {
+-            int info = rc.readSharedArray(i);
+-            if (info > 0) {
+-                int[] array = covertIntToMapInfo(info);
+-
+-                Map.map[array[0]][array[1]] = array[2];
+-                rc.writeSharedArray(i, 0);
+-            }
+-        }
+-    }
+-
+-    private static int covertMapLocationToInt(MapInfo info) {
+-        MapLocation location = info.getMapLocation();
+-
+-        int ret = 0;
+-        ret += location.x * Map.mapWidth + location.y;
+-        ret += 10000 * convertTileTypeToInt(info);
+-
+-        return ret;
+-    }
+-
+-    private static int[] covertIntToMapInfo(int num) {
+-        int firstDigit = Integer.parseInt(Integer.toString(num).substring(0, 1));
+-        num -= firstDigit * 10000;
+-        int x = num / Map.mapWidth;
+-        int y = num % Map.mapWidth;
+-        return new int[]{x,y,firstDigit};
+-    }
+-
+-    private static int convertTileTypeToInt(MapInfo info) {
+-        if (info.isPassable()) {
+-            return 1;
+-        }
+-        if (info.isWall()) {
+-            return 2;
+-        }
+-        return 1;
+-    }
+-
+-    private static void retrieveCrumbs(RobotController rc, MapLocation[] crumbLocations) throws GameActionException {
++    public static void retrieveCrumbs(RobotController rc) throws GameActionException {
+         //Retrieve all crumb locations within robot vision radius
++        MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
+         if (crumbLocations.length > 0) {
+             MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
+             rc.setIndicatorString("Getting Crumb");
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"d349e976-9e03-4690-82b0-71db621ae28a\" name=\"Changes\" comment=\".\">\n      <change beforePath=\"$PROJECT_DIR$/.gitignore\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.gitignore\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ExternalProjectsData\">\n    <projectState path=\"$PROJECT_DIR$\">\n      <ProjectState />\n    </projectState>\n  </component>\n  <component name=\"ExternalProjectsManager\">\n    <system id=\"GRADLE\">\n      <state>\n        <task path=\"$PROJECT_DIR$\">\n          <activation />\n        </task>\n        <projects_view>\n          <tree_state>\n            <expand>\n              <path>\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\n                <item name=\"Battlecode2024\" type=\"f1a62948:ProjectNode\" />\n              </path>\n              <path>\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\n                <item name=\"Battlecode2024\" type=\"f1a62948:ProjectNode\" />\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\n              </path>\n              <path>\n                <item name=\"\" type=\"6a2764b6:ExternalProjectsStructure$RootNode\" />\n                <item name=\"Battlecode2024\" type=\"f1a62948:ProjectNode\" />\n                <item name=\"Tasks\" type=\"e4a08cd1:TasksNode\" />\n                <item name=\"battlecode\" type=\"c8890929:TasksNode$1\" />\n              </path>\n            </expand>\n            <select />\n          </tree_state>\n        </projects_view>\n      </state>\n    </system>\n  </component>\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"Class\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_BRANCH_BY_REPOSITORY\">\n      <map>\n        <entry key=\"$PROJECT_DIR$\" value=\"digfilling\" />\n      </map>\n    </option>\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"MarkdownSettingsMigration\">\n    <option name=\"stateVersion\" value=\"1\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;associatedIndex&quot;: 2\n}</component>\n  <component name=\"ProjectId\" id=\"2ahGw7NiBjM8xgrano9UbNVld7h\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\"><![CDATA[{\n  \"keyToString\": {\n    \"ASKED_MARK_IGNORED_FILES_AS_EXCLUDED\": \"true\",\n    \"Gradle.Battlecode2024 [build].executor\": \"Run\",\n    \"Gradle.Battlecode2024 [run].executor\": \"Run\",\n    \"Gradle.Battlecode2024 [update].executor\": \"Run\",\n    \"Gradle.Battlecode2024 [verify].executor\": \"Run\",\n    \"RunOnceActivity.OpenProjectViewOnStart\": \"true\",\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\n    \"SHARE_PROJECT_CONFIGURATION_FILES\": \"true\",\n    \"git-widget-placeholder\": \"main\",\n    \"kotlin-language-version-configured\": \"true\",\n    \"last_opened_file_path\": \"/Users/colinzhu/Documents/College/Senior/Spring/battlecode/Battlecode2024\",\n    \"node.js.detected.package.eslint\": \"true\",\n    \"node.js.detected.package.tslint\": \"true\",\n    \"node.js.selected.package.eslint\": \"(autodetect)\",\n    \"node.js.selected.package.tslint\": \"(autodetect)\",\n    \"nodejs_package_manager_path\": \"npm\",\n    \"settings.editor.selected.configurable\": \"reference.settingsdialog.project.gradle\",\n    \"vue.rearranger.settings.migration\": \"true\"\n  }\n}]]></component>\n  <component name=\"RunManager\" selected=\"Gradle.Battlecode2024 [build]\">\n    <configuration name=\"Battlecode2024 [build]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\n      <ExternalSystemSettings>\n        <option name=\"executionName\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\n        <option name=\"scriptParameters\" value=\"\" />\n        <option name=\"taskDescriptions\">\n          <list />\n        </option>\n        <option name=\"taskNames\">\n          <list>\n            <option value=\"build\" />\n          </list>\n        </option>\n        <option name=\"vmOptions\" />\n      </ExternalSystemSettings>\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\n      <DebugAllEnabled>false</DebugAllEnabled>\n      <RunAsTest>false</RunAsTest>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"Battlecode2024 [run]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\n      <ExternalSystemSettings>\n        <option name=\"executionName\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\n        <option name=\"scriptParameters\" value=\"\" />\n        <option name=\"taskDescriptions\">\n          <list />\n        </option>\n        <option name=\"taskNames\">\n          <list>\n            <option value=\"run\" />\n          </list>\n        </option>\n        <option name=\"vmOptions\" />\n      </ExternalSystemSettings>\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\n      <DebugAllEnabled>false</DebugAllEnabled>\n      <RunAsTest>false</RunAsTest>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"Battlecode2024 [update]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\n      <ExternalSystemSettings>\n        <option name=\"executionName\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\n        <option name=\"scriptParameters\" value=\"\" />\n        <option name=\"taskDescriptions\">\n          <list />\n        </option>\n        <option name=\"taskNames\">\n          <list>\n            <option value=\"update\" />\n          </list>\n        </option>\n        <option name=\"vmOptions\" />\n      </ExternalSystemSettings>\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\n      <DebugAllEnabled>false</DebugAllEnabled>\n      <RunAsTest>false</RunAsTest>\n      <method v=\"2\" />\n    </configuration>\n    <configuration name=\"Battlecode2024 [verify]\" type=\"GradleRunConfiguration\" factoryName=\"Gradle\" temporary=\"true\">\n      <ExternalSystemSettings>\n        <option name=\"executionName\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"externalSystemIdString\" value=\"GRADLE\" />\n        <option name=\"scriptParameters\" />\n        <option name=\"taskDescriptions\">\n          <list />\n        </option>\n        <option name=\"taskNames\">\n          <list>\n            <option value=\"verify\" />\n          </list>\n        </option>\n        <option name=\"vmOptions\" />\n      </ExternalSystemSettings>\n      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>\n      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>\n      <DebugAllEnabled>false</DebugAllEnabled>\n      <RunAsTest>false</RunAsTest>\n      <method v=\"2\" />\n    </configuration>\n    <recent_temporary>\n      <list>\n        <item itemvalue=\"Gradle.Battlecode2024 [build]\" />\n        <item itemvalue=\"Gradle.Battlecode2024 [update]\" />\n        <item itemvalue=\"Gradle.Battlecode2024 [verify]\" />\n        <item itemvalue=\"Gradle.Battlecode2024 [run]\" />\n        <item itemvalue=\"Gradle.Battlecode2024 [verify]\" />\n      </list>\n    </recent_temporary>\n  </component>\n  <component name=\"SharedIndexes\">\n    <attachedChunks>\n      <set>\n        <option value=\"jdk-1.8.0_392-corretto-1.8.0_392-3183f394aec4-22f8fbaa\" />\n      </set>\n    </attachedChunks>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"d349e976-9e03-4690-82b0-71db621ae28a\" name=\"Changes\" comment=\"\" />\n      <created>1704763634222</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1704763634222</updated>\n      <workItem from=\"1704763635629\" duration=\"4158000\" />\n      <workItem from=\"1704902255379\" duration=\"66017000\" />\n      <workItem from=\"1705171454782\" duration=\"19466000\" />\n      <workItem from=\"1705285006208\" duration=\"1701000\" />\n    </task>\n    <task id=\"LOCAL-00001\" summary=\"status phase\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705077547331</created>\n      <option name=\"number\" value=\"00001\" />\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705077547331</updated>\n    </task>\n    <task id=\"LOCAL-00002\" summary=\"status phase improved\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705116734704</created>\n      <option name=\"number\" value=\"00002\" />\n      <option name=\"presentableId\" value=\"LOCAL-00002\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705116734704</updated>\n    </task>\n    <task id=\"LOCAL-00003\" summary=\"better defense setup\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705181668924</created>\n      <option name=\"number\" value=\"00003\" />\n      <option name=\"presentableId\" value=\"LOCAL-00003\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705181668924</updated>\n    </task>\n    <task id=\"LOCAL-00004\" summary=\"better defense setup\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705249332772</created>\n      <option name=\"number\" value=\"00004\" />\n      <option name=\"presentableId\" value=\"LOCAL-00004\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705249332772</updated>\n    </task>\n    <task id=\"LOCAL-00005\" summary=\"flag defense macro\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705267057343</created>\n      <option name=\"number\" value=\"00005\" />\n      <option name=\"presentableId\" value=\"LOCAL-00005\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705267057343</updated>\n    </task>\n    <task id=\"LOCAL-00006\" summary=\"opponent\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705267293857</created>\n      <option name=\"number\" value=\"00006\" />\n      <option name=\"presentableId\" value=\"LOCAL-00006\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705267293857</updated>\n    </task>\n    <task id=\"LOCAL-00007\" summary=\"opponent\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705267714983</created>\n      <option name=\"number\" value=\"00007\" />\n      <option name=\"presentableId\" value=\"LOCAL-00007\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705267714983</updated>\n    </task>\n    <task id=\"LOCAL-00008\" summary=\"improved code quality\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705272918009</created>\n      <option name=\"number\" value=\"00008\" />\n      <option name=\"presentableId\" value=\"LOCAL-00008\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705272918009</updated>\n    </task>\n    <task id=\"LOCAL-00009\" summary=\"improved code quality\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705284756015</created>\n      <option name=\"number\" value=\"00009\" />\n      <option name=\"presentableId\" value=\"LOCAL-00009\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705284756015</updated>\n    </task>\n    <task id=\"LOCAL-00010\" summary=\"improved code quality\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705284801490</created>\n      <option name=\"number\" value=\"00010\" />\n      <option name=\"presentableId\" value=\"LOCAL-00010\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705284801490</updated>\n    </task>\n    <task id=\"LOCAL-00011\" summary=\"fixed merge conflicts\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705285439203</created>\n      <option name=\"number\" value=\"00011\" />\n      <option name=\"presentableId\" value=\"LOCAL-00011\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705285439203</updated>\n    </task>\n    <task id=\"LOCAL-00012\" summary=\".\">\n      <option name=\"closed\" value=\"true\" />\n      <created>1705286616181</created>\n      <option name=\"number\" value=\"00012\" />\n      <option name=\"presentableId\" value=\"LOCAL-00012\" />\n      <option name=\"project\" value=\"LOCAL\" />\n      <updated>1705286616181</updated>\n    </task>\n    <option name=\"localTasksCounter\" value=\"13\" />\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.Tabs.Properties\">\n    <option name=\"TAB_STATES\">\n      <map>\n        <entry key=\"MAIN\">\n          <value>\n            <State />\n          </value>\n        </entry>\n      </map>\n    </option>\n  </component>\n  <component name=\"VcsManagerConfiguration\">\n    <MESSAGE value=\"status phase\" />\n    <MESSAGE value=\"status phase improved\" />\n    <MESSAGE value=\"better defense setup\" />\n    <MESSAGE value=\"flag defense macro\" />\n    <MESSAGE value=\"opponent\" />\n    <MESSAGE value=\"improved code quality\" />\n    <MESSAGE value=\"fixed merge conflicts\" />\n    <MESSAGE value=\".\" />\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\".\" />\n  </component>\n  <component name=\"XSLT-Support.FileAssociations.UIState\">\n    <expand />\n    <select />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/.idea/workspace.xml	(date 1705297483066)
+@@ -5,7 +5,27 @@
+   </component>
+   <component name="ChangeListManager">
+     <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment=".">
+-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId1" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId1" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/RobotPlayer.class.uniqueId0" beforeDir="false" />
++      <change beforePath="$PROJECT_DIR$/matches/initialrobot-vs-examplefuncsplayer-on-DefaultLarge.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/initialrobot-vs-examplefuncsplayer-on-DefaultLarge.bc24" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/matches/initialrobot-vs-initialrobot-on-DefaultLarge.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/initialrobot-vs-initialrobot-on-DefaultLarge.bc24" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/initialrobot/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/BotDuck.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/initialrobot/FlagDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/FlagDuck.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/initialrobot/MainRound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/MainRound.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/initialrobot/PathFind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/PathFind.java" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/initialrobot/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/initialrobot/Setup.java" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -74,28 +94,28 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+-    "Gradle.Battlecode2024 [build].executor": "Run",
+-    "Gradle.Battlecode2024 [run].executor": "Run",
+-    "Gradle.Battlecode2024 [update].executor": "Run",
+-    "Gradle.Battlecode2024 [verify].executor": "Run",
+-    "RunOnceActivity.OpenProjectViewOnStart": "true",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+-    "git-widget-placeholder": "main",
+-    "kotlin-language-version-configured": "true",
+-    "last_opened_file_path": "/Users/colinzhu/Documents/College/Senior/Spring/battlecode/Battlecode2024",
+-    "node.js.detected.package.eslint": "true",
+-    "node.js.detected.package.tslint": "true",
+-    "node.js.selected.package.eslint": "(autodetect)",
+-    "node.js.selected.package.tslint": "(autodetect)",
+-    "nodejs_package_manager_path": "npm",
+-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+-    "vue.rearranger.settings.migration": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
++    &quot;Gradle.Battlecode2024 [build].executor&quot;: &quot;Run&quot;,
++    &quot;Gradle.Battlecode2024 [run].executor&quot;: &quot;Run&quot;,
++    &quot;Gradle.Battlecode2024 [update].executor&quot;: &quot;Run&quot;,
++    &quot;Gradle.Battlecode2024 [verify].executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;/Users/colinzhu/Documents/College/Senior/Spring/battlecode/Battlecode2024&quot;,
++    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
++    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
++    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
++    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
+     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+       <ExternalSystemSettings>
+Index: build/reports/tests/test/index.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\n<title>Test results - Test Summary</title>\n<link href=\"css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<link href=\"css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<script src=\"js/report.js\" type=\"text/javascript\"></script>\n</head>\n<body>\n<div id=\"content\">\n<h1>Test Summary</h1>\n<div id=\"summary\">\n<table>\n<tr>\n<td>\n<div class=\"summaryGroup\">\n<table>\n<tr>\n<td>\n<div class=\"infoBox\" id=\"tests\">\n<div class=\"counter\">1</div>\n<p>tests</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"failures\">\n<div class=\"counter\">0</div>\n<p>failures</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"ignored\">\n<div class=\"counter\">0</div>\n<p>ignored</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"duration\">\n<div class=\"counter\">0.001s</div>\n<p>duration</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n</td>\n<td>\n<div class=\"infoBox success\" id=\"successRate\">\n<div class=\"percent\">100%</div>\n<p>successful</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n<div id=\"tabs\">\n<ul class=\"tabLinks\">\n<li>\n<a href=\"#tab0\">Packages</a>\n</li>\n<li>\n<a href=\"#tab1\">Classes</a>\n</li>\n</ul>\n<div id=\"tab0\" class=\"tab\">\n<h2>Packages</h2>\n<table>\n<thead>\n<tr>\n<th>Package</th>\n<th>Tests</th>\n<th>Failures</th>\n<th>Ignored</th>\n<th>Duration</th>\n<th>Success rate</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"success\">\n<a href=\"packages/examplefuncsplayer.html\">examplefuncsplayer</a>\n</td>\n<td>1</td>\n<td>0</td>\n<td>0</td>\n<td>0.001s</td>\n<td class=\"success\">100%</td>\n</tr>\n</tbody>\n</table>\n</div>\n<div id=\"tab1\" class=\"tab\">\n<h2>Classes</h2>\n<table>\n<thead>\n<tr>\n<th>Class</th>\n<th>Tests</th>\n<th>Failures</th>\n<th>Ignored</th>\n<th>Duration</th>\n<th>Success rate</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"success\">\n<a href=\"classes/examplefuncsplayer.RobotPlayerTest.html\">examplefuncsplayer.RobotPlayerTest</a>\n</td>\n<td>1</td>\n<td>0</td>\n<td>0</td>\n<td>0.001s</td>\n<td class=\"success\">100%</td>\n</tr>\n</tbody>\n</table>\n</div>\n</div>\n<div id=\"footer\">\n<p>\n<div>\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\n</label>\n</div>Generated by \n<a href=\"http://www.gradle.org\">Gradle 7.6</a> at Jan 14, 2024 9:47:09 PM</p>\n</div>\n</div>\n</body>\n</html>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/reports/tests/test/index.html b/build/reports/tests/test/index.html
+--- a/build/reports/tests/test/index.html	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/build/reports/tests/test/index.html	(date 1705297107033)
+@@ -126,7 +126,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 14, 2024 9:47:09 PM</p>
++<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 15, 2024 12:38:27 AM</p>
+ </div>
+ </div>
+ </body>
+Index: build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<testsuite name=\"examplefuncsplayer.RobotPlayerTest\" tests=\"1\" skipped=\"0\" failures=\"0\" errors=\"0\" timestamp=\"2024-01-15T02:47:09\" hostname=\"Colins-MacBook-Pro-2.local\" time=\"0.001\">\n  <properties/>\n  <testcase name=\"testSanity\" classname=\"examplefuncsplayer.RobotPlayerTest\" time=\"0.001\"/>\n  <system-out><![CDATA[]]></system-out>\n  <system-err><![CDATA[]]></system-err>\n</testsuite>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml b/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml
+--- a/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml	(date 1705297107030)
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<testsuite name="examplefuncsplayer.RobotPlayerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-15T02:47:09" hostname="Colins-MacBook-Pro-2.local" time="0.001">
++<testsuite name="examplefuncsplayer.RobotPlayerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-15T05:38:27" hostname="Colins-MacBook-Pro-2.local" time="0.001">
+   <properties/>
+   <testcase name="testSanity" classname="examplefuncsplayer.RobotPlayerTest" time="0.001"/>
+   <system-out><![CDATA[]]></system-out>
+Index: build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\n<title>Test results - Class examplefuncsplayer.RobotPlayerTest</title>\n<link href=\"../css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<link href=\"../css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<script src=\"../js/report.js\" type=\"text/javascript\"></script>\n</head>\n<body>\n<div id=\"content\">\n<h1>Class examplefuncsplayer.RobotPlayerTest</h1>\n<div class=\"breadcrumbs\">\n<a href=\"../index.html\">all</a> &gt; \n<a href=\"../packages/examplefuncsplayer.html\">examplefuncsplayer</a> &gt; RobotPlayerTest</div>\n<div id=\"summary\">\n<table>\n<tr>\n<td>\n<div class=\"summaryGroup\">\n<table>\n<tr>\n<td>\n<div class=\"infoBox\" id=\"tests\">\n<div class=\"counter\">1</div>\n<p>tests</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"failures\">\n<div class=\"counter\">0</div>\n<p>failures</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"ignored\">\n<div class=\"counter\">0</div>\n<p>ignored</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"duration\">\n<div class=\"counter\">0.001s</div>\n<p>duration</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n</td>\n<td>\n<div class=\"infoBox success\" id=\"successRate\">\n<div class=\"percent\">100%</div>\n<p>successful</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n<div id=\"tabs\">\n<ul class=\"tabLinks\">\n<li>\n<a href=\"#tab0\">Tests</a>\n</li>\n</ul>\n<div id=\"tab0\" class=\"tab\">\n<h2>Tests</h2>\n<table>\n<thead>\n<tr>\n<th>Test</th>\n<th>Duration</th>\n<th>Result</th>\n</tr>\n</thead>\n<tr>\n<td class=\"success\">testSanity</td>\n<td class=\"success\">0.001s</td>\n<td class=\"success\">passed</td>\n</tr>\n</table>\n</div>\n</div>\n<div id=\"footer\">\n<p>\n<div>\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\n</label>\n</div>Generated by \n<a href=\"http://www.gradle.org\">Gradle 7.6</a> at Jan 14, 2024 9:47:09 PM</p>\n</div>\n</div>\n</body>\n</html>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html b/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html
+--- a/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html	(date 1705297107033)
+@@ -89,7 +89,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 14, 2024 9:47:09 PM</p>
++<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 15, 2024 12:38:27 AM</p>
+ </div>
+ </div>
+ </body>
+Index: build/reports/tests/test/packages/examplefuncsplayer.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\n<title>Test results - Package examplefuncsplayer</title>\n<link href=\"../css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<link href=\"../css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<script src=\"../js/report.js\" type=\"text/javascript\"></script>\n</head>\n<body>\n<div id=\"content\">\n<h1>Package examplefuncsplayer</h1>\n<div class=\"breadcrumbs\">\n<a href=\"../index.html\">all</a> &gt; examplefuncsplayer</div>\n<div id=\"summary\">\n<table>\n<tr>\n<td>\n<div class=\"summaryGroup\">\n<table>\n<tr>\n<td>\n<div class=\"infoBox\" id=\"tests\">\n<div class=\"counter\">1</div>\n<p>tests</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"failures\">\n<div class=\"counter\">0</div>\n<p>failures</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"ignored\">\n<div class=\"counter\">0</div>\n<p>ignored</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"duration\">\n<div class=\"counter\">0.001s</div>\n<p>duration</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n</td>\n<td>\n<div class=\"infoBox success\" id=\"successRate\">\n<div class=\"percent\">100%</div>\n<p>successful</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n<div id=\"tabs\">\n<ul class=\"tabLinks\">\n<li>\n<a href=\"#tab0\">Classes</a>\n</li>\n</ul>\n<div id=\"tab0\" class=\"tab\">\n<h2>Classes</h2>\n<table>\n<thread>\n<tr>\n<th>Class</th>\n<th>Tests</th>\n<th>Failures</th>\n<th>Ignored</th>\n<th>Duration</th>\n<th>Success rate</th>\n</tr>\n</thread>\n<tr>\n<td class=\"success\">\n<a href=\"../classes/examplefuncsplayer.RobotPlayerTest.html\">RobotPlayerTest</a>\n</td>\n<td>1</td>\n<td>0</td>\n<td>0</td>\n<td>0.001s</td>\n<td class=\"success\">100%</td>\n</tr>\n</table>\n</div>\n</div>\n<div id=\"footer\">\n<p>\n<div>\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\n</label>\n</div>Generated by \n<a href=\"http://www.gradle.org\">Gradle 7.6</a> at Jan 14, 2024 9:47:09 PM</p>\n</div>\n</div>\n</body>\n</html>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/reports/tests/test/packages/examplefuncsplayer.html b/build/reports/tests/test/packages/examplefuncsplayer.html
+--- a/build/reports/tests/test/packages/examplefuncsplayer.html	(revision f0e292a5693c8a2d3ebd0ad71429b5b8186ad79b)
++++ b/build/reports/tests/test/packages/examplefuncsplayer.html	(date 1705297107033)
+@@ -96,7 +96,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 14, 2024 9:47:09 PM</p>
++<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 15, 2024 12:38:27 AM</p>
+ </div>
+ </div>
+ </body>

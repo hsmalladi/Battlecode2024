@@ -1,0 +1,159 @@
+Index: src/initialrobot/Setup.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package initialrobot;\n\nimport battlecode.common.*;\n\npublic class Setup {\n    private static final int EXPLORE_ROUNDS = 150;\n\n    public static void init(RobotController rc) throws GameActionException {\n        FlagDuck.init(rc);\n        // ExplorerDuck.init(rc);\n    }\n\n    public static void initTurn(RobotController rc) throws GameActionException {\n        if (!RobotPlayer.reachedTarget && rc.getLocation().equals(RobotPlayer.exploreLocation)) {\n            RobotPlayer.reachedTarget = true;\n        }\n    }\n    public static void run(RobotController rc) throws GameActionException {\n        if (!RobotPlayer.reachedTarget) {\n            explore(rc);\n        }\n        else {\n            if (rc.hasFlag()) {\n                dropFlag(rc);\n            }\n\n            if (RobotPlayer.flagDuck != 0) {\n                if (!checkDefenses(rc)) {\n                    buildDefenses(rc);\n                }\n                else {\n                }\n\n            }\n            else {\n                // PathFind.random(rc);\n                if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {\n                    PathFind.moveTowards(rc, Map.center);\n                    buildStunTrapsAtDam(rc);\n                }\n            }\n        }\n    }\n\n\n\n    public static void exit(RobotController rc) throws GameActionException {\n        rc.writeSharedArray(0, 0);\n        rc.writeSharedArray(1, 0);\n    }\n\n    public static void buildStunTrapsAtDam(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n        int adjDam = 0;\n        for (MapLocation loc : adj){\n            if (rc.onTheMap(loc)) {\n                MapInfo info = rc.senseMapInfo(loc);\n                if (info.getTrapType() == TrapType.STUN) {\n                    adjDam = 0;\n                    break;\n                }\n                if (info.isDam()) {\n                    adjDam += 1;\n                }\n            }\n        }\n        if (adjDam >= 2) {\n            if(rc.canBuild(TrapType.STUN, rc.getLocation())) {\n                rc.build(TrapType.STUN, rc.getLocation());\n            }\n        }\n    }\n\n    private static void dropFlag(RobotController rc) throws GameActionException {\n        if(rc.senseLegalStartingFlagPlacement(rc.getLocation())) {\n            if(rc.canDropFlag(rc.getLocation())) rc.dropFlag(rc.getLocation());\n        }\n    }\n\n    public static void moveAndDig(RobotController rc) throws GameActionException {\n        MapLocation water = rc.getLocation().add(Direction.allDirections()[RobotPlayer.rng.nextInt(8)]);\n        if (rc.canDig(water)) {\n            rc.dig(water);\n        }\n        else {\n           // PathFind.random(rc);\n        }\n\n    }\n\n    private static boolean checkDefenses(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n\n        for (MapLocation loc : adj){\n            if (rc.onTheMap(loc)) {\n                MapInfo info = rc.senseMapInfo(loc);\n                if (info.getTrapType() != TrapType.EXPLOSIVE) {\n                    return false;\n                }\n            }\n        }\n        return true;\n    }\n\n    private static void buildDefenses(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n        if(rc.canBuild(TrapType.STUN, rc.getLocation())) {\n            rc.build(TrapType.STUN, rc.getLocation());\n        }\n        for (MapLocation loc : adj){\n            if(rc.canBuild(TrapType.EXPLOSIVE, loc)) {\n                rc.build(TrapType.EXPLOSIVE, loc);\n            }\n        }\n    }\n\n    private static void digMoat(RobotController rc) throws GameActionException {\n        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());\n        for (MapLocation loc : adj){\n            if(rc.canDig(loc)) {\n                rc.dig(loc);\n            }\n        }\n    }\n\n    //potential improvement: communicate who is getting crumb, so not all ducks go to the same crumb\n    private static void explore(RobotController rc) throws GameActionException {\n        RobotPlayer.isExploring = true;\n        if (RobotPlayer.flagDuck == 0)\n            retrieveCrumbs(rc, rc.senseNearbyCrumbs(-1));\n        if (RobotPlayer.isExploring) {\n            if (rc.isMovementReady()) {\n                PathFind.moveTowards(rc, RobotPlayer.exploreLocation);\n            }\n        }\n    }\n\n    private static void calculateSymmetry(RobotController rc) throws GameActionException {\n    }\n\n    private static void communicateMap(RobotController rc) throws GameActionException {\n\n        MapInfo[] mapInfos = rc.senseNearbyMapInfos();\n        for (int i = 0; i < mapInfos.length; i++) {\n            if (rc.canWriteSharedArray(i, covertMapLocationToInt(mapInfos[i]))) {\n                rc.writeSharedArray(i, covertMapLocationToInt(mapInfos[i]));\n            }\n        }\n    }\n\n    private static void updateMap(RobotController rc) throws GameActionException {\n        for (int i = 0; i < 64; i++) {\n            int info = rc.readSharedArray(i);\n            if (info > 0) {\n                int[] array = covertIntToMapInfo(info);\n\n                Map.map[array[0]][array[1]] = array[2];\n                rc.writeSharedArray(i, 0);\n            }\n        }\n    }\n\n    private static int covertMapLocationToInt(MapInfo info) {\n        MapLocation location = info.getMapLocation();\n\n        int ret = 0;\n        ret += location.x * Map.mapWidth + location.y;\n        ret += 10000 * convertTileTypeToInt(info);\n\n        return ret;\n    }\n\n    private static int[] covertIntToMapInfo(int num) {\n        int firstDigit = Integer.parseInt(Integer.toString(num).substring(0, 1));\n        num -= firstDigit * 10000;\n        int x = num / Map.mapWidth;\n        int y = num % Map.mapWidth;\n        return new int[]{x,y,firstDigit};\n    }\n\n    private static int convertTileTypeToInt(MapInfo info) {\n        if (info.isPassable()) {\n            return 1;\n        }\n        if (info.isWall()) {\n            return 2;\n        }\n        return 1;\n    }\n\n    private static void retrieveCrumbs(RobotController rc, MapLocation[] crumbLocations) throws GameActionException {\n        //Retrieve all crumb locations within robot vision radius\n        if (crumbLocations.length > 0) {\n            MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);\n            rc.setIndicatorString(\"Getting Crumb\");\n            if (rc.isMovementReady()) {\n                PathFind.moveTowards(rc, closestCrumb);\n            }\n            RobotPlayer.isExploring = false;\n        }\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/initialrobot/Setup.java b/src/initialrobot/Setup.java
+--- a/src/initialrobot/Setup.java	(revision 23b76fc99314fe7f2e681e491ad1b8556260c529)
++++ b/src/initialrobot/Setup.java	(date 1705249609071)
+@@ -7,7 +7,7 @@
+ 
+     public static void init(RobotController rc) throws GameActionException {
+         FlagDuck.init(rc);
+-        // ExplorerDuck.init(rc);
++        ExplorerDuck.init(rc);
+     }
+ 
+     public static void initTurn(RobotController rc) throws GameActionException {
+Index: build/reports/tests/test/packages/examplefuncsplayer.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\n<title>Test results - Package examplefuncsplayer</title>\n<link href=\"../css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<link href=\"../css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<script src=\"../js/report.js\" type=\"text/javascript\"></script>\n</head>\n<body>\n<div id=\"content\">\n<h1>Package examplefuncsplayer</h1>\n<div class=\"breadcrumbs\">\n<a href=\"../index.html\">all</a> &gt; examplefuncsplayer</div>\n<div id=\"summary\">\n<table>\n<tr>\n<td>\n<div class=\"summaryGroup\">\n<table>\n<tr>\n<td>\n<div class=\"infoBox\" id=\"tests\">\n<div class=\"counter\">1</div>\n<p>tests</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"failures\">\n<div class=\"counter\">0</div>\n<p>failures</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"ignored\">\n<div class=\"counter\">0</div>\n<p>ignored</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"duration\">\n<div class=\"counter\">0.001s</div>\n<p>duration</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n</td>\n<td>\n<div class=\"infoBox success\" id=\"successRate\">\n<div class=\"percent\">100%</div>\n<p>successful</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n<div id=\"tabs\">\n<ul class=\"tabLinks\">\n<li>\n<a href=\"#tab0\">Classes</a>\n</li>\n</ul>\n<div id=\"tab0\" class=\"tab\">\n<h2>Classes</h2>\n<table>\n<thread>\n<tr>\n<th>Class</th>\n<th>Tests</th>\n<th>Failures</th>\n<th>Ignored</th>\n<th>Duration</th>\n<th>Success rate</th>\n</tr>\n</thread>\n<tr>\n<td class=\"success\">\n<a href=\"../classes/examplefuncsplayer.RobotPlayerTest.html\">RobotPlayerTest</a>\n</td>\n<td>1</td>\n<td>0</td>\n<td>0</td>\n<td>0.001s</td>\n<td class=\"success\">100%</td>\n</tr>\n</table>\n</div>\n</div>\n<div id=\"footer\">\n<p>\n<div>\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\n</label>\n</div>Generated by \n<a href=\"http://www.gradle.org\">Gradle 7.6</a> at Jan 13, 2024 6:19:48 PM</p>\n</div>\n</div>\n</body>\n</html>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/reports/tests/test/packages/examplefuncsplayer.html b/build/reports/tests/test/packages/examplefuncsplayer.html
+--- a/build/reports/tests/test/packages/examplefuncsplayer.html	(revision 23b76fc99314fe7f2e681e491ad1b8556260c529)
++++ b/build/reports/tests/test/packages/examplefuncsplayer.html	(date 1705249640090)
+@@ -40,7 +40,7 @@
+ </td>
+ <td>
+ <div class="infoBox" id="duration">
+-<div class="counter">0.001s</div>
++<div class="counter">0s</div>
+ <p>duration</p>
+ </div>
+ </td>
+@@ -83,7 +83,7 @@
+ <td>1</td>
+ <td>0</td>
+ <td>0</td>
+-<td>0.001s</td>
++<td>0s</td>
+ <td class="success">100%</td>
+ </tr>
+ </table>
+@@ -96,7 +96,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 13, 2024 6:19:48 PM</p>
++<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 14, 2024 11:27:20 AM</p>
+ </div>
+ </div>
+ </body>
+Index: build/reports/tests/test/index.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\n<title>Test results - Test Summary</title>\n<link href=\"css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<link href=\"css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<script src=\"js/report.js\" type=\"text/javascript\"></script>\n</head>\n<body>\n<div id=\"content\">\n<h1>Test Summary</h1>\n<div id=\"summary\">\n<table>\n<tr>\n<td>\n<div class=\"summaryGroup\">\n<table>\n<tr>\n<td>\n<div class=\"infoBox\" id=\"tests\">\n<div class=\"counter\">1</div>\n<p>tests</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"failures\">\n<div class=\"counter\">0</div>\n<p>failures</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"ignored\">\n<div class=\"counter\">0</div>\n<p>ignored</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"duration\">\n<div class=\"counter\">0.001s</div>\n<p>duration</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n</td>\n<td>\n<div class=\"infoBox success\" id=\"successRate\">\n<div class=\"percent\">100%</div>\n<p>successful</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n<div id=\"tabs\">\n<ul class=\"tabLinks\">\n<li>\n<a href=\"#tab0\">Packages</a>\n</li>\n<li>\n<a href=\"#tab1\">Classes</a>\n</li>\n</ul>\n<div id=\"tab0\" class=\"tab\">\n<h2>Packages</h2>\n<table>\n<thead>\n<tr>\n<th>Package</th>\n<th>Tests</th>\n<th>Failures</th>\n<th>Ignored</th>\n<th>Duration</th>\n<th>Success rate</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"success\">\n<a href=\"packages/examplefuncsplayer.html\">examplefuncsplayer</a>\n</td>\n<td>1</td>\n<td>0</td>\n<td>0</td>\n<td>0.001s</td>\n<td class=\"success\">100%</td>\n</tr>\n</tbody>\n</table>\n</div>\n<div id=\"tab1\" class=\"tab\">\n<h2>Classes</h2>\n<table>\n<thead>\n<tr>\n<th>Class</th>\n<th>Tests</th>\n<th>Failures</th>\n<th>Ignored</th>\n<th>Duration</th>\n<th>Success rate</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"success\">\n<a href=\"classes/examplefuncsplayer.RobotPlayerTest.html\">examplefuncsplayer.RobotPlayerTest</a>\n</td>\n<td>1</td>\n<td>0</td>\n<td>0</td>\n<td>0.001s</td>\n<td class=\"success\">100%</td>\n</tr>\n</tbody>\n</table>\n</div>\n</div>\n<div id=\"footer\">\n<p>\n<div>\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\n</label>\n</div>Generated by \n<a href=\"http://www.gradle.org\">Gradle 7.6</a> at Jan 13, 2024 6:19:48 PM</p>\n</div>\n</div>\n</body>\n</html>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/reports/tests/test/index.html b/build/reports/tests/test/index.html
+--- a/build/reports/tests/test/index.html	(revision 23b76fc99314fe7f2e681e491ad1b8556260c529)
++++ b/build/reports/tests/test/index.html	(date 1705249640090)
+@@ -38,7 +38,7 @@
+ </td>
+ <td>
+ <div class="infoBox" id="duration">
+-<div class="counter">0.001s</div>
++<div class="counter">0s</div>
+ <p>duration</p>
+ </div>
+ </td>
+@@ -85,7 +85,7 @@
+ <td>1</td>
+ <td>0</td>
+ <td>0</td>
+-<td>0.001s</td>
++<td>0s</td>
+ <td class="success">100%</td>
+ </tr>
+ </tbody>
+@@ -112,7 +112,7 @@
+ <td>1</td>
+ <td>0</td>
+ <td>0</td>
+-<td>0.001s</td>
++<td>0s</td>
+ <td class="success">100%</td>
+ </tr>
+ </tbody>
+@@ -126,7 +126,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 13, 2024 6:19:48 PM</p>
++<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 14, 2024 11:27:20 AM</p>
+ </div>
+ </div>
+ </body>
+Index: build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<testsuite name=\"examplefuncsplayer.RobotPlayerTest\" tests=\"1\" skipped=\"0\" failures=\"0\" errors=\"0\" timestamp=\"2024-01-13T23:19:48\" hostname=\"Havishs-MacBook-Pro-2.local\" time=\"0.001\">\n  <properties/>\n  <testcase name=\"testSanity\" classname=\"examplefuncsplayer.RobotPlayerTest\" time=\"0.001\"/>\n  <system-out><![CDATA[]]></system-out>\n  <system-err><![CDATA[]]></system-err>\n</testsuite>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml b/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml
+--- a/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml	(revision 23b76fc99314fe7f2e681e491ad1b8556260c529)
++++ b/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml	(date 1705249640089)
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+-<testsuite name="examplefuncsplayer.RobotPlayerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-13T23:19:48" hostname="Havishs-MacBook-Pro-2.local" time="0.001">
++<testsuite name="examplefuncsplayer.RobotPlayerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-01-14T16:27:20" hostname="Colins-MacBook-Pro-2.local" time="0.0">
+   <properties/>
+-  <testcase name="testSanity" classname="examplefuncsplayer.RobotPlayerTest" time="0.001"/>
++  <testcase name="testSanity" classname="examplefuncsplayer.RobotPlayerTest" time="0.0"/>
+   <system-out><![CDATA[]]></system-out>
+   <system-err><![CDATA[]]></system-err>
+ </testsuite>
+Index: build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><!DOCTYPE html>\n<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>\n<meta http-equiv=\"x-ua-compatible\" content=\"IE=edge\"/>\n<title>Test results - Class examplefuncsplayer.RobotPlayerTest</title>\n<link href=\"../css/base-style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<link href=\"../css/style.css\" rel=\"stylesheet\" type=\"text/css\"/>\n<script src=\"../js/report.js\" type=\"text/javascript\"></script>\n</head>\n<body>\n<div id=\"content\">\n<h1>Class examplefuncsplayer.RobotPlayerTest</h1>\n<div class=\"breadcrumbs\">\n<a href=\"../index.html\">all</a> &gt; \n<a href=\"../packages/examplefuncsplayer.html\">examplefuncsplayer</a> &gt; RobotPlayerTest</div>\n<div id=\"summary\">\n<table>\n<tr>\n<td>\n<div class=\"summaryGroup\">\n<table>\n<tr>\n<td>\n<div class=\"infoBox\" id=\"tests\">\n<div class=\"counter\">1</div>\n<p>tests</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"failures\">\n<div class=\"counter\">0</div>\n<p>failures</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"ignored\">\n<div class=\"counter\">0</div>\n<p>ignored</p>\n</div>\n</td>\n<td>\n<div class=\"infoBox\" id=\"duration\">\n<div class=\"counter\">0.001s</div>\n<p>duration</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n</td>\n<td>\n<div class=\"infoBox success\" id=\"successRate\">\n<div class=\"percent\">100%</div>\n<p>successful</p>\n</div>\n</td>\n</tr>\n</table>\n</div>\n<div id=\"tabs\">\n<ul class=\"tabLinks\">\n<li>\n<a href=\"#tab0\">Tests</a>\n</li>\n</ul>\n<div id=\"tab0\" class=\"tab\">\n<h2>Tests</h2>\n<table>\n<thead>\n<tr>\n<th>Test</th>\n<th>Duration</th>\n<th>Result</th>\n</tr>\n</thead>\n<tr>\n<td class=\"success\">testSanity</td>\n<td class=\"success\">0.001s</td>\n<td class=\"success\">passed</td>\n</tr>\n</table>\n</div>\n</div>\n<div id=\"footer\">\n<p>\n<div>\n<label class=\"hidden\" id=\"label-for-line-wrapping-toggle\" for=\"line-wrapping-toggle\">Wrap lines\n<input id=\"line-wrapping-toggle\" type=\"checkbox\" autocomplete=\"off\"/>\n</label>\n</div>Generated by \n<a href=\"http://www.gradle.org\">Gradle 7.6</a> at Jan 13, 2024 6:19:48 PM</p>\n</div>\n</div>\n</body>\n</html>\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html b/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html
+--- a/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html	(revision 23b76fc99314fe7f2e681e491ad1b8556260c529)
++++ b/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html	(date 1705249640090)
+@@ -41,7 +41,7 @@
+ </td>
+ <td>
+ <div class="infoBox" id="duration">
+-<div class="counter">0.001s</div>
++<div class="counter">0s</div>
+ <p>duration</p>
+ </div>
+ </td>
+@@ -76,7 +76,7 @@
+ </thead>
+ <tr>
+ <td class="success">testSanity</td>
+-<td class="success">0.001s</td>
++<td class="success">0s</td>
+ <td class="success">passed</td>
+ </tr>
+ </table>
+@@ -89,7 +89,7 @@
+ <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+ </label>
+ </div>Generated by 
+-<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 13, 2024 6:19:48 PM</p>
++<a href="http://www.gradle.org">Gradle 7.6</a> at Jan 14, 2024 11:27:20 AM</p>
+ </div>
+ </div>
+ </body>

@@ -55,7 +55,7 @@ public strictfp class RobotPlayer {
 
         // Hello world! Standard output is very useful for debugging.
         // Everything you say here will be directly viewable in your terminal when you run a match!
-        System.out.println("I'm alive");
+        // System.out.println("I'm alive");
 
         // You can also use indicators to save debug notes in replays.
         rc.setIndicatorString("Hello world!");
@@ -99,7 +99,7 @@ public strictfp class RobotPlayer {
                     }
                     else if (rc.canAttack(nextLoc)){
                         rc.attack(nextLoc);
-                        System.out.println("Take that! Damaged an enemy that was in our way!");
+                        // System.out.println("Take that! Damaged an enemy that was in our way!");
                     }
 
                     // Rarely attempt placing traps behind the robot.

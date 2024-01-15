@@ -11,6 +11,7 @@ public class BotDuck {
     public BotDuck(RobotController rc) throws GameActionException {
         this.rc = rc;
         Setup.init(rc);
+        MainRound.init(rc);
     }
 
     void initTurn() throws GameActionException {
@@ -31,6 +32,8 @@ public class BotDuck {
             }
             else if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
                 Setup.exit(rc);
+            } else if (RobotPlayer.turnCount > GameConstants.SETUP_ROUNDS && RobotPlayer.flagDuck == 0 ) {
+                MainRound.run(rc);
             }
         }
     }

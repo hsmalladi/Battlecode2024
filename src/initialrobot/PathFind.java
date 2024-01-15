@@ -88,7 +88,10 @@ public class PathFind {
         line = createLine(rc.getLocation(), destination);
 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
 
         for(MapLocation loc : line) {
             rc.setIndicatorDot(loc, 255, 0, 0);
@@ -99,6 +102,9 @@ public class PathFind {
             if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
                 prevLocation = rc.getLocation();
                 rc.move(duckDir);
+            }
+            else if (rc.canFill(rc.getLocation().add(duckDir))) {
+                rc.fill(rc.getLocation().add(duckDir));
             } else {
                 duckState = 1;
                 obstacleStartDist = rc.getLocation().distanceSquaredTo(destination);
@@ -109,13 +115,19 @@ public class PathFind {
                 duckState = 0;
             }
 
+<<<<<<< HEAD
+            for (int i = 0; i < 8; i++) {
+=======
             for (int i = 0; i < 9; i++) {
+>>>>>>> main
                 if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
                     prevLocation = rc.getLocation();
                     rc.move(duckDir);
                     duckDir = duckDir.rotateRight();
-                    duckDir = duckDir.rotateRight();
                     break;
+                } else if (rc.canFill(rc.getLocation().add(duckDir))) {
+                    rc.setIndicatorString("FILLING");
+                    rc.fill(rc.getLocation().add(duckDir));
                 } else {
                     duckDir = duckDir.rotateLeft();
                 }

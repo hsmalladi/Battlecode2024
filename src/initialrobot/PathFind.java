@@ -88,6 +88,7 @@ public class PathFind {
         line = createLine(rc.getLocation(), destination);
 
 
+
         for(MapLocation loc : line) {
             rc.setIndicatorDot(loc, 255, 0, 0);
         }
@@ -110,8 +111,7 @@ public class PathFind {
                 duckState = 0;
             }
 
-
-            for (int i = 0; i < 9; i++) {
+            for (int i = 0; i < 8; i++) {
                 if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
                     prevLocation = rc.getLocation();
                     rc.move(duckDir);

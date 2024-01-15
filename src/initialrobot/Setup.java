@@ -10,13 +10,13 @@ public class Setup {
         ExplorerDuck.init(rc);
     }
 
-    public static void initTurn(RobotController rc) {
+    public static void initTurn(RobotController rc) throws GameActionException {
         if (!RobotPlayer.reachedTarget && rc.getLocation().equals(RobotPlayer.exploreLocation)) {
             RobotPlayer.reachedTarget = true;
         }
     }
     public static void run(RobotController rc) throws GameActionException {
-        if (!RobotPlayer.reachedTarget && RobotPlayer.turnCount <= EXPLORE_ROUNDS) {
+        if (!RobotPlayer.reachedTarget) {
             explore(rc);
         }
         else {
@@ -25,14 +25,15 @@ public class Setup {
             }
 
             if (RobotPlayer.flagDuck != 0) {
-                if (checkDefenses(rc)) {
+                if (!checkDefenses(rc)) {
                     buildDefenses(rc);
                 }
                 else {
-                    //do something after built defenses.
                 }
+
             }
             else {
+                // PathFind.random(rc);
                 PathFind.moveTowards(rc, Map.center);
                 if (RobotPlayer.turnCount >= EXPLORE_ROUNDS) {
                     buildStunTrapsAtDam(rc);
@@ -87,21 +88,21 @@ public class Setup {
 
     }
 
-    public static boolean checkDefenses(RobotController rc) throws GameActionException {
+    private static boolean checkDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
 
         for (MapLocation loc : adj){
             if (rc.onTheMap(loc)) {
                 MapInfo info = rc.senseMapInfo(loc);
                 if (info.getTrapType() != TrapType.EXPLOSIVE) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
-    public static void buildDefenses(RobotController rc) throws GameActionException {
+    private static void buildDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
         if(rc.canBuild(TrapType.STUN, rc.getLocation())) {
             rc.build(TrapType.STUN, rc.getLocation());
@@ -109,6 +110,15 @@ public class Setup {
         for (MapLocation loc : adj){
             if(rc.canBuild(TrapType.EXPLOSIVE, loc)) {
                 rc.build(TrapType.EXPLOSIVE, loc);
+            }
+        }
+    }
+
+    private static void digMoat(RobotController rc) throws GameActionException {
+        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+        for (MapLocation loc : adj){
+            if(rc.canDig(loc)) {
+                rc.dig(loc);
             }
         }
     }
@@ -123,6 +133,59 @@ public class Setup {
                 PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
             }
         }
+    }
+
+    private static void calculateSymmetry(RobotController rc) throws GameActionException {
+    }
+
+    private static void communicateMap(RobotController rc) throws GameActionException {
+
+        MapInfo[] mapInfos = rc.senseNearbyMapInfos();
+        for (int i = 0; i < mapInfos.length; i++) {
+            if (rc.canWriteSharedArray(i, covertMapLocationToInt(mapInfos[i]))) {
+                rc.writeSharedArray(i, covertMapLocationToInt(mapInfos[i]));
+            }
+        }
+    }
+
+    private static void updateMap(RobotController rc) throws GameActionException {
+        for (int i = 0; i < 64; i++) {
+            int info = rc.readSharedArray(i);
+            if (info > 0) {
+                int[] array = covertIntToMapInfo(info);
+
+                Map.map[array[0]][array[1]] = array[2];
+                rc.writeSharedArray(i, 0);
+            }
+        }
+    }
+
+    private static int covertMapLocationToInt(MapInfo info) {
+        MapLocation location = info.getMapLocation();
+
+        int ret = 0;
+        ret += location.x * Map.mapWidth + location.y;
+        ret += 10000 * convertTileTypeToInt(info);
+
+        return ret;
+    }
+
+    private static int[] covertIntToMapInfo(int num) {
+        int firstDigit = Integer.parseInt(Integer.toString(num).substring(0, 1));
+        num -= firstDigit * 10000;
+        int x = num / Map.mapWidth;
+        int y = num % Map.mapWidth;
+        return new int[]{x,y,firstDigit};
+    }
+
+    private static int convertTileTypeToInt(MapInfo info) {
+        if (info.isPassable()) {
+            return 1;
+        }
+        if (info.isWall()) {
+            return 2;
+        }
+        return 1;
     }
 
     private static void retrieveCrumbs(RobotController rc, MapLocation[] crumbLocations) throws GameActionException {

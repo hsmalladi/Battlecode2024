@@ -130,18 +130,18 @@ public class MainRound {
 
 
     public static void tryTrap(RobotController rc) throws GameActionException {
+        if(!rc.isActionReady()) return;
         if (rc.getCrumbs() > 500) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
             if (oppRobotInfos.length > 0) {
                 MapLocation me = rc.getLocation();
-                Direction dir = me.directionTo(oppRobotInfos[0].getLocation());
-                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
-                    rc.build(TrapType.STUN, me.add(dir));
+                Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
                 }
-                else if (rc.canBuild(TrapType.STUN, me)) {
-                    rc.build(TrapType.STUN, me);
+                else if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
+                    rc.build(TrapType.EXPLOSIVE, me);
                 }
-
             }
         }
     }
@@ -207,6 +207,15 @@ public class MainRound {
             else
                 return rc.getAllySpawnLocations()[0];
          }
+    }
+
+    public static MapLocation closestEnemy(RobotController rc, RobotInfo[] robotInfos) {
+        MapLocation[] mapLocations = new MapLocation[robotInfos.length];
+        for (int i = 0; i < robotInfos.length; i++) {
+            mapLocations[i] = robotInfos[i].getLocation();
+        }
+
+        return Map.getClosestLocation(rc.getLocation(), mapLocations);
     }
 
 

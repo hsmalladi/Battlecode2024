@@ -45,6 +45,7 @@ public strictfp class RobotPlayer {
     static boolean isExploring = false;
     static boolean gettingCrumb = false;
     static boolean reachedTarget = false;
+    static boolean buildDefenses = false;
 
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.

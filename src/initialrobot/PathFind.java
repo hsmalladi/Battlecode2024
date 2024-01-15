@@ -84,10 +84,12 @@ public class PathFind {
 //    }
 
     public static void moveTowards(RobotController rc, MapLocation destination) throws GameActionException {
-        prevDest = destination;
+        if (!destination.equals(prevDest)) {
+            prevDest = destination;
+            obstacleStartDist = 10000;
+            prevLocation = null;
+        }
         line = createLine(rc.getLocation(), destination);
-
-
 
         for(MapLocation loc : line) {
             rc.setIndicatorDot(loc, 255, 0, 0);

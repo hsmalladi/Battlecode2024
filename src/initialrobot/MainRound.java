@@ -66,7 +66,6 @@ public class MainRound {
 
     private static void tryFlagDropOff(RobotController rc) throws GameActionException {
         if (!rc.hasFlag() && amHoldingFlag) {
-            rc.writeSharedArray(10, 0);
             amHoldingFlag = false;
             goingToFlag = true;
         }

@@ -24,11 +24,6 @@ public class MainRound {
     public static void run(RobotController rc) throws GameActionException {
         tryFlagPickUp(rc);
         tryFlagDropOff(rc);
-        if (rc.readSharedArray(10) == 1) {
-            goingToFlag = false;
-        } else {
-           goingToFlag = true;
-        }
         if (goingToFlag) {
             goToFlag(rc);
         } else {
@@ -51,7 +46,6 @@ public class MainRound {
 
     private static void tryFlagDropOff(RobotController rc) throws GameActionException {
         if (!rc.hasFlag() && amHoldingFlag) {
-            rc.writeSharedArray(10, 0);
             amHoldingFlag = false;
             goingToFlag = true;
         }

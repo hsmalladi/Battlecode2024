@@ -8,6 +8,7 @@ public class BotDuck {
     public BotDuck(RobotController rc) throws GameActionException {
         this.rc = rc;
         Setup.init(rc);
+        MainRound.init(rc);
     }
 
     void initTurn() throws GameActionException {

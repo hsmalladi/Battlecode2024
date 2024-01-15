@@ -203,7 +203,10 @@ public class MainRound {
              return flags[0].getLocation();
          } else {
             if (rc.senseBroadcastFlagLocations().length > 0) {
-                return rc.senseBroadcastFlagLocations()[0];
+                if (RobotPlayer.turnCount < 1500 || rc.senseBroadcastFlagLocations().length == 1)
+                    return rc.senseBroadcastFlagLocations()[0];
+                else
+                    return rc.senseBroadcastFlagLocations()[1];
             }
             else
                 return rc.getAllySpawnLocations()[0];

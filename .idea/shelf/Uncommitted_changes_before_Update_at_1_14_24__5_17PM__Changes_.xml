@@ -1,0 +1,54 @@
+<changelist name="Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]" date="1705270666578" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 1/14/24, 5:17 PM [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="matches/initialrobot-vs-examplefuncsplayer-on-DefaultHuge.bc24" />
+    <option name="AFTER_PATH" value="matches/initialrobot-vs-examplefuncsplayer-on-DefaultHuge.bc24" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/initialrobot-vs-examplefuncsplayer-on-DefaultHuge.bc24" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".gradle/7.6/executionHistory/executionHistory.lock" />
+    <option name="AFTER_PATH" value=".gradle/7.6/executionHistory/executionHistory.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/executionHistory.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="build/tmp/compileJava/compileTransaction/stash-dir/BotDuck.class.uniqueId0" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="build/tmp/compileJava/previous-compilation-data.bin" />
+    <option name="AFTER_PATH" value="build/tmp/compileJava/previous-compilation-data.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/previous-compilation-data.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="build/test-results/test/binary/results.bin" />
+    <option name="AFTER_PATH" value="build/test-results/test/binary/results.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/results.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".gradle/7.6/fileHashes/fileHashes.lock" />
+    <option name="AFTER_PATH" value=".gradle/7.6/fileHashes/fileHashes.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/fileHashes.lock" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".gradle/7.6/executionHistory/executionHistory.bin" />
+    <option name="AFTER_PATH" value=".gradle/7.6/executionHistory/executionHistory.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/executionHistory.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".gradle/7.6/fileHashes/fileHashes.bin" />
+    <option name="AFTER_PATH" value=".gradle/7.6/fileHashes/fileHashes.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/fileHashes.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".gradle/7.6/fileHashes/resourceHashesCache.bin" />
+    <option name="AFTER_PATH" value=".gradle/7.6/fileHashes/resourceHashesCache.bin" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/resourceHashesCache.bin" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value=".gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+    <option name="AFTER_PATH" value=".gradle/buildOutputCleanup/buildOutputCleanup.lock" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24,_5_17 PM_[Changes]/buildOutputCleanup.lock" />
+  </binary>
+</changelist>

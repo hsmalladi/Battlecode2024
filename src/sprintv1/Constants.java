@@ -1,4 +1,4 @@
-package initialrobot;
+package sprintv1;
 
 public class Constants {
     final static double BASE_DAMAGE = 200;

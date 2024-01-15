@@ -1,4 +1,4 @@
-package initialrobot;
+package sprintv1;
 
 public class Communication {
     final static int FLAG_COMM = 0;

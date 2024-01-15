@@ -1,4 +1,4 @@
-package initialrobot;
+package sprintv1;
 
 import battlecode.common.*;
 

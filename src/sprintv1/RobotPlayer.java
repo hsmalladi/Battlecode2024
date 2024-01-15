@@ -1,8 +1,7 @@
-package initialrobot;
+package sprintv1;
 
 import battlecode.common.*;
 
-import java.nio.file.Path;
 import java.util.Random;
 
 /**

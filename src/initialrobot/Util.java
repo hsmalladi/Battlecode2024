@@ -11,11 +11,4 @@ public class Util {
         return h < Constants.CRITICAL_HEALTH;
     }
 
-
-    static Team opponentTeam(RobotController rc) throws GameActionException {
-        if (rc.getTeam().equals(Team.A))
-            return Team.B;
-        return Team.A;
-    }
-
 }

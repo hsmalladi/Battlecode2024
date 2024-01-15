@@ -27,7 +27,7 @@ public class FlagDuck {
                 rc.writeSharedArray(RobotPlayer.flagDuck, enemies.length);
             }
             if (rc.getLocation().equals(RobotPlayer.exploreLocation)) {
-                if (!Setup.checkDefenses(rc)) {
+                if (Setup.checkDefenses(rc)) {
                     Setup.buildDefenses(rc);
                 }
             }

@@ -27,6 +27,9 @@ public class BotDuck {
             if (RobotPlayer.turnCount <= GameConstants.SETUP_ROUNDS) {
                 Setup.run(rc);
             }
+            else if (RobotPlayer.turnCount > GameConstants.SETUP_ROUNDS && RobotPlayer.flagDuck == 0 ) {
+                MainRound.run(rc);
+            }
         }
     }
 

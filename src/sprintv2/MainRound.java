@@ -130,7 +130,6 @@ public class MainRound {
 
 
     public static void tryTrap(RobotController rc) throws GameActionException {
-        if(!rc.isActionReady()) return;
         if (rc.getCrumbs() > 500) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
             if (oppRobotInfos.length > 0) {
@@ -165,24 +164,17 @@ public class MainRound {
 
 
     public static void tryHeal(RobotController rc) throws GameActionException {
+        if(!rc.isActionReady()) return;
         RobotInfo[] allyRobots = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
-        focusFlagHeal(rc, allyRobots);
+        HealingTarget bestTarget =  null;
         for (RobotInfo r : allyRobots) {
             if (rc.canHeal(r.getLocation())) {
-                rc.heal(r.getLocation());
-                break;
+                HealingTarget hl = new HealingTarget(r);
+                if (hl.isBetterThan(bestTarget)) bestTarget = hl;
             }
         }
-    }
-
-    public static void focusFlagHeal(RobotController rc, RobotInfo[] robotInfos) {
-        for (RobotInfo robotInfo : robotInfos) {
-            if (robotInfo.hasFlag()) {
-                if (rc.canHeal(robotInfo.getLocation())) {
-                    rc.canHeal(robotInfo.getLocation());
-                    break;
-                }
-            }
+        if(bestTarget != null && rc.canHeal(bestTarget.mloc)){
+            rc.heal(bestTarget.mloc);
         }
     }
 
@@ -248,6 +240,25 @@ public class MainRound {
         }
 
         AttackTarget(RobotInfo r){
+            health = r.getHealth();
+            mloc = r.getLocation();
+            flagHolder = r.hasFlag();
+        }
+    }
+
+    public static class HealingTarget{
+        int health;
+        boolean flagHolder = false;
+        MapLocation mloc;
+
+        boolean isBetterThan(HealingTarget t){
+            if (t == null) return true;
+            if (flagHolder && !t.flagHolder) return true;
+            if (!flagHolder && t.flagHolder) return false;
+            return health <= t.health;
+        }
+
+        HealingTarget(RobotInfo r){
             health = r.getHealth();
             mloc = r.getLocation();
             flagHolder = r.hasFlag();

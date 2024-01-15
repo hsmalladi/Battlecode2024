@@ -88,7 +88,7 @@ public class Setup {
 
     }
 
-    private static boolean checkDefenses(RobotController rc) throws GameActionException {
+    public static boolean checkDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
 
         for (MapLocation loc : adj){
@@ -102,7 +102,7 @@ public class Setup {
         return true;
     }
 
-    private static void buildDefenses(RobotController rc) throws GameActionException {
+    public static void buildDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
         if(rc.canBuild(TrapType.STUN, rc.getLocation())) {
             rc.build(TrapType.STUN, rc.getLocation());

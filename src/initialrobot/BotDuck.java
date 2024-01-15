@@ -30,16 +30,19 @@ public class BotDuck {
             if (RobotPlayer.turnCount <= GameConstants.SETUP_ROUNDS) {
                 Setup.run(rc);
             }
-            else if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
-                Setup.exit(rc);
-            } else if (RobotPlayer.turnCount > GameConstants.SETUP_ROUNDS && RobotPlayer.flagDuck == 0 ) {
+            else if (RobotPlayer.flagDuck == 0) {
                 MainRound.run(rc);
+            }
+            else {
+                FlagDuck.protectFlag(rc);
             }
         }
     }
 
-    void endTurn(){
-
+    void endTurn() throws GameActionException {
+        if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS + 1) {
+            Setup.exit(rc);
+        }
     }
 
     void trySpawn(RobotController rc) throws GameActionException {

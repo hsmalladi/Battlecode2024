@@ -22,19 +22,39 @@ public class MainRound {
     }
 
     public static void run(RobotController rc) throws GameActionException {
+        GlobalUpgrades.useGlobalUpgrade(rc);
+
         tryFlagPickUp(rc);
         tryFlagDropOff(rc);
-        if (rc.readSharedArray(10) == 1) {
-            goingToFlag = false;
-        } else {
-           goingToFlag = true;
-        }
+        Setup.retrieveCrumbs(rc);
+
+        goingToFlag = rc.readSharedArray(10) != 1;
         if (goingToFlag) {
             goToFlag(rc);
         } else {
             retreat(rc);
         }
+
+
     }
+
+    private static int protectFlag(RobotController rc) throws GameActionException {
+        for (int i = 1; i < 4; i++) {
+            int numEnemies = rc.readSharedArray(i);
+            if (numEnemies >= 3) {
+                System.out.println("FLAG IN DANGER");
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private static void retreatToFlag(RobotController rc, int flag) throws GameActionException {
+        if (!rc.hasFlag()) {
+            PathFind.moveTowards(rc, Map.flagLocations[flag]);
+        }
+    }
+
 
     private static void tryFlagPickUp(RobotController rc) throws GameActionException {
         for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {
@@ -64,6 +84,7 @@ public class MainRound {
         tryMove(rc);
         tryAttack(rc);
         tryHeal(rc);
+        tryTrap(rc);
     }
 
     private static void retreat(RobotController rc) throws GameActionException {
@@ -74,6 +95,7 @@ public class MainRound {
             tryMove(rc);
             tryAttack(rc);
             tryHeal(rc);
+            tryTrap(rc);
         } else {
             tryMoveBack(rc);
         }
@@ -100,19 +122,34 @@ public class MainRound {
     }
 
 
-    private static void tryAttack(RobotController rc) throws GameActionException {
-        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
-        if (oppRobotInfos.length > 0) {
-            for (RobotInfo opps : oppRobotInfos) {
-                if (rc.canAttack(opps.getLocation())) {
-                    rc.attack(opps.getLocation());
-                    break;
+    public static void tryTrap(RobotController rc) throws GameActionException {
+        if (rc.getCrumbs() > 500) {
+            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+            if (oppRobotInfos.length > 0) {
+                MapLocation me = rc.getLocation();
+                Direction dir = me.directionTo(oppRobotInfos[0].getLocation());
+                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
+                    rc.build(TrapType.STUN, me.add(dir));
                 }
+                else if (rc.canBuild(TrapType.STUN, me)) {
+                    rc.build(TrapType.STUN, me);
+                }
+
             }
         }
     }
 
-    private static void tryHeal(RobotController rc) throws GameActionException {
+    public static void tryAttack(RobotController rc) throws GameActionException {
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
+        for (RobotInfo opps : oppRobotInfos) {
+            if (rc.canAttack(opps.getLocation())) {
+                rc.attack(opps.getLocation());
+                break;
+            }
+        }
+    }
+
+    public static void tryHeal(RobotController rc) throws GameActionException {
         RobotInfo[] allyRobots = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
         for (RobotInfo r : allyRobots) {
             if (rc.canHeal(r.getLocation())) {

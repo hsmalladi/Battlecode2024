@@ -77,17 +77,6 @@ public class Setup {
         }
     }
 
-    public static void moveAndDig(RobotController rc) throws GameActionException {
-        MapLocation water = rc.getLocation().add(Direction.allDirections()[RobotPlayer.rng.nextInt(8)]);
-        if (rc.canDig(water)) {
-            rc.dig(water);
-        }
-        else {
-           // PathFind.random(rc);
-        }
-
-    }
-
     public static boolean checkDefenses(RobotController rc) throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
 
@@ -114,20 +103,11 @@ public class Setup {
         }
     }
 
-    private static void digMoat(RobotController rc) throws GameActionException {
-        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
-        for (MapLocation loc : adj){
-            if(rc.canDig(loc)) {
-                rc.dig(loc);
-            }
-        }
-    }
-
     //potential improvement: communicate who is getting crumb, so not all ducks go to the same crumb
     private static void explore(RobotController rc) throws GameActionException {
         RobotPlayer.isExploring = true;
         if (RobotPlayer.flagDuck == 0)
-            retrieveCrumbs(rc, rc.senseNearbyCrumbs(-1));
+            retrieveCrumbs(rc);
         if (RobotPlayer.isExploring) {
             if (rc.isMovementReady()) {
                 PathFind.moveTowards(rc, RobotPlayer.exploreLocation);
@@ -135,61 +115,9 @@ public class Setup {
         }
     }
 
-    private static void calculateSymmetry(RobotController rc) throws GameActionException {
-    }
-
-    private static void communicateMap(RobotController rc) throws GameActionException {
-
-        MapInfo[] mapInfos = rc.senseNearbyMapInfos();
-        for (int i = 0; i < mapInfos.length; i++) {
-            if (rc.canWriteSharedArray(i, covertMapLocationToInt(mapInfos[i]))) {
-                rc.writeSharedArray(i, covertMapLocationToInt(mapInfos[i]));
-            }
-        }
-    }
-
-    private static void updateMap(RobotController rc) throws GameActionException {
-        for (int i = 0; i < 64; i++) {
-            int info = rc.readSharedArray(i);
-            if (info > 0) {
-                int[] array = covertIntToMapInfo(info);
-
-                Map.map[array[0]][array[1]] = array[2];
-                rc.writeSharedArray(i, 0);
-            }
-        }
-    }
-
-    private static int covertMapLocationToInt(MapInfo info) {
-        MapLocation location = info.getMapLocation();
-
-        int ret = 0;
-        ret += location.x * Map.mapWidth + location.y;
-        ret += 10000 * convertTileTypeToInt(info);
-
-        return ret;
-    }
-
-    private static int[] covertIntToMapInfo(int num) {
-        int firstDigit = Integer.parseInt(Integer.toString(num).substring(0, 1));
-        num -= firstDigit * 10000;
-        int x = num / Map.mapWidth;
-        int y = num % Map.mapWidth;
-        return new int[]{x,y,firstDigit};
-    }
-
-    private static int convertTileTypeToInt(MapInfo info) {
-        if (info.isPassable()) {
-            return 1;
-        }
-        if (info.isWall()) {
-            return 2;
-        }
-        return 1;
-    }
-
-    private static void retrieveCrumbs(RobotController rc, MapLocation[] crumbLocations) throws GameActionException {
+    public static void retrieveCrumbs(RobotController rc) throws GameActionException {
         //Retrieve all crumb locations within robot vision radius
+        MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
         if (crumbLocations.length > 0) {
             MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
             rc.setIndicatorString("Getting Crumb");

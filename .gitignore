@@ -24,8 +24,3 @@ hs_err_pid*
 replay_pid*
 
 .DS_Store
-.gradle
-build
-client
-.idea
-matches

@@ -27,9 +27,8 @@ public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
         tryAttack();
         tryHeal();
         if (micro.doMicro()) return;
-        if (buildTrapsWithin3Tiles(flagDuck)) {
-            pf.moveTowards(Map.allyFlagLocations[flagDuck-1]);
-        }
+
+        pf.moveTowards(Map.allyFlagLocations[flagDuck-1]);
     }
 
     private static void tryAttack() throws GameActionException {

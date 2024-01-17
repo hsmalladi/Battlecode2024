@@ -81,8 +81,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                     if (rc.canSenseLocation(location)) {
                         MapInfo adjInfo = rc.senseMapInfo(location);
                         if (adjInfo.getTeamTerritory() == rc.getTeam() && !rc.canSenseRobotAtLocation(location) && adjInfo.isPassable()) {
-                            isExploring = false;
-                            PathFind.moveTowards(location);
+                            pf.moveTowards(location);
                             return;
                         }
                     }
@@ -95,8 +94,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
        else {
            setupLocation = Map.center;
        }
-
-       PathFind.moveTowards(setupLocation);
+       pf.moveTowards(setupLocation);
     }
 
     private static void comEmptySpotsNextToDam() throws GameActionException {

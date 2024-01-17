@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment=".">
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Communication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Communication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Globals.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/MicroFlag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/MicroFlag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +84,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/betterinfra" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -241,7 +236,8 @@
       <workItem from="1705171454782" duration="19466000" />
       <workItem from="1705285006208" duration="1701000" />
       <workItem from="1705430766229" duration="1089000" />
-      <workItem from="1705460671309" duration="10098000" />
+      <workItem from="1705460671309" duration="10768000" />
+      <workItem from="1705503821195" duration="144000" />
     </task>
     <task id="LOCAL-00001" summary="status phase">
       <option name="closed" value="true" />

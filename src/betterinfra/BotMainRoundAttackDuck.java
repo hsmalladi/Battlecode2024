@@ -71,17 +71,16 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 if (!flag.isPickedUp())
                     return flag.getLocation();
             }
-        } else {
-            if (rc.senseBroadcastFlagLocations().length > 0) {
-                if (turnCount < 1500 || rc.senseBroadcastFlagLocations().length == 1)
-                    return rc.senseBroadcastFlagLocations()[0];
-                else
-                    return rc.senseBroadcastFlagLocations()[1];
-            }
-            else
-                return rc.getAllySpawnLocations()[0];
         }
-        return rc.getAllySpawnLocations()[0];
+        if (rc.senseBroadcastFlagLocations().length > 0) {
+            if (turnCount < 1500 || rc.senseBroadcastFlagLocations().length == 1)
+                return rc.senseBroadcastFlagLocations()[0];
+            else
+                return rc.senseBroadcastFlagLocations()[1];
+        }
+        else
+            return rc.getAllySpawnLocations()[0];
+
     }
 
     public static void tryTrap() throws GameActionException {

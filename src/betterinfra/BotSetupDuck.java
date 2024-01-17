@@ -27,11 +27,11 @@ public class BotSetupDuck extends BotDuck {
     }
 
     private static void determineRole() throws GameActionException {
-        int type = rc.readSharedArray(Communication.FLAG_COMM);
+        int type = rc.readSharedArray(Communication.FLAG_SETUP_COMM);
         if (type < 3) {
             myRole = SETUP_FLAG_ROLE;
             flagDuck = type + 1;
-            rc.writeSharedArray(Communication.FLAG_COMM, flagDuck);
+            rc.writeSharedArray(Communication.FLAG_SETUP_COMM, flagDuck);
         } else {
             myRole = SETUP_EXPLORER_ROLE;
         }

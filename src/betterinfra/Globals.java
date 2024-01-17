@@ -18,6 +18,7 @@ public class Globals {
     public static RobotController rc;
 
     public static Micro micro;
+    public static MicroFlag flagMicro;
 
     static int turnCount = 0;
 
@@ -41,6 +42,7 @@ public class Globals {
         id = rc.getID();
         exploreLocation = new MapLocation(0, 0);
         micro = new Micro();
+        flagMicro = new MicroFlag();
     }
 
     public static void updateGlobals() {

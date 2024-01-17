@@ -2,16 +2,15 @@ package betterinfra;
 
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
 import battlecode.common.RobotInfo;
 
-public class MicroFlag {
+public class MicroFlag extends Globals {
+
     PathFind path;
     static final int FLEE_STRIDE = 50;
-    RobotController rc;
-    MicroFlag(RobotController rc){
+
+    MicroFlag(){
         path = new PathFind();
-        this.rc = rc;
     }
 
 

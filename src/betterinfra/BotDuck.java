@@ -53,11 +53,8 @@ public class BotDuck extends Globals {
         if (turnCount <= GameConstants.SETUP_ROUNDS) {
             BotSetupDuck.play();
         }
-        else if (flagDuck == 0) {
-            BotMainRoundDuck.play();
-        }
         else {
-            BotSetupFlagDuck.play();
+            BotMainRoundDuck.play();
         }
     }
 
@@ -67,13 +64,14 @@ public class BotDuck extends Globals {
 //        }
 //    }
 
-    public static void trySpawn() throws GameActionException {
+    public static boolean trySpawn() throws GameActionException {
         for (MapLocation loc : Map.allySpawnLocations) {
             if (rc.canSpawn(loc)) {
                 rc.spawn(loc);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     public static void smartSpawn() throws GameActionException {

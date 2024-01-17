@@ -3,6 +3,9 @@ package betterinfra;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
+import battlecode.common.RobotController;
+
 
 public class BotSetupDuck extends BotDuck {
 

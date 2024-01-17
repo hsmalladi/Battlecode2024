@@ -11,21 +11,19 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Communication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Constants.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/ExplorerDuck.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/FlagDuck.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/MainRound.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/PathFind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/PathFind.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/RobotPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/RobotPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Setup.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Util.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sprintv2/MainRound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sprintv2/MainRound.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sprintv2/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sprintv2/Setup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupFlagDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupFlagDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Globals.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,6 +104,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/betterinfra" />
+    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -253,7 +252,7 @@
       <workItem from="1705171454782" duration="19466000" />
       <workItem from="1705285006208" duration="1701000" />
       <workItem from="1705430766229" duration="1089000" />
-      <workItem from="1705460671309" duration="2779000" />
+      <workItem from="1705460671309" duration="7556000" />
     </task>
     <task id="LOCAL-00001" summary="status phase">
       <option name="closed" value="true" />

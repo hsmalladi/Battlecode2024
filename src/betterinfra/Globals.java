@@ -43,5 +43,11 @@ public class Globals {
         micro = new Micro();
     }
 
+    public static void updateGlobals() {
+        if (!reachedTarget && rc.isSpawned() && rc.getLocation().equals(exploreLocation)) {
+            reachedTarget = true;
+        }
+    }
+
 
 }

@@ -139,42 +139,4 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             rc.heal(bestTarget.mloc);
         }
     }
-
-    public static class AttackTarget{
-        int health;
-        boolean flagHolder = false;
-        MapLocation mloc;
-
-        boolean isBetterThan(AttackTarget t){
-            if (t == null) return true;
-            if (flagHolder && !t.flagHolder) return true;
-            if (!flagHolder && t.flagHolder) return false;
-            return health <= t.health;
-        }
-
-        AttackTarget(RobotInfo r){
-            health = r.getHealth();
-            mloc = r.getLocation();
-            flagHolder = r.hasFlag();
-        }
-    }
-
-    public static class HealingTarget{
-        int health;
-        boolean flagHolder = false;
-        MapLocation mloc;
-
-        boolean isBetterThan(HealingTarget t){
-            if (t == null) return true;
-            if (flagHolder && !t.flagHolder) return true;
-            if (!flagHolder && t.flagHolder) return false;
-            return health <= t.health;
-        }
-
-        HealingTarget(RobotInfo r){
-            health = r.getHealth();
-            mloc = r.getLocation();
-            flagHolder = r.hasFlag();
-        }
-    }
 }

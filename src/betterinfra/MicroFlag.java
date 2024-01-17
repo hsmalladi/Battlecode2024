@@ -51,7 +51,7 @@ public class MicroFlag {
             if (!found) return false;
             if (x == 0 && y == 0) return true;
             MapLocation target = normalize(x,y);
-            path.moveTowards(rc, target);
+            path.moveTowards(target);
             return true;
         } catch(Exception e){
             e.printStackTrace();

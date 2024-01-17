@@ -188,7 +188,10 @@ public class MainRound {
     private static MapLocation closestFlag(RobotController rc) throws GameActionException {
          FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
          if (flags.length > 0) {
-             return flags[0].getLocation();
+             for (FlagInfo flag : flags) {
+                 if (!flag.isPickedUp())
+                    return flag.getLocation();
+             }
          } else {
             if (rc.senseBroadcastFlagLocations().length > 0) {
                 if (RobotPlayer.turnCount < 1500 || rc.senseBroadcastFlagLocations().length == 1)
@@ -199,6 +202,7 @@ public class MainRound {
             else
                 return rc.getAllySpawnLocations()[0];
          }
+         return rc.getAllySpawnLocations()[0];
     }
 
     public static MapLocation closestEnemy(RobotController rc, RobotInfo[] robotInfos) {

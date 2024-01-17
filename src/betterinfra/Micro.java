@@ -4,9 +4,8 @@ import battlecode.common.*;
 
 import static battlecode.common.GameConstants.*;
 
-public class Micro {
+public class Micro extends Globals {
 
-    RobotController rc;
     final int INF = 1000000;
     Direction[] dirs = Direction.values();
     boolean attacker = false;
@@ -27,8 +26,7 @@ public class Micro {
     double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.85, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.7, ATTACK_COOLDOWN*0.6};
     int MAX_MICRO_BYTECODE = 25000;
 
-    Micro(RobotController rc){
-        this.rc = rc;
+    Micro(){
         myRange = ATTACK_RADIUS_SQUARED;
         myVisionRange = VISION_RADIUS_SQUARED;
         myDPS = DPS[rc.getLevel(SkillType.ATTACK)];

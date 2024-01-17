@@ -1,63 +1,73 @@
 package betterinfra;
 
-import battlecode.common.GameActionException;
-import battlecode.common.GameConstants;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
+import battlecode.common.*;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
-public class BotDuck {
+public class BotDuck extends Globals {
 
 
-    private final RobotController rc;
+    public static int flagDuck = 0;
+    public static PathFind pf = null;
 
 
-    public BotDuck(RobotController rc) throws GameActionException {
-        this.rc = rc;
-        Setup.init(rc);
-        MainRound.init(rc);
-    }
-
-    void initTurn() throws GameActionException {
-        if (!rc.isSpawned()){
-             PathFind.resetDuck();
-             if (RobotPlayer.turnCount < GameConstants.SETUP_ROUNDS) {
-                 trySpawn(rc);
-             }
-             else {
-                 smartSpawn(rc);
-             }
-
+    public static void initDuck() throws GameActionException {
+        if (pf == null) {
+            pf = new PathFind();
+        } else {
+            pf.resetDuck();
         }
-
-        if (rc.isSpawned()) {
-            Setup.initTurn(rc);
+        if (turnCount < GameConstants.SETUP_ROUNDS) {
+            trySpawn();
+        }
+        else {
+            smartSpawn();
         }
     }
 
-    void play() throws GameActionException {
-        if (rc.isSpawned()) {
-            if (RobotPlayer.turnCount <= GameConstants.SETUP_ROUNDS) {
-                Setup.run(rc);
+    public static void loop() throws GameActionException {
+        while (true) {
+            try {
+                turnCount += 1;
+//                if (!rc.isSpawned()) {
+//                    initDuck();
+//                }
+                play();
+            } catch (GameActionException e) {
+                System.out.println("GameActionException");
+                e.printStackTrace();
+
+            } catch (Exception e) {
+                System.out.println("Exception");
+                e.printStackTrace();
+
+            } finally {
+                Clock.yield();
             }
-            else if (RobotPlayer.flagDuck == 0) {
-                MainRound.run(rc);
-            }
-            else {
-                FlagDuck.protectFlag(rc);
-            }
         }
     }
 
-    void endTurn() throws GameActionException {
-        if (RobotPlayer.turnCount == GameConstants.SETUP_ROUNDS) {
-            Setup.exit(rc);
+    public static void play() throws GameActionException {
+        if (turnCount <= GameConstants.SETUP_ROUNDS) {
+            BotSetupDuck.play();
+        }
+        else if (flagDuck == 0) {
+            BotMainRoundDuck.play();
+        }
+        else {
+            BotSetupFlagDuck.play();
         }
     }
 
-    void trySpawn(RobotController rc) throws GameActionException {
+//    public static void endTurn() throws GameActionException {
+//        if (turnCount == GameConstants.SETUP_ROUNDS) {
+//            Setup.exit(rc);
+//        }
+//    }
+
+    public static void trySpawn() throws GameActionException {
         for (MapLocation loc : Map.allySpawnLocations) {
             if (rc.canSpawn(loc)) {
                 rc.spawn(loc);
@@ -66,7 +76,7 @@ public class BotDuck {
         }
     }
 
-    void smartSpawn(RobotController rc) throws GameActionException {
+    public static void smartSpawn() throws GameActionException {
         for (int i = 1; i < 4; i++) {
             int numEnemies = rc.readSharedArray(i);
             if (numEnemies >= 1) {
@@ -80,7 +90,7 @@ public class BotDuck {
                 }
             }
             else {
-                trySpawn(rc);
+                trySpawn();
             }
         }
     }

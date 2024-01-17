@@ -15,6 +15,7 @@ public class Setup {
             RobotPlayer.reachedTarget = true;
         }
     }
+
     public static void run(RobotController rc) throws GameActionException {
         if (!RobotPlayer.reachedTarget && RobotPlayer.turnCount < EXPLORE_ROUNDS) {
             explore(rc);
@@ -47,13 +48,10 @@ public class Setup {
         }
     }
 
-
-
     public static void exit(RobotController rc) throws GameActionException {
         rc.writeSharedArray(0, 0);
         rc.writeSharedArray(1, 0);
     }
-
 
     public static boolean farmToLvl6Build(RobotController rc) throws GameActionException {
         int currentLvl = rc.getLevel(SkillType.BUILD);

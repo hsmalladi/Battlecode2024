@@ -8,9 +8,7 @@ import battlecode.common.RobotController;
 import java.util.HashSet;
 
 
-public class PathFind {
-
-    static Direction direction;
+public class PathFind extends Globals{
 
     static MapLocation prevLocation = null;
 
@@ -32,61 +30,8 @@ public class PathFind {
         prevLocation = null;
     }
 
-    public static void duckNav0(RobotController rc, MapLocation location) throws GameActionException {
-        Direction dir = rc.getLocation().directionTo(location);
-        if (rc.canMove(dir)) {
-            rc.move(dir);
-        }
-        else if (rc.canFill(rc.getLocation().add(dir))) {
-            rc.fill(rc.getLocation().add(dir));
-        }
-        else {
-            for (int i = 0; i < 8; i++) {
-                if (rc.canMove(dir)) {
-                    rc.move(dir);
-                    break;
-                }
-                else {
-                    dir = dir.rotateLeft();
-                }
-            }
-        }
 
-    }
-
-//    public static void duckNav1(RobotController rc, MapLocation destination) throws GameActionException{
-//        if (duckState == 0) {
-//            duckDir = rc.getLocation().directionTo(destination);
-//            if (rc.canMove(duckDir)) {
-//                rc.move(duckDir);
-//            } else {
-//                duckState = 1;
-//                closestObstacle = null;
-//                closestObstacleDist = 10000;
-//            }
-//        } else {
-//            if (rc.getLocation().equals(closestObstacle)) {
-//                duckState = 0;
-//            }
-//
-//            if (rc.getLocation().distanceSquaredTo(destination) < closestObstacleDist) {
-//                closestObstacleDist = rc.getLocation().distanceSquaredTo(destination);
-//                closestObstacle = rc.getLocation();
-//            }
-//
-//            for (int i = 0; i < 8; i++) {
-//                if (rc.canMove(duckDir)) {
-//                    rc.move(duckDir);
-//                    duckDir = duckDir.rotateRight();
-//                    break;
-//                } else {
-//                    duckDir = duckDir.rotateLeft();
-//                }
-//            }
-//        }
-//    }
-
-    public static void moveTowards(RobotController rc, MapLocation destination) throws GameActionException {
+    public static void moveTowards(MapLocation destination) throws GameActionException {
         if (!destination.equals(prevDest)) {
             prevDest = destination;
             obstacleStartDist = 10000;

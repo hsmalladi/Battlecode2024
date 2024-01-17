@@ -5,8 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment=".">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Communication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Constants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/ExplorerDuck.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/FlagDuck.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/MainRound.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/PathFind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/PathFind.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/RobotPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/RobotPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Setup.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Util.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sprintv2/MainRound.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sprintv2/MainRound.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sprintv2/Setup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sprintv2/Setup.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,8 +113,11 @@
       <recent name="$PROJECT_DIR$/src/sprintv2" />
       <recent name="$PROJECT_DIR$/src" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="betterinfra" />
+    </key>
   </component>
-  <component name="RunManager" selected="Gradle.Battlecode2024 [zipForSubmit]">
+  <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -117,18 +139,18 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Battlecode2024 [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Battlecode2024 [checkNewVersion]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
         <option name="taskNames">
           <list>
-            <option value="run" />
+            <option value="checkNewVersion" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -203,11 +225,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
         <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [update]" />
+        <item itemvalue="Gradle.Battlecode2024 [checkNewVersion]" />
+        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
         <item itemvalue="Gradle.Battlecode2024 [verify]" />
-        <item itemvalue="Gradle.Battlecode2024 [run]" />
       </list>
     </recent_temporary>
   </component>
@@ -231,6 +253,7 @@
       <workItem from="1705171454782" duration="19466000" />
       <workItem from="1705285006208" duration="1701000" />
       <workItem from="1705430766229" duration="1089000" />
+      <workItem from="1705460671309" duration="2779000" />
     </task>
     <task id="LOCAL-00001" summary="status phase">
       <option name="closed" value="true" />

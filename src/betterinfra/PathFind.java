@@ -30,7 +30,6 @@ public class PathFind extends Globals{
         prevLocation = null;
     }
 
-
     public static void moveTowards(MapLocation destination) throws GameActionException {
         if (!destination.equals(prevDest)) {
             prevDest = destination;
@@ -63,11 +62,14 @@ public class PathFind extends Globals{
 
             for (int i = 0; i < 8; i++) {
                 if (rc.canMove(duckDir) && !rc.getLocation().add(duckDir).equals(prevLocation)) {
-                    prevLocation = rc.getLocation();
-                    rc.move(duckDir);
-                    duckDir = duckDir.rotateRight();
+                    if (rc.canMove(duckDir)) {
+                        prevLocation = rc.getLocation();
+                        rc.move(duckDir);
+                        duckDir = duckDir.rotateRight();
+                    }
+
                     break;
-                } else if (rc.canFill(rc.getLocation().add(duckDir))) {
+                } else if (rc.getLocation() != null && rc.canFill(rc.getLocation().add(duckDir))) {
                     rc.setIndicatorString("FILLING");
                     rc.fill(rc.getLocation().add(duckDir));
                 } else {

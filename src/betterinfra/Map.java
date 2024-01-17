@@ -1,10 +1,10 @@
 package betterinfra;
 
-import battlecode.common.Direction;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
+import battlecode.common.*;
+import battlecode.world.MapSymmetry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -16,9 +16,10 @@ public class Map {
     static int[][] map;
     static MapLocation center;
     static MapLocation[] corners;
-    static MapLocation[] flagLocations;
+    static MapLocation[] allyFlagLocations;
     static ArrayList<MapLocation> neutralCrumbs;
-
+    static MapLocation[] enemySpawnLocations;
+    static MapLocation[] enemyFlagLocations;
 
     public static void init(RobotController rc) {
         mapWidth = rc.getMapWidth();
@@ -27,46 +28,10 @@ public class Map {
         flagSpawnLocations = getCenters(allySpawnLocations);
         center = getCenter();
         corners = getFourCorners();
-        flagLocations = calculateFlagLocations();
+        allyFlagLocations = getFlagSpawnLocations();
         neutralCrumbs = new ArrayList<>();
     }
-    private static MapLocation[] calculateFlagLocations() {
-        MapLocation bestCorner = calculateBestCorner();
-        MapLocation two = null;
-        MapLocation three = null;
-        if (bestCorner == Map.corners[0]) {
-            two = bestCorner.translate(0, -7);
-            three = bestCorner.translate(7, 0);
-        }
-        else if (bestCorner == Map.corners[1]) {
-            two = bestCorner.translate(0, -7);
-            three = bestCorner.translate(-7, 0);
-        }
-        else if (bestCorner == Map.corners[2]) {
-            two = bestCorner.translate(0, 7);
-            three = bestCorner.translate(7, 0);
-        }
-        else if (bestCorner == Map.corners[3]) {
-            two = bestCorner.translate(0, 7);
-            three = bestCorner.translate(-7, 0);
-        }
-         return new MapLocation[]{bestCorner, two, three};
-    }
-    private static MapLocation calculateBestCorner() {
-        int max = 999999999;
-        int best = -1;
-        for (int i = 0; i < Map.corners.length; i++) {
-            int distance = 0;
-            for (MapLocation flag : Map.flagSpawnLocations) {
-                distance += Map.corners[i].distanceSquaredTo(flag);
-            }
-            if (distance < max) {
-                max = distance;
-                best = i;
-            }
-        }
-        return Map.corners[best];
-    }
+
     public static MapLocation[] getFourCorners() {
         MapLocation bottomLeft = new MapLocation(0, 0);
         MapLocation bottomRight = new MapLocation(mapWidth - 1, 0);
@@ -111,6 +76,42 @@ public class Map {
         });
     }
 
+/*
+    public static MapLocation symmetry(MapLocation location) {
+        int x = location.x;
+        int y = location.y;
+        if (mapSymmetry == MapSymmetry.HORIZONTAL) {
+            return new MapLocation(x, mapHeight - 1 - y);
+        }
+        else if (mapSymmetry == MapSymmetry.VERTICAL) {
+            return new MapLocation(mapWidth - 1 - x, y);
+        }
+        else {
+            return new MapLocation(y,x);
+        }
+    }
+*/
+
+    public static int getQuadrant(MapLocation location) {
+        int x = location.x;
+        int y = location.y;
+        if (x < mapWidth / 2) {
+            if (y > mapHeight / 2) {
+                return 4;
+            }
+            else {
+                return 3;
+            }
+        }
+        else {
+            if (y > mapHeight / 2) {
+                return 1;
+            }
+            else {
+                return 2;
+            }
+        }
+    }
     private static MapLocation[] getCenters(MapLocation[] spawnZones) {
         ArrayList<MapLocation> group1 = new ArrayList<>();
         ArrayList<MapLocation> group2 = new ArrayList<>();
@@ -151,10 +152,23 @@ public class Map {
         return false;
     }
 
+    public static MapLocation[] getFlagSpawnLocations() {
+        return new MapLocation[]{allySpawnLocations[5], allySpawnLocations[14], allySpawnLocations[23]};
+    }
+
     public static MapLocation[] getAdjacentLocations(MapLocation location) {
         Direction[] directions = Direction.allDirections();
-        MapLocation[] adjacentLocations = new MapLocation[8];
-        for (int i = 0; i < 8; i++) {
+        MapLocation[] adjacentLocations = new MapLocation[directions.length];
+        for (int i = 0; i < directions.length; i++) {
+            adjacentLocations[i] = location.add(directions[i]);
+        }
+        return adjacentLocations;
+    }
+
+    public static MapLocation[] getAdjacentLocationsNoCorners(MapLocation location) {
+        Direction[] directions = Direction.cardinalDirections();
+        MapLocation[] adjacentLocations = new MapLocation[directions.length];
+        for (int i = 0; i < directions.length; i++) {
             adjacentLocations[i] = location.add(directions[i]);
         }
         return adjacentLocations;

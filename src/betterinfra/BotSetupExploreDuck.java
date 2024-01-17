@@ -1,9 +1,9 @@
 package betterinfra;
 
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
+import battlecode.common.*;
 
 public class BotSetupExploreDuck extends BotSetupDuck {
+    static MapLocation setupLocation;
 
     public static void play() throws GameActionException {
         updateGlobals();
@@ -14,16 +14,20 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
                 explore();
             } else {
-                retrieveCrumbs();
-                if (!gettingCrumb)
-                    pf.moveTowards(Map.center);
+                lineUpAtDam();
             }
         }
+    }
+
+    public static void exit() throws GameActionException {
+        updateFlagLocations();
     }
     
     public static boolean init() throws GameActionException {
         int val = rc.readSharedArray(Communication.EXPLORER_COMM);
-        if (val < 4) { //top left corner
+        setupLocation = new MapLocation(0, 0);
+        rc.writeSharedArray(12, 4444);
+        if (val < 4) {
             if (trySpawn()) {
                 exploreLocation = Map.corners[val];
                 rc.writeSharedArray(Communication.EXPLORER_COMM, val + 1);
@@ -52,6 +56,79 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         return false;
     }
 
+    private static void updateFlagLocations() throws GameActionException {
+        for (int i = 1; i < 4; i++) {
+            MapLocation location = Map.intToLocation(rc.readSharedArray(i));
+            Map.allyFlagLocations[i-1] = location;
+        }
+    }
+
+
+
+    private static void lineUpAtDam() throws GameActionException {
+       if (isNextToDam()) {
+           reachedTarget = true;
+           comEmptySpotsNextToDam();
+           return;
+       }
+
+       MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
+
+       for (MapInfo mapInfo : mapInfos) {
+            if (mapInfo.isDam()) {
+                MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
+                for (MapLocation location : adjacent) {
+                    if (rc.canSenseLocation(location)) {
+                        MapInfo adjInfo = rc.senseMapInfo(location);
+                        if (adjInfo.getTeamTerritory() == rc.getTeam() && !rc.canSenseRobotAtLocation(location) && adjInfo.isPassable()) {
+                            isExploring = false;
+                            PathFind.moveTowards(location);
+                            return;
+                        }
+                    }
+                }
+            }
+       }
+       if (rc.readSharedArray(12) != 4444){
+           setupLocation = Map.intToLocation(rc.readSharedArray(12));
+       }
+       else {
+           setupLocation = Map.center;
+       }
+
+       PathFind.moveTowards(setupLocation);
+    }
+
+    private static void comEmptySpotsNextToDam() throws GameActionException {
+        MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
+        for (MapInfo mapInfo : mapInfos) {
+            if (mapInfo.isDam()) {
+                MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
+                for (MapLocation location : adjacent) {
+                    if (rc.canSenseLocation(location)) {
+                        MapInfo adjInfo = rc.senseMapInfo(location);
+                        if (adjInfo.getTeamTerritory() == rc.getTeam() && !rc.canSenseRobotAtLocation(location)) {
+                            rc.writeSharedArray(12, Map.locationToInt(location));
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isNextToDam() throws GameActionException {
+        MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(rc.getLocation());
+        for (MapLocation adj : adjacent) {
+            if (rc.canSenseLocation(adj)) {
+                if (rc.senseMapInfo(adj).isDam()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private static void explore() throws GameActionException {
         isExploring = true;
         if (flagDuck == 0)
@@ -68,12 +145,17 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
         if (crumbLocations.length > 0) {
             MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
-            rc.setIndicatorString("Getting Crumb");
-            gettingCrumb = true;
-            if (rc.isMovementReady()) {
-                pf.moveTowards(closestCrumb);
+            if (rc.senseMapInfo(closestCrumb).getTeamTerritory() == rc.getTeam()) {
+                rc.setIndicatorString("Getting Crumb");
+                gettingCrumb = true;
+                if (rc.isMovementReady()) {
+                    pf.moveTowards(closestCrumb);
+                }
+                isExploring = false;
             }
-            isExploring = false;
+            else {
+                gettingCrumb = false;
+            }
         } else {
             gettingCrumb = false;
         }

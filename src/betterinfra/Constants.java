@@ -5,6 +5,6 @@ public class Constants {
 
     final static int CRITICAL_HEALTH = 60;
 
-    final static int EXPLORE_ROUNDS = 150;
+    final static int EXPLORE_ROUNDS = 100;
 
 }

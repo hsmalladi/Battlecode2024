@@ -33,10 +33,11 @@ public class BotDuck extends Globals {
     }
 
     public static void play() throws GameActionException {
-        if (turnCount <= GameConstants.SETUP_ROUNDS) {
+        if (turnCount < GameConstants.SETUP_ROUNDS) {
             BotSetupDuck.play();
-        }
-        else {
+        } else if (turnCount == GameConstants.SETUP_ROUNDS) {
+            BotSetupDuck.exit();
+        } else {
             BotMainRoundDuck.play();
         }
     }

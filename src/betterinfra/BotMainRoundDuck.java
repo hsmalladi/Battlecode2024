@@ -9,7 +9,8 @@ public class BotMainRoundDuck extends BotDuck {
 
     private static final int
                     ATTACK_DUCK = 1,
-                    FLAG_CARRIER = 2;
+                    FLAG_CARRIER = 2,
+                    FLAG_DEFENSE_DUCK = 3;
 
     private static int myRole = -1;
 
@@ -25,14 +26,18 @@ public class BotMainRoundDuck extends BotDuck {
             determineRole();
             if (myRole == ATTACK_DUCK) {
                 BotMainRoundAttackDuck.play();
-            } else {
+            } else if (myRole == FLAG_CARRIER){
                 BotMainRoundFlagDuck.play();
+            } else {
+                BotMainRoundFlagDefenseDuck.play();
             }
         }
     }
 
     private static void determineRole() {
-        if (rc.hasFlag()) {
+        if (flagDuck != 0) {
+            myRole = FLAG_DEFENSE_DUCK;
+        } else if (rc.hasFlag()) {
             myRole = FLAG_CARRIER;
         } else {
             myRole = ATTACK_DUCK;

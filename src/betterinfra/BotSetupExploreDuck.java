@@ -11,11 +11,16 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             init();
         }
         if (rc.isSpawned()) {
+            recordQuadrants();
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
                 explore();
             } else {
+                if (exploreLocation.equals(Map.center)) {
+                    determineSymmetry();
+                }
                 lineUpAtDam();
             }
+
         }
     }
 
@@ -60,6 +65,33 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         for (int i = 1; i < 4; i++) {
             MapLocation location = Map.intToLocation(rc.readSharedArray(i));
             Map.allyFlagLocations[i-1] = location;
+        }
+    }
+
+    public static void recordQuadrants() throws GameActionException {
+        int quad = Map.getQuadrant(rc.getLocation());
+        rc.writeSharedArray(quad + 19, 1);
+    }
+
+    public static void determineSymmetry() throws GameActionException {
+        int q1 = 0, q2 = 0, q3 = 0, q4 = 0;
+
+        q1 = rc.readSharedArray(20);
+        q2 = rc.readSharedArray(21);
+        q3 = rc.readSharedArray(22);
+        q4 = rc.readSharedArray(23);
+
+        if (q1 + q2 + q3 + q4 >=3) {
+            rc.writeSharedArray(0, 3); //3 is diagonal
+        }
+        else if (q1 + q2 == 2 || q4+q3 == 2) {
+            rc.writeSharedArray(0, 2); // 2 is vertical
+        }
+        else if (q2+q3 == 2 || q1+q4 == 2) {
+            rc.writeSharedArray(0, 1); // 1 is hori
+        }
+        else {
+            rc.writeSharedArray(0, 3);
         }
     }
 

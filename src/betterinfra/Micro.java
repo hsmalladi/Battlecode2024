@@ -57,8 +57,10 @@ public class Micro extends Globals {
         for (int i = 0; i < 9; ++i) microInfo[i] = new MicroInfo(dirs[i]);
 
         for (RobotInfo unit : units) {
+            if(unit.hasFlag()){
+                continue;
+            }
             currentDPS = DPS[unit.getAttackLevel()];
-            if (currentDPS <= 0) continue;
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
             microInfo[2].updateEnemy(unit);
@@ -73,6 +75,9 @@ public class Micro extends Globals {
         if (myDPS > 0) {
             units = rc.senseNearbyRobots(myVisionRange, rc.getTeam());
             for (RobotInfo unit : units) {
+                if (unit.hasFlag()){
+                    continue;
+                }
                 currentDPS = DPS[unit.getAttackLevel()];
                 microInfo[0].updateAlly(unit);
                 microInfo[1].updateAlly(unit);

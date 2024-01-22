@@ -61,7 +61,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     private static void tryMove() throws GameActionException {
         if(!rc.isMovementReady()) return;
         if (micro.doMicro()) return;
-        MapLocation closestEnemy =  closestEnemy();
+        MapLocation closestEnemy = closestEnemy();
         if (closestEnemy != null) {
             pf.moveTowards(closestEnemy);
         }
@@ -91,15 +91,36 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     return flag.getLocation();
             }
         }
-        if (rc.senseBroadcastFlagLocations().length > 0) {
-            if (turnCount < 1500 || rc.senseBroadcastFlagLocations().length == 1)
-                return rc.senseBroadcastFlagLocations()[0];
-            else
-                return rc.senseBroadcastFlagLocations()[1];
-        }
-        else
-            return rc.getAllySpawnLocations()[0];
 
+        int mindist = 100000;
+        MapLocation closestFlag = null;
+        MapLocation[] flagLocations = rc.senseBroadcastFlagLocations();
+        for (MapLocation flagLoc : flagLocations){
+            int flagDist = rc.getLocation().distanceSquaredTo(flagLoc);
+            if (flagDist < mindist){
+                mindist = flagDist;
+                closestFlag = flagLoc;
+            }
+        }
+        if (closestFlag != null){
+            return closestFlag;
+        }
+
+        return getRandomTarget(15);
+    }
+
+    private static MapLocation getRandomTarget(int tries) {
+        MapLocation myLoc = rc.getLocation();
+        int maxX = rc.getMapWidth();
+        int maxY = rc.getMapHeight();
+        MapLocation exploreLoc = null;
+        while(tries-- > 0){
+            MapLocation newLoc = new MapLocation((int)(Math.random()*maxX), (int)(Math.random()*maxY));
+            if (myLoc.distanceSquaredTo(newLoc) > GameConstants.VISION_RADIUS_SQUARED){
+                exploreLoc = newLoc;
+            }
+        }
+        return exploreLoc;
     }
 
     public static void tryTrap() throws GameActionException {

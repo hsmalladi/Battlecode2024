@@ -68,13 +68,13 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static MapLocation getTarget() throws GameActionException{
-        MapLocation target = closestFlag();
+        MapLocation target = getBestTarget();
         if (target != null){
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             return target;
         }
         //TODO: ADD ENEMY FLAG AND SPAWN TARGET
-        target = getClosestBroadcastFlag();
+        target = closestFlag();
         if (target != null){
             rc.setIndicatorString("GOING TO BROADCAST");
             return target;
@@ -108,28 +108,20 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static MapLocation closestFlag() throws GameActionException {
         ArrayList<MapLocation> flagLocs = new ArrayList<>();
-        FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
-        for (FlagInfo flag : flags) {
-            if (!flag.isPickedUp()) {
-                flagLocs.add(flag.getLocation());
+        for (int i = Comm.ENEMY_FLAG_FIRST+1; i <= Comm.ENEMY_FLAG_LAST; i++) {
+            if (Comm.getLocation(i) != null) {
+                flagLocs.add(Comm.getLocation(i));
             }
         }
         if (flagLocs.size() == 0) {
-            for (int i = Comm.ENEMY_FLAG_FIRST+1; i <= Comm.ENEMY_FLAG_LAST; i++) {
-                if (Comm.getLocation(i) != null) {
-                    flagLocs.add(Comm.getLocation(i));
-                }
-            }
-            if (flagLocs.size() == 0) {
-                MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
-                for (MapLocation flagLoc : broadcastLocs) {
-                    flagLocs.add(flagLoc);
-                }
+            MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
+            for (MapLocation flagLoc : broadcastLocs) {
+                flagLocs.add(flagLoc);
             }
         }
+
         MapLocation closestFlag = findClosest(rc.getLocation(), flagLocs);
         return closestFlag;
-
     }
 
     private static MapLocation getClosestVisionFlag() throws GameActionException {

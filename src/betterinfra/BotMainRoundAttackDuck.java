@@ -64,6 +64,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         MapLocation closestEnemy = closestEnemy();
         if (closestEnemy != null) {
             pf.moveTowards(closestEnemy);
+            return;
         }
         pf.moveTowards(closestFlag(rc));
     }

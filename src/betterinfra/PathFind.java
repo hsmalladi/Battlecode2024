@@ -32,6 +32,7 @@ public class PathFind extends Globals{
 
 
     public static void moveTowards(MapLocation destination) throws GameActionException {
+        if (!rc.isMovementReady()) return;
         if (!destination.equals(prevDest)) {
             prevDest = destination;
             obstacleStartDist = 10000;

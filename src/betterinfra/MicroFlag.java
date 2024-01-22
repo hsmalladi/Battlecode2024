@@ -31,7 +31,7 @@ public class MicroFlag extends Globals {
 
     boolean doMicro(){
         try{
-            RobotInfo[] enemies = rc.senseNearbyRobots(rc.getLocation(), GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+            RobotInfo[] enemies = rc.senseNearbyRobots(rc.getLocation(), 6, rc.getTeam().opponent());
             MapLocation myLoc = rc.getLocation();
             int x = 0;
             int y = 0;

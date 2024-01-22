@@ -171,7 +171,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     public static void tryTrap() throws GameActionException {
-        if (builderDuck == 1 && rc.getRoundNum() % 20 == 0) {
+        if (builderDuck == 1) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
             if (oppRobotInfos.length > 0) {
                 MapLocation me = rc.getLocation();

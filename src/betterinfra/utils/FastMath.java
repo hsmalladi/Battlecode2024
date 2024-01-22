@@ -1,5 +1,10 @@
 package betterinfra.utils;
 
+/**
+ * The following code is from https://github.com/carlguo866/battlecode23-gonefishin/tree/main/src/submit24_US_qual/util and is
+ * not ours
+ */
+
 import battlecode.common.Direction;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;

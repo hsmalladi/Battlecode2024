@@ -8,7 +8,13 @@ import betterinfra.utils.FastMath;
  * This class contains logic / variable that is shared between all units
  * pathfinding logics will be here
  */
-public class Unit extends Globals {
+/**
+ * The following code is partially
+ * from https://github.com/carlguo866/battlecode23-gonefishin/tree/main/src/submit24_US_qual and is
+ * not ours
+ */
+
+public class BadPathFind extends Globals {
 
     static void randomMove() throws GameActionException {
         int starting_i = FastMath.rand256() % Constants.directions.length;
@@ -86,7 +92,7 @@ public class Unit extends Globals {
     private static int pathingCnt_ = 0;
     static int MAX_DEPTH = 15;
 
-    static void moveToward(MapLocation location) throws GameActionException {
+    static void moveTowards(MapLocation location) throws GameActionException {
         // reset queue when target location changes or there's gap in between calls
         if (!location.equals(lastPathingTarget) || lastPathingTurn < turnCount - 4) {
             pathingCnt = 0;

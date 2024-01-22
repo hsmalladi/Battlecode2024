@@ -3,6 +3,12 @@ package betterinfra;
 import battlecode.common.*;
 import betterinfra.utils.FastIterableIntSet;
 
+/**
+ * The following code is partially
+ * from https://github.com/carlguo866/battlecode23-gonefishin/tree/main/src/submit24_US_qual and is
+ * not ours
+ */
+
 /***
  *
  * to represent coord, the value in the shared array is 1 more than usual

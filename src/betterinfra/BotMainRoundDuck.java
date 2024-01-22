@@ -60,7 +60,7 @@ public class BotMainRoundDuck extends BotDuck {
             int numEnemies = rc.readSharedArray(i);
             if (numEnemies >= 1) {
                 List<MapLocation> sorted = Arrays.asList(Map.allySpawnLocations);
-                Map.sortCoordinatesByDistance(sorted, Map.flagLocations[i-1]);
+                Map.sortCoordinatesByDistance(sorted, Map.allyFlagLocations[i-1]);
                 for (MapLocation loc : sorted) {
                     if (rc.canSpawn(loc)) {
                         rc.spawn(loc);

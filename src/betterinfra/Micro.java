@@ -94,7 +94,7 @@ public class Micro extends Globals {
         if (bestMicro.dir == Direction.CENTER) return true;
 
         if (rc.canMove(bestMicro.dir)) {
-            // rc.setIndicatorString("Moving back: " + bestMicro.dir);
+            rc.setIndicatorString("Moving back: " + bestMicro.dir);
             rc.move(bestMicro.dir);
             return true;
         }

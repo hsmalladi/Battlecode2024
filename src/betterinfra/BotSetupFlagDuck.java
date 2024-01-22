@@ -23,18 +23,41 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         } else {
             if (rc.hasFlag()) {
                 dropFlag();
+                communicateFlagLocation();
             }
-            setUpStructure();
         }
     }
 
     public static boolean initFlagDuck() throws GameActionException {
         if (rc.canSpawn(Map.flagSpawnLocations[flagDuck-1])) {
             rc.spawn(Map.flagSpawnLocations[flagDuck-1]);
-            exploreLocation = Map.flagLocations[flagDuck-1];
+            Map.allyFlagLocations[flagDuck-1] = calculateOptimalFlagLocation();
+            exploreLocation = Map.allyFlagLocations[flagDuck-1];
+            rc.setIndicatorString(String.valueOf(Map.flagSpawnLocations[flagDuck-1]));
             return true;
         }
         return false;
+    }
+
+
+    //currently don't move flags
+    public static MapLocation calculateOptimalFlagLocation() throws GameActionException {
+        FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
+        if (flags.length > 0) {
+            return flags[0].getLocation();
+        }
+        return rc.getLocation();
+    }
+
+    public static void communicateFlagLocation() throws GameActionException {
+        for (int i = 1; i < 4; i++) {
+            if (BotDuck.flagDuck == i) {
+                int location = Map.locationToInt(rc.getLocation());
+                if (rc.canWriteSharedArray(i, location)) {
+                    rc.writeSharedArray(i, location);
+                }
+            }
+        }
     }
 
     private static void moveToLocation() throws GameActionException {
@@ -55,24 +78,6 @@ public class BotSetupFlagDuck extends BotSetupDuck {
                 break;
             }
         }
-    }
-
-    private static void setUpStructure() throws GameActionException {
-        if (rc.hasFlag()) {
-            dropFlag();
-        }
-        if (!rc.hasFlag()) {
-            if (farmToLvl6Build()) {
-                if (!checkDefenses() && !buildDefenses) {
-                    buildDefenses();
-                } else {
-                    if (buildTrapsWithin3Tiles(flagDuck)) {
-                        pf.moveTowards(Map.flagLocations[flagDuck - 1]);
-                    }
-                }
-            }
-        }
-
     }
 
     private static void dropFlag() throws GameActionException {
@@ -132,7 +137,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     }
 
     public static boolean buildTrapsWithin3Tiles(int flagDuck) throws GameActionException {
-        MapInfo[] trapsLocations = rc.senseNearbyMapInfos(Map.flagLocations[flagDuck-1], 6);
+        MapInfo[] trapsLocations = rc.senseNearbyMapInfos(Map.allyFlagLocations[flagDuck-1], 6);
         if (trapsLocations.length > 0) {
             for (MapInfo trapLoc : trapsLocations) {
                 if (trapLoc.getTrapType() == TrapType.NONE) {

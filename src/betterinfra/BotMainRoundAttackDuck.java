@@ -86,11 +86,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static MapLocation closestFlag(RobotController rc) throws GameActionException {
         FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
-        if (flags.length > 0) {
-            for (FlagInfo flag : flags) {
-                if (!flag.isPickedUp())
-                    return flag.getLocation();
-            }
+        for (FlagInfo flag : flags) {
+            if (!flag.isPickedUp())
+                return flag.getLocation();
         }
 
         int mindist = 100000;
@@ -125,7 +123,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     public static void tryTrap() throws GameActionException {
-        if (rc.getCrumbs() > 500) {
+        if (builderDuck == 1) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
             if (oppRobotInfos.length > 0) {
                 MapLocation me = rc.getLocation();
@@ -133,7 +131,13 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
                     rc.build(TrapType.EXPLOSIVE, me.add(dir));
                 }
-                else if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
+                }
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight()))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
+                }
+                if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
                     rc.build(TrapType.EXPLOSIVE, me);
                 }
             }

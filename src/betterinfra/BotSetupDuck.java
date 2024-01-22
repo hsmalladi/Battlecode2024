@@ -8,7 +8,8 @@ public class BotSetupDuck extends BotDuck {
 
     final public static int
                     SETUP_EXPLORER_ROLE = 1,
-                    SETUP_FLAG_ROLE = 2;
+                    SETUP_FLAG_ROLE = 2,
+                    SETUP_BUILDER_ROLE = 3;
 
     private static int myRole = -1;
 
@@ -35,6 +36,10 @@ public class BotSetupDuck extends BotDuck {
             myRole = SETUP_FLAG_ROLE;
             flagDuck = type + 1;
             rc.writeSharedArray(Comm.FLAG_SETUP_COMM, flagDuck);
+        } else if (type < 5) {
+            myRole = SETUP_EXPLORER_ROLE;
+            builderDuck = 1;
+            rc.writeSharedArray(Comm.FLAG_SETUP_COMM, type + 1);
         } else {
             myRole = SETUP_EXPLORER_ROLE;
         }

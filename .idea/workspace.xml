@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="removed building defense traps in main phase">
-      <change afterPath="$PROJECT_DIR$/src/betterinfra/Unit.java" afterDir="false" />
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="determine symmetry">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDefenseDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDefenseDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Globals.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Comm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Comm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,12 +77,12 @@
     <option name="BRANCH" value="main" />
   </component>
   <component name="Git.Rebase.Settings">
-    <option name="NEW_BASE" value="main" />
+    <option name="NEW_BASE" value="origin/new_coms" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="setup-phase-sprint2" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -100,8 +102,13 @@
     "Gradle.Battlecode2024 [update].executor": "Run",
     "Gradle.Battlecode2024 [wrapper].executor": "Run",
     "Gradle.Battlecode2024 [zipForSubmit].executor": "Run",
+    "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "setup-phase-v3",
-    "node.js.selected.package.tslint": "(autodetect)"
+    "last_opened_file_path": "/Users/louishu/Battlecode2024/build.gradle",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -114,7 +121,7 @@
       <recent name="betterinfra" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
+  <component name="RunManager" selected="Gradle.Battlecode2024 [wrapper]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -227,10 +234,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
         <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [update]" />
         <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
-        <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
         <item itemvalue="Gradle.Battlecode2024 [run]" />
       </list>
     </recent_temporary>
@@ -258,6 +265,7 @@
       <workItem from="1705460671309" duration="10768000" />
       <workItem from="1705503821195" duration="144000" />
       <workItem from="1705505348636" duration="1215000" />
+      <workItem from="1705901245729" duration="932000" />
     </task>
     <task id="LOCAL-00001" summary="status phase">
       <option name="closed" value="true" />
@@ -419,31 +427,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705785672236</updated>
     </task>
-    <task id="LOCAL-00021" summary="merged setup phase v2">
+    <task id="LOCAL-00021" summary="testing">
       <option name="closed" value="true" />
-      <created>1705896388843</created>
+      <created>1705938515863</created>
       <option name="number" value="00021" />
       <option name="presentableId" value="LOCAL-00021" />
       <option name="project" value="LOCAL" />
-      <updated>1705896388843</updated>
+      <updated>1705938515863</updated>
     </task>
-    <task id="LOCAL-00022" summary="map recorder + determine symmetry and enemy flag spawn zones">
-      <option name="closed" value="true" />
-      <created>1705902536382</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1705902536382</updated>
-    </task>
-    <task id="LOCAL-00023" summary="removed building defense traps in main phase">
-      <option name="closed" value="true" />
-      <created>1705902894225</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1705902894225</updated>
-    </task>
-    <option name="localTasksCounter" value="24" />
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -474,10 +466,8 @@
     <MESSAGE value="smart spawning to spawn near flags if getting attacked; prio for crumbs in main phase; flag ducks farm to lv 6 build before building." />
     <MESSAGE value="line up at dam, kinda works." />
     <MESSAGE value="determine symmetry" />
-    <MESSAGE value="merged setup phase v2" />
-    <MESSAGE value="map recorder + determine symmetry and enemy flag spawn zones" />
-    <MESSAGE value="removed building defense traps in main phase" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed building defense traps in main phase" />
+    <MESSAGE value="testing" />
+    <option name="LAST_COMMIT_MESSAGE" value="testing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

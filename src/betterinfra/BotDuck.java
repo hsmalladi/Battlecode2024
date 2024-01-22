@@ -5,6 +5,8 @@ public class BotDuck extends Globals {
 
 
     public static int flagDuck = 0;
+
+    public static int builderDuck = 0;
     public static PathFind pf = null;
 
 

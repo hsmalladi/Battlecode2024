@@ -19,6 +19,10 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             }
             MapRecorder.recordSym(500);
 
+            if (builderDuck == 1){
+                digToLv6();
+            }
+
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
                 explore();
             } else {
@@ -29,6 +33,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     }
 
     public static void exit() throws GameActionException {
+        System.out.println(Arrays.toString(Map.enemySpawnLocations));
         updateFlagLocations();
     }
     
@@ -64,6 +69,17 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         }
         return false;
     }
+
+    private static void digToLv6() throws GameActionException {
+        if (rc.getLevel(SkillType.BUILD) < 6) {
+            for (MapLocation adj : Map.getAdjacentLocations(rc.getLocation())) {
+                if (rc.canDig(adj)) {
+                    rc.dig(adj);
+                }
+            }
+        }
+    }
+
 
     private static void updateFlagLocations() throws GameActionException {
         for (int i = 1; i < 4; i++) {

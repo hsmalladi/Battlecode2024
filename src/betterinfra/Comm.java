@@ -3,10 +3,6 @@ package betterinfra;
 import battlecode.common.*;
 import betterinfra.utils.FastIterableIntSet;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
-import java.util.Arrays;
-
-
 /***
  *
  * to represent coord, the value in the shared array is 1 more than usual
@@ -33,6 +29,10 @@ public class Comm extends Globals {
     private static final int ARRAY_LENGTH = 64; // this is how much we use rn
     private static final int SYM_BIT = 48;
     private static final int NUM_FLAGS = 3;
+    public static int numFlagsReported = 0;
+
+    private static boolean needFlagUpdate = false;
+    public static MapLocation[] enemyFlags = new MapLocation[NUM_FLAGS];
 
 
 
@@ -48,15 +48,12 @@ public class Comm extends Globals {
                 if (i == 3 && !isSymmetryConfirmed) {
                     needSymUpdate = true;
                 }
+                if (i >= 6 && i <= 13) {
+                    needFlagUpdate = true;
+                }
                 buffered_share_array[i] = rc.readSharedArray(i);
             }
         }
-        // HQ update should only be done once, at turn 1 for all HQ, and at turn 0 for other units
-  /*      if ((turnCount <= 1 && rc.getType() == RobotType.HEADQUARTERS)
-                || (turnCount == 0 && rc.getType() != RobotType.HEADQUARTERS)) {
-            updateHQLocations();
-        }*/
-
         if (needSymUpdate || Globals.turnCount == 0) {
             updateSym();
         }
@@ -70,6 +67,13 @@ public class Comm extends Globals {
                 rc.writeSharedArray(indexes[i], buffered_share_array[indexes[i]]);
             }
             changedIndexes.clear();
+        }
+    }
+    public static void reportEnemyFlags(MapLocation location) {
+        if (!location.equals(int2loc(readBits(numFlagsReported * 12, 12)))) {
+                enemyFlags[numFlagsReported] = location;
+                writeBits(numFlagsReported * 12, 12, loc2int(location));
+                numFlagsReported += 1;
         }
     }
     public static void eliminateSym(int sym) throws GameActionException {

@@ -7,6 +7,7 @@ import battlecode.common.RobotController;
 
 public class BotMainRoundFlagDuck extends BotMainRoundDuck {
 
+    private static MapLocation target;
     public static void play() throws GameActionException {
         tryMoveBack();
     }
@@ -14,10 +15,14 @@ public class BotMainRoundFlagDuck extends BotMainRoundDuck {
     private static void tryMoveBack() throws GameActionException {
         if(!rc.isMovementReady()) return;
         if (flagMicro.doMicro()) return;
-        pf.moveTowards(closestSpawn(rc));
+        if (target == null) {
+            target = closestSpawn();
+        }
+        pf.moveTowards(target);
     }
 
-    private static MapLocation closestSpawn(RobotController rc) {
+    private static MapLocation closestSpawn() {
+        System.out.println(Map.getClosestLocation(rc.getLocation(), Map.allySpawnLocations));
         return Map.getClosestLocation(rc.getLocation(), Map.allySpawnLocations);
     }
 }

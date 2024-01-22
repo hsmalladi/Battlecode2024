@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment=".">
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="builder ducks build traps more">
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/MicroFlag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/MicroFlag.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +102,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "main"
+    "Gradle.Battlecode2024 [zipForSubmit].executor": "Run",
+    "git-widget-placeholder": "main",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -109,7 +117,7 @@
       <recent name="betterinfra" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
+  <component name="RunManager" selected="Gradle.Battlecode2024 [zipForSubmit]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -222,10 +230,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
         <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
         <item itemvalue="Gradle.Battlecode2024 [update]" />
-        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
         <item itemvalue="Gradle.Battlecode2024 [run]" />
       </list>
     </recent_temporary>
@@ -424,7 +432,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705938515863</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="builder ducks build traps more">
+      <option name="closed" value="true" />
+      <created>1705964562996</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1705964562996</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -456,7 +472,8 @@
     <MESSAGE value="line up at dam, kinda works." />
     <MESSAGE value="testing" />
     <MESSAGE value="determine symmetry" />
-    <option name="LAST_COMMIT_MESSAGE" value="determine symmetry" />
+    <MESSAGE value="builder ducks build traps more" />
+    <option name="LAST_COMMIT_MESSAGE" value="builder ducks build traps more" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

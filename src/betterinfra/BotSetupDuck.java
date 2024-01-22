@@ -29,17 +29,6 @@ public class BotSetupDuck extends BotDuck {
         }
     }
 
-
-
-
-    private static void clearSharedArray() throws GameActionException {
-        for (int i = 0; i < 4; i++) {
-            if (rc.canWriteSharedArray(i, 0)) {
-                rc.writeSharedArray(i, 0);
-            }
-        }
-    }
-
     private static void determineRole() throws GameActionException {
         int type = rc.readSharedArray(Comm.FLAG_SETUP_COMM);
         if (type < 3) {

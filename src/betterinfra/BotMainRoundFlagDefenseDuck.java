@@ -19,13 +19,6 @@ public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
             rc.writeSharedArray(flagDuck, enemies.length);
         }
 
-
-        if (rc.getLocation().equals(exploreLocation)) {
-            buildDefenses();
-        }
-        else {
-            pf.moveTowards(exploreLocation);
-        }
         tryAttack();
         tryHeal();
         if (micro.doMicro()) return;

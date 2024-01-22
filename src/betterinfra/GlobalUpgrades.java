@@ -8,7 +8,11 @@ public class GlobalUpgrades extends Globals {
     public static void useGlobalUpgrade() throws GameActionException {
         if(rc.canBuyGlobal(GlobalUpgrade.ACTION)) {
             rc.buyGlobal(GlobalUpgrade.ACTION);
-            System.out.println("BOUGHT ACTION UPGRADE");
+            System.out.println("BOUGHT ATTACK UPGRADE");
+        }
+        else if(rc.canBuyGlobal(GlobalUpgrade.CAPTURING)) {
+            rc.buyGlobal(GlobalUpgrade.CAPTURING);
+            System.out.println("BOUGHT CAPTURING UPGRADE");
         }
         else if(rc.canBuyGlobal(GlobalUpgrade.HEALING)) {
             rc.buyGlobal(GlobalUpgrade.HEALING);

@@ -61,36 +61,56 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     private static void tryMove() throws GameActionException {
         if(!rc.isMovementReady()) return;
         if (micro.doMicro()) return;
-        MapLocation closestEnemy = closestEnemy();
-        if (closestEnemy != null) {
-            pf.moveTowards(closestEnemy);
-            return;
-        }
-        pf.moveTowards(closestFlag(rc));
+        MapLocation target = getTarget();
+        pf.moveTowards(target);
     }
 
-    private static MapLocation closestEnemy() throws GameActionException {
+    private static MapLocation getTarget() throws GameActionException{
+        MapLocation target = getBestTarget();
+        if (target != null) return target;
+        //TODO: ADD ENEMY FLAG AND SPAWN TARGET
+        target = getClosestBroadcastFlag();
+        if (target != null) return target;
+        target = Map.enemySpawnLocations[0];
+        if (target != null) return target;
+        return getRandomTarget(15);
+    }
+
+    private static MapLocation getBestTarget() throws GameActionException{
+        MoveTarget bestTarget = null;
+        MapLocation closestEnemyFlag = getClosestVisionFlag();
+        if (closestEnemyFlag != null){
+            return closestEnemyFlag;
+        }
+
+        int dist = 10000;
         RobotInfo[] enemies = rc.senseNearbyRobots(rc.getLocation(), GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
-        MapLocation bestTarget = null;
-        int best_dist = 100000;
-        for (RobotInfo enemy: enemies){
-            int enemy_dist = rc.getLocation().distanceSquaredTo(enemy.getLocation());
-            if (enemy_dist < best_dist) {
-                best_dist = enemy_dist;
-                bestTarget = enemy.getLocation();
-            }
+        for(RobotInfo enemy: enemies){
+            MoveTarget mt = new MoveTarget(enemy);
+            if (mt.isBetterThan(bestTarget)) bestTarget = mt;
         }
-
-        return bestTarget;
+        if (bestTarget != null)
+        {
+            return bestTarget.mloc;
+        }
+        return null;
     }
 
-    private static MapLocation closestFlag(RobotController rc) throws GameActionException {
+    private static MapLocation getClosestVisionFlag() throws GameActionException {
+        int dist = 10000;
+        MapLocation closestFlag = null;
         FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
         for (FlagInfo flag : flags) {
-            if (!flag.isPickedUp())
-                return flag.getLocation();
+            if (!flag.isPickedUp() && rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist)
+            {
+                closestFlag = flag.getLocation();
+                dist = rc.getLocation().distanceSquaredTo(flag.getLocation());
+            }
         }
+        return closestFlag;
+    }
 
+    private static MapLocation getClosestBroadcastFlag() throws GameActionException {
         int mindist = 100000;
         MapLocation closestFlag = null;
         MapLocation[] flagLocations = rc.senseBroadcastFlagLocations();

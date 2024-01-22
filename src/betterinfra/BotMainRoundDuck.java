@@ -22,6 +22,11 @@ public class BotMainRoundDuck extends BotDuck {
             smartSpawn();
         }
         if (rc.isSpawned()) {
+            if (Comm.needSymmetryReport && rc.canWriteSharedArray(0, 0)) {
+                Comm.reportSym();
+                Comm.commit_write();
+            }
+            MapRecorder.recordSym(500);
             tryFlagPickUp();
             determineRole();
             if (myRole == ATTACK_DUCK) {
@@ -49,7 +54,7 @@ public class BotMainRoundDuck extends BotDuck {
             if (rc.canPickupFlag(loc.getLocation())) {
                 rc.pickupFlag(loc.getLocation());
                 goingToFlag = false;
-                rc.writeSharedArray(Communication.ENEMY_FLAG_HELD, 1);
+                rc.writeSharedArray(Comm.ENEMY_FLAG_HELD, 1);
                 break;
             }
         }

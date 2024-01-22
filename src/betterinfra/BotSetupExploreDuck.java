@@ -2,6 +2,8 @@ package betterinfra;
 
 import battlecode.common.*;
 
+import java.util.Arrays;
+
 public class BotSetupExploreDuck extends BotSetupDuck {
     static MapLocation setupLocation;
 
@@ -11,13 +13,15 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             init();
         }
         if (rc.isSpawned()) {
-            recordQuadrants();
+            if (Comm.needSymmetryReport && rc.canWriteSharedArray(0, 0)) {
+                Comm.reportSym();
+                Comm.commit_write();
+            }
+            MapRecorder.recordSym(500);
+
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
                 explore();
             } else {
-                if (exploreLocation.equals(Map.center)) {
-                    determineSymmetry();
-                }
                 lineUpAtDam();
             }
 
@@ -29,13 +33,13 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     }
     
     public static boolean init() throws GameActionException {
-        int val = rc.readSharedArray(Communication.EXPLORER_COMM);
+        int val = rc.readSharedArray(Comm.EXPLORER_COMM);
         setupLocation = new MapLocation(0, 0);
         rc.writeSharedArray(12, 4444);
         if (val < 4) {
             if (trySpawn()) {
                 exploreLocation = Map.corners[val];
-                rc.writeSharedArray(Communication.EXPLORER_COMM, val + 1);
+                rc.writeSharedArray(Comm.EXPLORER_COMM, val + 1);
                 isExploring = true;
                 rc.setIndicatorString(String.valueOf(exploreLocation));
             }
@@ -44,7 +48,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         else if (val == 4) { //center
             if (trySpawn()) {
                 exploreLocation = Map.center;
-                rc.writeSharedArray(Communication.EXPLORER_COMM, val + 1);
+                rc.writeSharedArray(Comm.EXPLORER_COMM, val + 1);
                 isExploring = true;
                 rc.setIndicatorString("Center " + exploreLocation);
                 return true;
@@ -68,35 +72,6 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         }
     }
 
-    public static void recordQuadrants() throws GameActionException {
-        int quad = Map.getQuadrant(rc.getLocation());
-        rc.writeSharedArray(quad + 19, 1);
-    }
-
-    public static void determineSymmetry() throws GameActionException {
-        int q1 = 0, q2 = 0, q3 = 0, q4 = 0;
-
-        q1 = rc.readSharedArray(20);
-        q2 = rc.readSharedArray(21);
-        q3 = rc.readSharedArray(22);
-        q4 = rc.readSharedArray(23);
-
-        if (q1 + q2 + q3 + q4 >=3) {
-            rc.writeSharedArray(0, 3); //3 is diagonal
-        }
-        else if (q1 + q2 == 2 || q4+q3 == 2) {
-            rc.writeSharedArray(0, 2); // 2 is vertical
-        }
-        else if (q2+q3 == 2 || q1+q4 == 2) {
-            rc.writeSharedArray(0, 1); // 1 is hori
-        }
-        else {
-            rc.writeSharedArray(0, 3);
-        }
-    }
-
-
-
     private static void lineUpAtDam() throws GameActionException {
        if (isNextToDam()) {
            reachedTarget = true;
@@ -107,7 +82,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
        MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
 
        for (MapInfo mapInfo : mapInfos) {
-            if (mapInfo.isDam()) {
+            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
                     if (rc.canSenseLocation(location)) {
@@ -132,7 +107,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     private static void comEmptySpotsNextToDam() throws GameActionException {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
         for (MapInfo mapInfo : mapInfos) {
-            if (mapInfo.isDam()) {
+            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
                     if (rc.canSenseLocation(location)) {

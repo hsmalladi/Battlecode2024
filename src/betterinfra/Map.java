@@ -25,7 +25,9 @@ public class Map {
         mapWidth = rc.getMapWidth();
         mapHeight = rc.getMapHeight();
         allySpawnLocations = rc.getAllySpawnLocations();
+        enemySpawnLocations = new MapLocation[allySpawnLocations.length];
         flagSpawnLocations = getCenters(allySpawnLocations);
+        enemyFlagLocations = new MapLocation[flagSpawnLocations.length];
         center = getCenter();
         corners = getFourCorners();
         allyFlagLocations = getFlagSpawnLocations();
@@ -75,22 +77,6 @@ public class Map {
             return Double.compare(distance1, distance2);
         });
     }
-
-/*
-    public static MapLocation symmetry(MapLocation location) {
-        int x = location.x;
-        int y = location.y;
-        if (mapSymmetry == MapSymmetry.HORIZONTAL) {
-            return new MapLocation(x, mapHeight - 1 - y);
-        }
-        else if (mapSymmetry == MapSymmetry.VERTICAL) {
-            return new MapLocation(mapWidth - 1 - x, y);
-        }
-        else {
-            return new MapLocation(y,x);
-        }
-    }
-*/
 
     public static int getQuadrant(MapLocation location) {
         int x = location.x;

@@ -14,6 +14,8 @@ public class BotMainRoundDuck extends BotDuck {
 
     private static int myRole = -1;
 
+    public static int myFlag = -1;
+
     public static boolean goingToFlag = true;
 
     public static void play() throws GameActionException {

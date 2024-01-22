@@ -2,6 +2,8 @@ package betterinfra;
 
 import battlecode.common.*;
 
+import java.util.ArrayList;
+
 public class BotDuck extends Globals {
 
 
@@ -57,5 +59,18 @@ public class BotDuck extends Globals {
             }
         }
         return false;
+    }
+
+    public static MapLocation findClosest(MapLocation ref, ArrayList<MapLocation> locations) {
+        int maxDistance = 100000;
+        MapLocation best = null;
+        for (MapLocation loc : locations) {
+            int distTo = ref.distanceSquaredTo(loc);
+            if (distTo < maxDistance) {
+                maxDistance = distTo;
+                best = loc;
+            }
+        }
+        return best;
     }
 }

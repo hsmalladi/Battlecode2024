@@ -2,6 +2,8 @@ package betterinfra;
 
 import battlecode.common.*;
 
+import java.util.ArrayList;
+
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
@@ -66,7 +68,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static MapLocation getTarget() throws GameActionException{
-        MapLocation target = getBestTarget();
+        MapLocation target = closestFlag();
         if (target != null){
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             return target;
@@ -102,6 +104,32 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return bestTarget.mloc;
         }
         return null;
+    }
+
+    private static MapLocation closestFlag() throws GameActionException {
+        ArrayList<MapLocation> flagLocs = new ArrayList<>();
+        FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+        for (FlagInfo flag : flags) {
+            if (!flag.isPickedUp()) {
+                flagLocs.add(flag.getLocation());
+            }
+        }
+        if (flagLocs.size() == 0) {
+            for (int i = Comm.ENEMY_FLAG_FIRST+1; i <= Comm.ENEMY_FLAG_LAST; i++) {
+                if (Comm.getLocation(i) != null) {
+                    flagLocs.add(Comm.getLocation(i));
+                }
+            }
+            if (flagLocs.size() == 0) {
+                MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
+                for (MapLocation flagLoc : broadcastLocs) {
+                    flagLocs.add(flagLoc);
+                }
+            }
+        }
+        MapLocation closestFlag = findClosest(rc.getLocation(), flagLocs);
+        return closestFlag;
+
     }
 
     private static MapLocation getClosestVisionFlag() throws GameActionException {

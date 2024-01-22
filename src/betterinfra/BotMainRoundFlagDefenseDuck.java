@@ -5,9 +5,7 @@ import battlecode.common.*;
 public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
 
     public static void play() throws GameActionException {
-        if (rc.isSpawned()) {
-            protectFlag();
-        }
+        protectFlag();
     }
 
     public static void protectFlag() throws GameActionException {

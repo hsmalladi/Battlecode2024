@@ -23,6 +23,7 @@ public class Globals {
     static int turnCount = 0;
 
     static Random rng;
+    static String indicator;
 
     static final Direction[] directions = {
             Direction.NORTH,
@@ -43,6 +44,7 @@ public class Globals {
         exploreLocation = new MapLocation(0, 0);
         micro = new Micro();
         flagMicro = new MicroFlag();
+        indicator = "";
     }
 
     public static void updateGlobals() {

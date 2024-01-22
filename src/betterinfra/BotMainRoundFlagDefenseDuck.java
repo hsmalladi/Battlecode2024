@@ -5,9 +5,7 @@ import battlecode.common.*;
 public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
 
     public static void play() throws GameActionException {
-        if (rc.isSpawned()) {
-            protectFlag();
-        }
+        protectFlag();
     }
 
     public static void protectFlag() throws GameActionException {
@@ -19,13 +17,6 @@ public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
             rc.writeSharedArray(flagDuck, enemies.length);
         }
 
-
-        if (rc.getLocation().equals(exploreLocation)) {
-            buildDefenses();
-        }
-        else {
-            pf.moveTowards(exploreLocation);
-        }
         tryAttack();
         tryHeal();
         if (micro.doMicro()) return;

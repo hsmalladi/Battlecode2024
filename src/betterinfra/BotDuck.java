@@ -1,21 +1,19 @@
 package betterinfra;
 
 import battlecode.common.*;
-
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-
 public class BotDuck extends Globals {
 
 
     public static int flagDuck = 0;
+
+    public static int builderDuck = 0;
     public static PathFind pf = null;
 
 
     public static void loop() throws GameActionException {
         while (true) {
             try {
+                Comm.turn_starts();
                 turnCount += 1;
                 play();
             } catch (GameActionException e) {

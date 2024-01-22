@@ -182,7 +182,26 @@ public class MainRound {
     private static void tryMove(RobotController rc) throws GameActionException {
         if(!rc.isMovementReady()) return;
         if (m.doMicro()) return;
+        MapLocation closestEnemy = closestEnemy(rc);
+        if (closestEnemy != null) {
+            PathFind.moveTowards(rc, closestEnemy);
+        }
         PathFind.moveTowards(rc, closestFlag(rc));
+    }
+
+    private static MapLocation closestEnemy(RobotController rc) throws GameActionException {
+        RobotInfo[] enemies = rc.senseNearbyRobots(rc.getLocation(), GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+        MapLocation bestTarget = null;
+        int best_dist = 100000;
+        for (RobotInfo enemy: enemies){
+            int enemy_dist = rc.getLocation().distanceSquaredTo(enemy.getLocation());
+            if (enemy_dist < best_dist) {
+                best_dist = enemy_dist;
+                bestTarget = enemy.getLocation();
+            }
+        }
+
+        return bestTarget;
     }
 
     private static MapLocation closestFlag(RobotController rc) throws GameActionException {

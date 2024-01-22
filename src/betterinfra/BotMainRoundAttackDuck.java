@@ -61,7 +61,26 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     private static void tryMove() throws GameActionException {
         if(!rc.isMovementReady()) return;
         if (micro.doMicro()) return;
+        MapLocation closestEnemy =  closestEnemy();
+        if (closestEnemy != null) {
+            pf.moveTowards(closestEnemy);
+        }
         pf.moveTowards(closestFlag(rc));
+    }
+
+    private static MapLocation closestEnemy() throws GameActionException {
+        RobotInfo[] enemies = rc.senseNearbyRobots(rc.getLocation(), GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+        MapLocation bestTarget = null;
+        int best_dist = 100000;
+        for (RobotInfo enemy: enemies){
+            int enemy_dist = rc.getLocation().distanceSquaredTo(enemy.getLocation());
+            if (enemy_dist < best_dist) {
+                best_dist = enemy_dist;
+                bestTarget = enemy.getLocation();
+            }
+        }
+
+        return bestTarget;
     }
 
     private static MapLocation closestFlag(RobotController rc) throws GameActionException {

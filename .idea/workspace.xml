@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="map recorder + determine symmetry and enemy flag spawn zones">
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="removed building defense traps in main phase">
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/Unit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDefenseDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDefenseDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Globals.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -434,7 +435,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705902536382</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="removed building defense traps in main phase">
+      <option name="closed" value="true" />
+      <created>1705902894225</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1705902894225</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -467,7 +476,8 @@
     <MESSAGE value="determine symmetry" />
     <MESSAGE value="merged setup phase v2" />
     <MESSAGE value="map recorder + determine symmetry and enemy flag spawn zones" />
-    <option name="LAST_COMMIT_MESSAGE" value="map recorder + determine symmetry and enemy flag spawn zones" />
+    <MESSAGE value="removed building defense traps in main phase" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed building defense traps in main phase" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

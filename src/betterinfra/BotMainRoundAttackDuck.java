@@ -67,13 +67,21 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static MapLocation getTarget() throws GameActionException{
         MapLocation target = getBestTarget();
-        if (target != null) return target;
+        if (target != null){
+            rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
+            return target;
+        }
         //TODO: ADD ENEMY FLAG AND SPAWN TARGET
         target = getClosestBroadcastFlag();
-        if (target != null) return target;
-        target = Map.enemySpawnLocations[0];
-        if (target != null) return target;
-        return getRandomTarget(15);
+        if (target != null){
+            rc.setIndicatorString("GOING TO BROADCAST");
+            return target;
+        }
+        //TODO: MAKE SMARTER THAN JUST CHOOSING ONE SPOT
+//        target = Map.enemySpawnLocations[0];
+//        if (target != null) return target;
+        rc.setIndicatorString("I'm DUMB. GOING TO RANDOM LOC");
+        return Explore.getExploreTarget();
     }
 
     private static MapLocation getBestTarget() throws GameActionException{
@@ -125,7 +133,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return closestFlag;
         }
 
-        return getRandomTarget(15);
+        return null;
     }
 
     private static MapLocation getRandomTarget(int tries) {
@@ -143,7 +151,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     public static void tryTrap() throws GameActionException {
-        if (builderDuck == 1) {
+        if (builderDuck == 1 && rc.getRoundNum() % 20 == 0) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
             if (oppRobotInfos.length > 0) {
                 MapLocation me = rc.getLocation();

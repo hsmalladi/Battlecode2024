@@ -4,10 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="determine symmetry">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_1_14_24__2_26PM__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_1_14_24__5_39PM__Changes_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_1_14_24__5_17PM__Changes_.xml" beforeDir="false" />
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="merged setup phase v2">
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/Comm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/MapRecorder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/utils/FastIterableIntSet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/utils/FastIterableLocSet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/utils/FastLocIntMap.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/utils/FastMath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Communication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Map.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +39,7 @@
           <activation />
         </task>
         <projects_view>
+          <option name="groupModules" value="false" />
           <tree_state>
             <expand>
               <path>
@@ -78,7 +92,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="setup-phase-sprint2" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -98,7 +112,7 @@
     "Gradle.Battlecode2024 [update].executor": "Run",
     "Gradle.Battlecode2024 [wrapper].executor": "Run",
     "Gradle.Battlecode2024 [zipForSubmit].executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "setup-phase-v3",
     "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
@@ -112,7 +126,7 @@
       <recent name="betterinfra" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Battlecode2024 [zipForSubmit]">
+  <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -225,9 +239,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
         <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [update]" />
+        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
         <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
         <item itemvalue="Gradle.Battlecode2024 [run]" />
       </list>
@@ -417,7 +431,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705785672236</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="merged setup phase v2">
+      <option name="closed" value="true" />
+      <created>1705896388843</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1705896388843</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -448,7 +470,8 @@
     <MESSAGE value="smart spawning to spawn near flags if getting attacked; prio for crumbs in main phase; flag ducks farm to lv 6 build before building." />
     <MESSAGE value="line up at dam, kinda works." />
     <MESSAGE value="determine symmetry" />
-    <option name="LAST_COMMIT_MESSAGE" value="determine symmetry" />
+    <MESSAGE value="merged setup phase v2" />
+    <option name="LAST_COMMIT_MESSAGE" value="merged setup phase v2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

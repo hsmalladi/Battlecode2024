@@ -1,10 +1,7 @@
 package betterinfra;
 
 
-import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
 
 
 public class BotSetupDuck extends BotDuck {
@@ -44,11 +41,11 @@ public class BotSetupDuck extends BotDuck {
     }
 
     private static void determineRole() throws GameActionException {
-        int type = rc.readSharedArray(Communication.FLAG_SETUP_COMM);
+        int type = rc.readSharedArray(Comm.FLAG_SETUP_COMM);
         if (type < 3) {
             myRole = SETUP_FLAG_ROLE;
             flagDuck = type + 1;
-            rc.writeSharedArray(Communication.FLAG_SETUP_COMM, flagDuck);
+            rc.writeSharedArray(Comm.FLAG_SETUP_COMM, flagDuck);
         } else {
             myRole = SETUP_EXPLORER_ROLE;
         }

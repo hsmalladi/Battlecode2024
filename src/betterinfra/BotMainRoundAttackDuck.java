@@ -8,7 +8,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     public static void play() throws GameActionException {
         retrieveCrumbs();
         if (!gettingCrumb) {
-            goingToFlag = rc.readSharedArray(Communication.ENEMY_FLAG_HELD) != 1;
+            goingToFlag = rc.readSharedArray(Comm.ENEMY_FLAG_HELD) != 1;
             if (goingToFlag) {
                 goToFlag();
             } else {

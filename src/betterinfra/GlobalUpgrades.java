@@ -14,5 +14,9 @@ public class GlobalUpgrades extends Globals {
             rc.buyGlobal(GlobalUpgrade.HEALING);
             System.out.println("BOUGHT HEALING UPGRADE");
         }
+        else if (rc.canBuyGlobal(GlobalUpgrade.CAPTURING)) {
+            rc.buyGlobal(GlobalUpgrade.CAPTURING);
+            System.out.println("BOUGHT CAPTURING UPGRADE");
+        }
     }
 }

@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="determine symmetry">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="removed building defense traps in main phase">
+      <change afterPath="$PROJECT_DIR$/src/betterinfra/Unit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Micro.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Micro.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/PathFind.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/PathFind.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDefenseDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDefenseDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Globals.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +27,7 @@
           <activation />
         </task>
         <projects_view>
+          <option name="groupModules" value="false" />
           <tree_state>
             <expand>
               <path>
@@ -83,7 +80,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="setup-phase-sprint2" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -96,22 +93,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Battlecode2024 [build].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Battlecode2024 [run].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Battlecode2024 [update].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Battlecode2024 [wrapper].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.Battlecode2024 [zipForSubmit].executor&quot;: &quot;Run&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/louishu/Battlecode2024/build.gradle&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Battlecode2024 [build].executor": "Run",
+    "Gradle.Battlecode2024 [run].executor": "Run",
+    "Gradle.Battlecode2024 [update].executor": "Run",
+    "Gradle.Battlecode2024 [wrapper].executor": "Run",
+    "Gradle.Battlecode2024 [zipForSubmit].executor": "Run",
+    "git-widget-placeholder": "setup-phase-v3",
+    "node.js.selected.package.tslint": "(autodetect)"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/betterinfra" />
@@ -122,7 +114,7 @@
       <recent name="betterinfra" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Battlecode2024 [wrapper]">
+  <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -142,6 +134,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="Battlecode2024 [run]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -163,6 +156,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="Battlecode2024 [update]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -184,6 +178,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="Battlecode2024 [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -205,6 +200,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <configuration name="Battlecode2024 [zipForSubmit]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -226,14 +222,15 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
         <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [update]" />
         <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
+        <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
         <item itemvalue="Gradle.Battlecode2024 [run]" />
       </list>
     </recent_temporary>
@@ -261,7 +258,6 @@
       <workItem from="1705460671309" duration="10768000" />
       <workItem from="1705503821195" duration="144000" />
       <workItem from="1705505348636" duration="1215000" />
-      <workItem from="1705901245729" duration="932000" />
     </task>
     <task id="LOCAL-00001" summary="status phase">
       <option name="closed" value="true" />
@@ -423,7 +419,31 @@
       <option name="project" value="LOCAL" />
       <updated>1705785672236</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="merged setup phase v2">
+      <option name="closed" value="true" />
+      <created>1705896388843</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1705896388843</updated>
+    </task>
+    <task id="LOCAL-00022" summary="map recorder + determine symmetry and enemy flag spawn zones">
+      <option name="closed" value="true" />
+      <created>1705902536382</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1705902536382</updated>
+    </task>
+    <task id="LOCAL-00023" summary="removed building defense traps in main phase">
+      <option name="closed" value="true" />
+      <created>1705902894225</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1705902894225</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -454,7 +474,10 @@
     <MESSAGE value="smart spawning to spawn near flags if getting attacked; prio for crumbs in main phase; flag ducks farm to lv 6 build before building." />
     <MESSAGE value="line up at dam, kinda works." />
     <MESSAGE value="determine symmetry" />
-    <option name="LAST_COMMIT_MESSAGE" value="determine symmetry" />
+    <MESSAGE value="merged setup phase v2" />
+    <MESSAGE value="map recorder + determine symmetry and enemy flag spawn zones" />
+    <MESSAGE value="removed building defense traps in main phase" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed building defense traps in main phase" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

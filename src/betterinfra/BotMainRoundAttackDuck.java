@@ -2,6 +2,8 @@ package betterinfra;
 
 import battlecode.common.*;
 
+import java.util.ArrayList;
+
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
@@ -72,7 +74,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return target;
         }
         //TODO: ADD ENEMY FLAG AND SPAWN TARGET
-        target = getClosestBroadcastFlag();
+        target = closestFlag();
         if (target != null){
             rc.setIndicatorString("GOING TO BROADCAST");
             return target;
@@ -102,6 +104,24 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return bestTarget.mloc;
         }
         return null;
+    }
+
+    private static MapLocation closestFlag() throws GameActionException {
+        ArrayList<MapLocation> flagLocs = new ArrayList<>();
+        for (int i = Comm.ENEMY_FLAG_FIRST+1; i <= Comm.ENEMY_FLAG_LAST; i++) {
+            if (Comm.getLocation(i) != null) {
+                flagLocs.add(Comm.getLocation(i));
+            }
+        }
+        if (flagLocs.size() == 0) {
+            MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
+            for (MapLocation flagLoc : broadcastLocs) {
+                flagLocs.add(flagLoc);
+            }
+        }
+
+        MapLocation closestFlag = findClosest(rc.getLocation(), flagLocs);
+        return closestFlag;
     }
 
     private static MapLocation getClosestVisionFlag() throws GameActionException {

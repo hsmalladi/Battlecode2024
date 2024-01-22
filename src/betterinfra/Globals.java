@@ -3,6 +3,7 @@ package betterinfra;
 import battlecode.common.Direction;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
+import battlecode.common.Team;
 
 import java.util.Random;
 
@@ -52,6 +53,8 @@ public class Globals {
             reachedTarget = true;
         }
     }
+
+
 
 
 }

@@ -27,10 +27,13 @@ public class Comm extends Globals {
     final static int FLAG_SETUP_COMM = 0;
     final static int EXPLORER_COMM = 1;
     final static int ENEMY_FLAG_HELD = 10;
+    final static int ENEMY_FLAG_FIRST = 15;
+    final static int ENEMY_FLAG_LAST = 17;
     public static int symmetry;
     public static boolean isSymmetryConfirmed;
     public static boolean needSymmetryReport;
     public static boolean[] isSymEliminated = new boolean[3];
+    public static int[] flagIDs = new int[6];
 
     private static final int ARRAY_LENGTH = 64; // this is how much we use rn
     private static final int SYM_BIT = 48;
@@ -63,7 +66,61 @@ public class Comm extends Globals {
         if (needSymUpdate || Globals.turnCount == 0) {
             updateSym();
         }
+        if (rc.isSpawned()) {
+            for (FlagInfo flag : rc.senseNearbyFlags(-1)) {
+                updateFlagInfo(flag.getLocation(), flag.isPickedUp(), flagIDToIdx(flag.getID(), flag.getTeam()));
+            }
+        }
     }
+
+    public static int flagIDToIdx(int flagID, Team team) {
+        if (flagIDs == null) {
+            flagIDs = new int[6];
+        }
+        int j = 0;
+        if (team.equals(rc.getTeam().opponent())) j += 3;
+        for (int i = j; i<j+3; i++) {
+            if (flagIDs[i] == 0) {
+                flagIDs[i] = flagID;
+                return i;
+            } else if (flagIDs[i] == flagID) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+
+    public static void updateFlagInfo(MapLocation loc, boolean isCarried, int idx) throws GameActionException {
+        idx = idx + ENEMY_FLAG_FIRST - 3;
+        int locInt = loc2int(loc);
+        locInt = locInt << 1;
+        if (isCarried) {
+            locInt += 1;
+        }
+        int readArray = rc.readSharedArray(idx);
+        if (readArray != locInt) {
+            rc.writeSharedArray(idx, locInt);
+        }
+
+    }
+
+
+    public static MapLocation getLocation(int idx) throws GameActionException {
+        idx = idx + ENEMY_FLAG_FIRST - 3;
+        int val = rc.readSharedArray(idx);
+        val = val >> 1;
+        return int2loc(val);
+    }
+
+    public static boolean isCarriedHere(MapLocation loc) throws GameActionException {
+        int locInt = loc2int(loc);
+        int val = rc.readSharedArray(locInt);
+        if (val == 0)
+            return false;
+        return val % 2 == 1;
+    }
+
     // IMPORTANT: always ensure that any write op is performed when writable
     public static void commit_write() throws GameActionException {
         if (changedIndexes.size > 0) {

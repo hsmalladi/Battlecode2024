@@ -4,6 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment=".">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Comm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Comm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/Globals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Globals.java" afterDir="false" />
+=======
     <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="builder ducks build traps more">
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
@@ -13,6 +22,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundFlagDuck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/betterinfra/MicroFlag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/MicroFlag.java" afterDir="false" />
+>>>>>>> main
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,6 +110,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+=======
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Gradle.Battlecode2024 [zipForSubmit].executor": "Run",
@@ -107,6 +123,7 @@
     "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
+>>>>>>> main
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/betterinfra" />
@@ -262,7 +279,8 @@
       <workItem from="1705503821195" duration="144000" />
       <workItem from="1705505348636" duration="1215000" />
       <workItem from="1705901245729" duration="932000" />
-      <workItem from="1705962309879" duration="340000" />
+      <workItem from="1705962309879" duration="647000" />
+      <workItem from="1705964804350" duration="1805000" />
     </task>
     <task id="LOCAL-00001" summary="status phase">
       <option name="closed" value="true" />

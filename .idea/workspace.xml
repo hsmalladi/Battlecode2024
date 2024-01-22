@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="line up at dam, kinda works.">
+    <list default="true" id="d349e976-9e03-4690-82b0-71db621ae28a" name="Changes" comment="determine symmetry">
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/checksums.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/md5-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/md5-checksums.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/checksums/sha1-checksums.bin" afterDir="false" />
@@ -14,6 +14,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" afterDir="false" />
@@ -21,12 +22,9 @@
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotMainRoundAttackDuck.class.uniqueId2" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/Battlecode Client.app/Contents/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/client/Battlecode Client.app/Contents/Info.plist" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/Battlecode Client.app/Contents/MacOS/Battlecode Client" beforeDir="false" afterPath="$PROJECT_DIR$/client/Battlecode Client.app/Contents/MacOS/Battlecode Client" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupExploreDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Communication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Communication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/version.txt" beforeDir="false" afterPath="$PROJECT_DIR$/version.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -117,6 +115,7 @@
     "Gradle.Battlecode2024 [run].executor": "Run",
     "Gradle.Battlecode2024 [update].executor": "Run",
     "Gradle.Battlecode2024 [wrapper].executor": "Run",
+    "Gradle.Battlecode2024 [zipForSubmit].executor": "Run",
     "git-widget-placeholder": "setup-phase-sprint2",
     "node.js.selected.package.tslint": "(autodetect)"
   }
@@ -131,7 +130,7 @@
       <recent name="betterinfra" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
+  <component name="RunManager" selected="Gradle.Battlecode2024 [zipForSubmit]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -244,11 +243,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
         <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [update]" />
         <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
         <item itemvalue="Gradle.Battlecode2024 [run]" />
-        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
       </list>
     </recent_temporary>
   </component>
@@ -428,7 +427,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705533000610</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="determine symmetry">
+      <option name="closed" value="true" />
+      <created>1705785672236</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1705785672236</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -458,7 +465,8 @@
     <MESSAGE value="focus flag attack and heal" />
     <MESSAGE value="smart spawning to spawn near flags if getting attacked; prio for crumbs in main phase; flag ducks farm to lv 6 build before building." />
     <MESSAGE value="line up at dam, kinda works." />
-    <option name="LAST_COMMIT_MESSAGE" value="line up at dam, kinda works." />
+    <MESSAGE value="determine symmetry" />
+    <option name="LAST_COMMIT_MESSAGE" value="determine symmetry" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

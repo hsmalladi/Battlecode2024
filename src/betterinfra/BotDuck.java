@@ -1,6 +1,7 @@
 package betterinfra;
 
 import battlecode.common.*;
+
 public class BotDuck extends Globals {
 
 
@@ -13,6 +14,8 @@ public class BotDuck extends Globals {
     public static void loop() throws GameActionException {
         while (true) {
             try {
+                if (pf == null)
+                    pf = new PathFind();
                 Comm.turn_starts();
                 turnCount += 1;
                 play();

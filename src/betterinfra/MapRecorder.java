@@ -1,7 +1,10 @@
 package betterinfra;
 
 import battlecode.common.*;
-
+/**
+ * The following code is from https://github.com/carlguo866/battlecode23-gonefishin/tree/main/src/submit24_US_qual and is
+ * not ours
+ */
 
 
 public class MapRecorder extends Globals {
@@ -10,8 +13,6 @@ public class MapRecorder extends Globals {
     public static final char WALL_BIT = 1 << 5;
     public static final char DAM_BIT = 1 << 6;
     public static final char PASSABLE_BIT = 1 << 7;
-    public static final char CURRENT_MASK = 0xF;
-    // current use & 0xF for ordinal
 
     public static char[] vals = Constants.MAP_LEN_STRING.toCharArray();
 
@@ -24,8 +25,7 @@ public class MapRecorder extends Globals {
         if ((val & PASSABLE_BIT) == 0)
             return false;
         else {
-            Direction current = Direction.values()[val & CURRENT_MASK];
-            return (current == targetDir || current == targetDir.rotateLeft() || current == targetDir.rotateRight() || current == Direction.CENTER);
+            return true;
         }
     }
 
@@ -60,7 +60,7 @@ public class MapRecorder extends Globals {
                     if ((symVal & SEEN_BIT) == 0) {
                         continue;
                     }
-                    isSym = (val | CURRENT_MASK) == (symVal | CURRENT_MASK);
+                    isSym = (val) == (symVal);
                     if (!isSym) {
                         Comm.eliminateSym(sym);
                     }

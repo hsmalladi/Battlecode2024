@@ -13,6 +13,7 @@ public class Map {
     static int mapHeight;
     static MapLocation[] allySpawnLocations;
     static MapLocation[] flagSpawnLocations;
+    static MapLocation[] enemyFlagSpawnLocations;
     static int[][] map;
     static MapLocation center;
     static MapLocation[] corners;
@@ -27,6 +28,7 @@ public class Map {
         allySpawnLocations = rc.getAllySpawnLocations();
         enemySpawnLocations = new MapLocation[allySpawnLocations.length];
         flagSpawnLocations = getCenters(allySpawnLocations);
+        enemyFlagSpawnLocations = new MapLocation[flagSpawnLocations.length];
         enemyFlagLocations = new MapLocation[flagSpawnLocations.length];
         center = getCenter();
         corners = getFourCorners();
@@ -98,7 +100,7 @@ public class Map {
             }
         }
     }
-    private static MapLocation[] getCenters(MapLocation[] spawnZones) {
+    public static MapLocation[] getCenters(MapLocation[] spawnZones) {
         ArrayList<MapLocation> group1 = new ArrayList<>();
         ArrayList<MapLocation> group2 = new ArrayList<>();
         ArrayList<MapLocation> group3 = new ArrayList<>();

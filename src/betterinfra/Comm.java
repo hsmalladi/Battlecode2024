@@ -15,7 +15,7 @@ import betterinfra.utils.FastIterableIntSet;
  * so that (0,0) in shared array means null
  *
  * Shared array
- * 0-47:
+ * 0-35: 3*2 6bits int specifying the coord of friendly HQs
  * 48-50: 3 bit whether symmetries of the map have been eliminated:
  * [ROTATIONAL, VERTIAL, HORIZONTAL]
  * 64-67:
@@ -43,7 +43,7 @@ public class Comm extends Globals {
     private static boolean needFlagUpdate = false;
     public static MapLocation[] enemyFlags = new MapLocation[NUM_FLAGS];
 
-
+    public static MapLocation[] allyFlagLocs = new MapLocation[NUM_FLAGS];
 
 
     private static int[] buffered_share_array = new int[ARRAY_LENGTH];
@@ -56,9 +56,6 @@ public class Comm extends Globals {
             if (rc.readSharedArray(i) != buffered_share_array[i]) {
                 if (i == 3 && !isSymmetryConfirmed) {
                     needSymUpdate = true;
-                }
-                if (i >= 6 && i <= 13) {
-                    needFlagUpdate = true;
                 }
                 buffered_share_array[i] = rc.readSharedArray(i);
             }
@@ -199,7 +196,29 @@ public class Comm extends Globals {
                     (symmetry & 1) == 0? Map.mapWidth - loc.x - 1 : loc.x,
                     (symmetry & 2) == 0? Map.mapHeight - loc.y - 1 : loc.y);
         }
+
+        Map.enemyFlagSpawnLocations = Map.getCenters(Map.enemySpawnLocations);
     }
+
+    public static void commFlagLocation(MapLocation location, int flagDuck) throws GameActionException {
+        rc.writeSharedArray((flagDuck +60) ,loc2int(location));
+    }
+
+    public static void commFlagLocationDropped(int flagDuck) throws GameActionException {
+        FlagInfo[] flags = rc.senseNearbyFlags(-1);
+        if (flags.length > 0) {
+            allyFlagLocs[flagDuck - 1] = flags[0].getLocation();
+            rc.writeSharedArray((flagDuck +60) ,loc2int(flags[0].getLocation()));
+        }
+    }
+
+    public static void readFlagLocation() throws GameActionException {
+        for (int i = 0; i < NUM_FLAGS; i++) {
+            allyFlagLocs[i] = int2loc(rc.readSharedArray(i+61));
+        }
+    }
+
+
 
 
     // helper funcs
@@ -232,14 +251,14 @@ public class Comm extends Globals {
         }
     }
 
-    private static MapLocation int2loc(int val) {
+    public static MapLocation int2loc(int val) {
         if (val == 0) {
             return null;
         }
         return new MapLocation(val / 64 - 1, val % 64 - 1);
     }
 
-    private static int loc2int(MapLocation loc) {
+    public static int loc2int(MapLocation loc) {
         if (loc == null)
             return 0;
         return ((loc.x + 1) * 64) + (loc.y + 1);

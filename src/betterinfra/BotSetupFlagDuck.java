@@ -2,6 +2,8 @@ package betterinfra;
 
 import battlecode.common.*;
 
+import java.util.Arrays;
+
 public class BotSetupFlagDuck extends BotSetupDuck {
 
     public static final int
@@ -16,14 +18,19 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             if (initFlagDuck()) {
                 flags = rc.senseNearbyFlags(-1, rc.getTeam());
                 holdFlag();
+
+                Comm.commFlagLocation(rc.getLocation(), flagDuck);
+
             }
         }
-        if (!reachedTarget) {
+        else {
+            Comm.readFlagLocation();
+            calculateOptimalFlagLocation();
             moveToLocation();
-        } else {
-            if (rc.hasFlag()) {
+            Comm.commFlagLocation(rc.getLocation(), flagDuck);
+            if (rc.hasFlag() && rc.getLocation().equals(exploreLocation)) {
                 dropFlag();
-                communicateFlagLocation();
+                Comm.commFlagLocationDropped(flagDuck);
             }
         }
     }
@@ -31,7 +38,6 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     public static boolean initFlagDuck() throws GameActionException {
         if (rc.canSpawn(Map.flagSpawnLocations[flagDuck-1])) {
             rc.spawn(Map.flagSpawnLocations[flagDuck-1]);
-            Map.allyFlagLocations[flagDuck-1] = calculateOptimalFlagLocation();
             exploreLocation = Map.allyFlagLocations[flagDuck-1];
             rc.setIndicatorString(String.valueOf(Map.flagSpawnLocations[flagDuck-1]));
             return true;
@@ -40,33 +46,72 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     }
 
 
-    //currently don't move flags
-    public static MapLocation calculateOptimalFlagLocation() throws GameActionException {
-        FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
-        if (flags.length > 0) {
-            return flags[0].getLocation();
-        }
-        return rc.getLocation();
-    }
 
-    public static void communicateFlagLocation() throws GameActionException {
-        for (int i = 1; i < 4; i++) {
-            if (BotDuck.flagDuck == i) {
-                int location = Map.locationToInt(rc.getLocation());
-                if (rc.canWriteSharedArray(i, location)) {
-                    rc.writeSharedArray(i, location);
+
+    public static void calculateOptimalFlagLocation() throws GameActionException {
+        MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
+
+        MapLocation best = mapInfos[0].getMapLocation();
+        int maxScore = -99999999;
+        for (MapInfo mapInfo : mapInfos) {
+            if (!mapInfo.isWall() && !mapInfo.isDam()) {
+                int score = getScore(mapInfo, Comm.allyFlagLocs);
+                if (maxScore < score) {
+                    best = mapInfo.getMapLocation();
+                    maxScore = score;
                 }
             }
         }
+        exploreLocation = best;
+    }
+
+    private static int getScore(MapInfo mapInfo, MapLocation[] flags) {
+        int score = 0;
+        for (MapLocation flag : flags) {
+            if (!flag.equals(rc.getLocation())) {
+                if (flag.distanceSquaredTo(mapInfo.getMapLocation()) < 50) {
+                    score -= 10000 * flag.distanceSquaredTo(mapInfo.getMapLocation());
+                }
+                else {
+                    //score += (int) Math.sqrt(flag.distanceSquaredTo(mapInfo.getMapLocation()));
+                }
+            }
+        }
+        for (MapLocation enemySpawn : Map.enemyFlagSpawnLocations) {
+            score += (int) Math.sqrt(enemySpawn.distanceSquaredTo(mapInfo.getMapLocation()));
+        }
+        return score;
+    }
+
+    private static int getWallScore(MapInfo mapInfo) {
+        return 0;
     }
 
     private static void moveToLocation() throws GameActionException {
         if (rc.isMovementReady()) {
             isExploring = true;
             if (isExploring) {
-                pf.moveTowards(exploreLocation);
+                if (!rc.getLocation().equals(exploreLocation)) {
+                    pf.moveTowards(exploreLocation);
+                }
             }
         }
+    }
+
+    private static boolean fillWaterFlagDuck() throws GameActionException {
+        Direction dir = rc.getLocation().directionTo(exploreLocation);
+        MapLocation water = rc.getLocation().add(dir);
+        if (rc.canSenseLocation(water)) {
+            if (rc.senseMapInfo(water).isWater()) {
+                dropFlag();
+                if (rc.canFill(water)) {
+                    rc.fill(water);
+                }
+                return true;
+            }
+        }
+        return false;
+
     }
 
     private static void holdFlag() throws GameActionException {
@@ -88,20 +133,6 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         }
     }
 
-    public static boolean checkDefenses() throws GameActionException {
-        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
-
-        for (MapLocation loc : adj){
-            if (rc.onTheMap(loc)) {
-                MapInfo info = rc.senseMapInfo(loc);
-                if (info.getTrapType() == TrapType.NONE) {
-                    return false;
-                }
-            }
-        }
-        buildDefenses = true;
-        return true;
-    }
 
     public static void buildDefenses() throws GameActionException {
         MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
@@ -115,26 +146,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         }
     }
 
-    public static boolean farmToLvl6Build() throws GameActionException {
-        int currentLvl = rc.getLevel(SkillType.BUILD);
-        MapLocation[] adj = sprintv2.Map.getAdjacentLocations(rc.getLocation());
-        if (currentLvl < 6) {
-            for (MapLocation location : adj) {
-                if (rc.onTheMap(location)) {
-                    if (rc.canDig(location)) {
-                        rc.dig(location);
-                    }
-                    if (rc.canFill(location)) {
-                        rc.fill(location);
-                    }
-                }
-            }
-        }
-        else {
-            return true;
-        }
-        return false;
-    }
+
 
     public static boolean buildTrapsWithin3Tiles(int flagDuck) throws GameActionException {
         MapInfo[] trapsLocations = rc.senseNearbyMapInfos(Map.allyFlagLocations[flagDuck-1], 6);

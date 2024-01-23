@@ -104,15 +104,13 @@ public class Comm extends Globals {
 
 
     public static MapLocation getLocation(int idx) throws GameActionException {
-        idx = idx + ENEMY_FLAG_FIRST - 3;
         int val = rc.readSharedArray(idx);
         val = val >> 1;
         return int2loc(val);
     }
 
-    public static boolean isCarriedHere(MapLocation loc) throws GameActionException {
-        int locInt = loc2int(loc);
-        int val = rc.readSharedArray(locInt);
+    public static boolean isCarried(int idx) throws GameActionException {
+        int val = rc.readSharedArray(idx);
         if (val == 0)
             return false;
         return val % 2 == 1;

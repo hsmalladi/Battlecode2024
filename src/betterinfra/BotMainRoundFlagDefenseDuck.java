@@ -31,7 +31,7 @@ public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
             }
         }
         else {
-
+            pf.moveTowards(Map.flagSpawnLocations[flagDuck-1]);
         }
     }
 

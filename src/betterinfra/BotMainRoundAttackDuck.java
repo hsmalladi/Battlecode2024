@@ -108,9 +108,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static MapLocation closestFlag() throws GameActionException {
         ArrayList<MapLocation> flagLocs = new ArrayList<>();
-        for (int i = Comm.ENEMY_FLAG_FIRST+1; i <= Comm.ENEMY_FLAG_LAST; i++) {
-            if (Comm.getLocation(i) != null) {
-                flagLocs.add(Comm.getLocation(i));
+        for (int i = Comm.ENEMY_FLAG_FIRST; i <= Comm.ENEMY_FLAG_LAST; i++) {
+            MapLocation loc = Comm.getLocation(i);
+            if (loc != null) {
+                flagLocs.add(loc);
             }
         }
         if (flagLocs.size() == 0) {

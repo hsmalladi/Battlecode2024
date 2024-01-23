@@ -110,7 +110,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         ArrayList<MapLocation> flagLocs = new ArrayList<>();
         for (int i = Comm.ENEMY_FLAG_FIRST; i <= Comm.ENEMY_FLAG_LAST; i++) {
             MapLocation loc = Comm.getLocation(i);
-            if (loc != null) {
+            if (loc != null && !Comm.isCarried(i)) {
                 flagLocs.add(loc);
             }
         }

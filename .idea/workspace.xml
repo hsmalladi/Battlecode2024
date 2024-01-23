@@ -10,16 +10,16 @@
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/jar/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/jar/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matches/betterinfra-vs-examplefuncsplayer-on-DefaultMedium.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/betterinfra-vs-examplefuncsplayer-on-DefaultMedium.bc24" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotMainRoundAttackDuck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/Comm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/Comm.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +119,7 @@
       <recent name="betterinfra" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Battlecode2024 [build]">
+  <component name="RunManager" selected="Gradle.Battlecode2024 [update]">
     <configuration name="Battlecode2024 [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -167,7 +167,7 @@
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
+        <option name="scriptParameters" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -183,7 +183,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Battlecode2024 [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Battlecode2024 [verify]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -194,7 +194,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="wrapper" />
+            <option value="verify" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -204,7 +204,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Battlecode2024 [zipForSubmit]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Battlecode2024 [version]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -215,7 +215,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="zipForSubmit" />
+            <option value="version" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -227,10 +227,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [update]" />
-        <item itemvalue="Gradle.Battlecode2024 [zipForSubmit]" />
-        <item itemvalue="Gradle.Battlecode2024 [wrapper]" />
+        <item itemvalue="Gradle.Battlecode2024 [verify]" />
+        <item itemvalue="Gradle.Battlecode2024 [version]" />
+        <item itemvalue="Gradle.Battlecode2024 [build]" />
         <item itemvalue="Gradle.Battlecode2024 [run]" />
       </list>
     </recent_temporary>

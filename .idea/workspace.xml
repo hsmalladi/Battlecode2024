@@ -4,26 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5dde93cf-ed16-405e-aeb0-e0cbc058ef9e" name="Changes" comment="fail safe for when flags don't get placed">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.bin" afterDir="false" />
+    <list default="true" id="5dde93cf-ed16-405e-aeb0-e0cbc058ef9e" name="Changes" comment="changed flag distance to 63 to avoid more conflicts">
       <change beforePath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/executionHistory/executionHistory.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.6/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/classes/examplefuncsplayer.RobotPlayerTest.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/packages/examplefuncsplayer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/TEST-examplefuncsplayer.RobotPlayerTest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotMainRoundAttackDuck.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotSetupDuck.class.uniqueId1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/compileTransaction/stash-dir/BotSetupExploreDuck.class.uniqueId0" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matches/betterinfra-vs-sprintv2-on-DefaultSmall.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/betterinfra-vs-sprintv2-on-DefaultSmall.bc24" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/matches/betterinfra-vs-sprintv2-on-Snake.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/betterinfra-vs-sprintv2-on-Snake.bc24" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/betterinfra/BotSetupFlagDuck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/BotSetupFlagDuck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/matches/betterinfra-vs-sprintv2-on-Rivers.bc24" beforeDir="false" afterPath="$PROJECT_DIR$/matches/betterinfra-vs-sprintv2-on-Rivers.bc24" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/betterinfra/GlobalUpgrades.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +245,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1706032801518</updated>
-      <workItem from="1706032804146" duration="2528000" />
+      <workItem from="1706032804146" duration="2812000" />
     </task>
     <task id="LOCAL-00001" summary="fail safe for when flags don't get placed">
       <option name="closed" value="true" />
@@ -270,7 +255,15 @@
       <option name="project" value="LOCAL" />
       <updated>1706037927935</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="changed flag distance to 63 to avoid more conflicts">
+      <option name="closed" value="true" />
+      <created>1706053329786</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1706053329787</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,6 +271,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fail safe for when flags don't get placed" />
-    <option name="LAST_COMMIT_MESSAGE" value="fail safe for when flags don't get placed" />
+    <MESSAGE value="changed flag distance to 63 to avoid more conflicts" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed flag distance to 63 to avoid more conflicts" />
   </component>
 </project>

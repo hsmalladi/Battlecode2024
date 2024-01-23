@@ -8,7 +8,13 @@ import java.util.ArrayList;
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     public static void play() throws GameActionException {
-        retrieveCrumbs();
+        if (turnCount < GameConstants.SETUP_ROUNDS + 20) {
+            retrieveCrumbs();
+        }
+        else {
+            gettingCrumb = false;
+        }
+
         if (!gettingCrumb) {
             goingToFlag = rc.readSharedArray(Comm.ENEMY_FLAG_HELD) != 1;
             if (goingToFlag) {
@@ -27,15 +33,29 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
         if (crumbLocations.length > 0) {
             MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
-            rc.setIndicatorString("Getting Crumb");
-            gettingCrumb = true;
-            if (rc.isMovementReady()) {
-                pf.moveTowards(closestCrumb);
+            if (reachable(closestCrumb)) {
+                rc.setIndicatorString("Getting Crumb");
+                gettingCrumb = true;
+                if (rc.isMovementReady()) {
+                    pf.moveTowards(closestCrumb);
+                }
+                isExploring = false;
             }
-            isExploring = false;
         } else {
             gettingCrumb = false;
         }
+    }
+
+    private static boolean reachable(MapLocation location) throws GameActionException {
+        MapLocation[] adj = Map.getAdjacentLocations(location);
+        for (MapLocation ad : adj) {
+            if (rc.canSenseLocation(ad)) {
+                if (!rc.senseMapInfo(ad).isWall()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static void goToFlag() throws GameActionException {

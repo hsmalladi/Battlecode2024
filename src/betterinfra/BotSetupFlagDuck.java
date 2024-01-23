@@ -69,7 +69,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         int score = 0;
         for (MapLocation flag : flags) {
             if (!flag.equals(rc.getLocation())) {
-                if (flag.distanceSquaredTo(mapInfo.getMapLocation()) < 50) {
+                if (flag.distanceSquaredTo(mapInfo.getMapLocation()) < 63) {
                     score -= 10000 * flag.distanceSquaredTo(mapInfo.getMapLocation());
                 }
                 else {

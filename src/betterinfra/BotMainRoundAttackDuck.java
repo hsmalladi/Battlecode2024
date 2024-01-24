@@ -103,6 +103,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             return target;
         }
+
         target = Explore.getFlagTarget();
         if (target !=  null){
             rc.setIndicatorString("GOING TO COMMED FLAG");
@@ -117,6 +118,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 return target;
             }
         }
+        //target = Explore.getDefenseTarget();
+        if (target != null){
+            rc.setIndicatorString("DEFENDING FLAG BY GOING TO TAKEN FLAG LOCATION");
+            return target;
+        }
+
         rc.setIndicatorString("I'm DUMB. GOING TO RANDOM LOC");
         return Explore.getExploreTarget();
     }
@@ -214,6 +221,31 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 }
             }
         }
+        tryWaterTrap();
+    }
+
+    public static void tryWaterTrap() throws GameActionException {
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        for (RobotInfo opps : oppRobotInfos) {
+            if (opps.hasFlag()) {
+                MapLocation me = rc.getLocation();
+                Direction dir = me.directionTo(opps.getLocation());
+                if (rc.canBuild(TrapType.WATER, me.add(dir))) {
+                    rc.build(TrapType.WATER, me.add(dir));
+                }
+                if (rc.canBuild(TrapType.WATER, me.add(dir.rotateLeft()))) {
+                    rc.build(TrapType.WATER, me.add(dir.rotateLeft()));
+                }
+                if (rc.canBuild(TrapType.WATER, me.add(dir.rotateRight()))) {
+                    rc.build(TrapType.WATER, me.add(dir.rotateRight()));
+                }
+                if (rc.canBuild(TrapType.WATER, me)) {
+                    rc.build(TrapType.WATER, me);
+                }
+            }
+        }
+
+
     }
 
     public static MapLocation closestEnemy(RobotController rc, RobotInfo[] robotInfos) {

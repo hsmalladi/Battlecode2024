@@ -34,7 +34,25 @@ public class Explore extends Globals{
         return closestFlag;
     }
 
+    public static MapLocation getDefenseTarget() throws GameActionException {
+        for (int i = 51; i < 54; i++) {
+            if (rc.readSharedArray(i) > 0) { //flag missing for 10 or less turns
+                MapLocation defend = closestEnemySpawnZoneToOurFlag(i);
+                int distance = Comm.allyFlagLocs[i -51].distanceSquaredTo(defend);
+                if (rc.readSharedArray(i) < Math.sqrt(distance) * 2) {
+                    return defend;
+                }
+            }
+        }
+        return null;
+    }
 
+    public static MapLocation closestEnemySpawnZoneToOurFlag(int flag) throws GameActionException{
+        int index = flag - 51;
+
+        MapLocation defendTarget = Map.getClosestLocation(Comm.allyFlagLocs[index], Map.enemySpawnLocations);
+        return defendTarget;
+    }
     public static MapLocation getExploreTarget(){
         if (exploreLoc != null && rc.getLocation().distanceSquaredTo(exploreLoc) <= GameConstants.VISION_RADIUS_SQUARED) exploreLoc = null;
         if(exploreLoc == null){

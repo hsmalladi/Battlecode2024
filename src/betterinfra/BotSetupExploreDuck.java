@@ -39,7 +39,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     }
 
     public static void exit() throws GameActionException {
-        System.out.println(Arrays.toString(Map.enemySpawnLocations));
+        //System.out.println(Arrays.toString(Map.enemySpawnLocations));
         updateFlagLocations();
     }
     

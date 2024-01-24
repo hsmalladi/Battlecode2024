@@ -13,7 +13,7 @@ public class BotMainRoundFlagDuck extends BotMainRoundDuck {
     private static void tryMoveBack() throws GameActionException {
         if(!rc.isMovementReady()) return;
         MapLocation closestSpawn = closestSpawn();
-        if(closestSpawn.distanceSquaredTo(rc.getLocation()) < GameConstants.VISION_RADIUS_SQUARED){
+        if(closestSpawn.distanceSquaredTo(rc.getLocation()) <= GameConstants.VISION_RADIUS_SQUARED){
             pf.moveTowards(closestSpawn());
             return;
         }

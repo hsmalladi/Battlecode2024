@@ -27,8 +27,8 @@ public class Comm extends Globals {
     final static int FLAG_SETUP_COMM = 0;
     final static int EXPLORER_COMM = 1;
     final static int ENEMY_FLAG_HELD = 10;
-    final static int ENEMY_FLAG_FIRST = 15;
-    final static int ENEMY_FLAG_LAST = 17;
+    final static int ENEMY_FLAG_FIRST = 58;
+    final static int ENEMY_FLAG_LAST = 60;
     public static int symmetry;
     public static boolean isSymmetryConfirmed;
     public static boolean needSymmetryReport;
@@ -127,13 +127,7 @@ public class Comm extends Globals {
             changedIndexes.clear();
         }
     }
-    public static void reportEnemyFlags(MapLocation location) {
-        if (!location.equals(int2loc(readBits(numFlagsReported * 12, 12)))) {
-                enemyFlags[numFlagsReported] = location;
-                writeBits(numFlagsReported * 12, 12, loc2int(location));
-                numFlagsReported += 1;
-        }
-    }
+
     public static void eliminateSym(int sym) throws GameActionException {
         isSymEliminated[sym] = true;
         if (rc.canWriteSharedArray(0, 0)) {

@@ -88,10 +88,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
 
 
     private static void updateFlagLocations() throws GameActionException {
-        for (int i = 1; i < 4; i++) {
-            MapLocation location = Map.intToLocation(rc.readSharedArray(i));
-            Map.allyFlagLocations[i-1] = location;
-        }
+        Map.allyFlagLocations = Comm.allyFlagLocs;
     }
 
     private static void lineUpAtDam() throws GameActionException {

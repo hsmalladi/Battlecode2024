@@ -27,10 +27,10 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             Comm.readFlagLocation();
             calculateOptimalFlagLocation();
             moveToLocation();
-            Comm.commFlagLocation(rc.getLocation(), flagDuck);
+            Comm.commFlagLocationDropped(flagDuck);
             if (rc.hasFlag() && rc.getLocation().equals(exploreLocation)) {
                 dropFlag();
-                Comm.commFlagLocationDropped(flagDuck);
+                buildDefenses();
             }
         }
     }
@@ -140,35 +140,12 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             rc.build(TrapType.STUN, rc.getLocation());
         }
         for (MapLocation loc : adj){
-            if(rc.canBuild(TrapType.EXPLOSIVE, loc)) {
-                rc.build(TrapType.EXPLOSIVE, loc);
+            if(rc.canBuild(TrapType.WATER, loc)) {
+                rc.build(TrapType.WATER, loc);
+                break;
             }
         }
     }
 
-
-
-    public static boolean buildTrapsWithin3Tiles(int flagDuck) throws GameActionException {
-        MapInfo[] trapsLocations = rc.senseNearbyMapInfos(Map.allyFlagLocations[flagDuck-1], 6);
-        if (trapsLocations.length > 0) {
-            for (MapInfo trapLoc : trapsLocations) {
-                if (trapLoc.getTrapType() == TrapType.NONE) {
-                    if (rc.canBuild(TrapType.EXPLOSIVE, trapLoc.getMapLocation())) {
-                        rc.build(TrapType.EXPLOSIVE, trapLoc.getMapLocation());
-                        return false;
-                    }
-                }
-            }
-
-            for (MapInfo trapLoc : trapsLocations) {
-                if (trapLoc.getTrapType() == TrapType.NONE && trapLoc.isPassable()) {
-                    sprintv2.PathFind.moveTowards(rc, trapLoc.getMapLocation());
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
 
 }

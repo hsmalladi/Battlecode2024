@@ -36,7 +36,7 @@ public class BotMainRoundDuck extends BotDuck {
             } else if (myRole == FLAG_CARRIER){
                 BotMainRoundFlagDuck.play();
             } else {
-                BotMainRoundFlagDefenseDuck.play();
+                BotMainRoundSentryDuck.play();
             }
         }
     }
@@ -50,6 +50,10 @@ public class BotMainRoundDuck extends BotDuck {
             myRole = ATTACK_DUCK;
         }
     }
+
+
+
+
 
     private static void tryFlagPickUp() throws GameActionException {
         for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {

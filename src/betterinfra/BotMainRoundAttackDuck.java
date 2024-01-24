@@ -93,6 +93,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         pf.moveTowards(target);
     }
 
+
+    /*
+    TODO: THERE ARE 3 ROLES, EITHER GO TO FLAG, PROTECT OUR FLAG, OR PROTECT FLAG HOLDER.
+     */
     private static MapLocation getTarget() throws GameActionException{
         MapLocation target = getBestTarget();
         if (target != null){
@@ -121,6 +125,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         return Explore.getExploreTarget();
     }
 
+
     private static MapLocation getBestTarget() throws GameActionException{
         MoveTarget bestTarget = null;
 
@@ -136,8 +141,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
         return null;
     }
-
-
 
     private static MapLocation getClosestVisionFlag() throws GameActionException {
         int dist = 10000;
@@ -188,7 +191,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     public static void tryTrap() throws GameActionException {
         if (builderDuck == 1) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-            if (oppRobotInfos.length > 0) {
+            if (oppRobotInfos.length >= 3) {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
                 if (rc.canBuild(TrapType.STUN, me.add(dir))) {
@@ -199,6 +202,16 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 }
                 if (rc.canBuild(TrapType.STUN, me.add(dir.rotateRight()))) {
                     rc.build(TrapType.STUN, me.add(dir.rotateRight()));
+                }
+                if (rc.canBuild(TrapType.STUN, me)) {
+                    rc.build(TrapType.STUN, me);
+                }
+            }
+            else if (oppRobotInfos.length > 0) {
+                MapLocation me = rc.getLocation();
+                Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
+                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
+                    rc.build(TrapType.STUN, me.add(dir));
                 }
                 if (rc.canBuild(TrapType.STUN, me)) {
                     rc.build(TrapType.STUN, me);

@@ -104,6 +104,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
         target = Explore.getBroadcastFlagTarget();
         if(target != null){
+            if(rc.getLocation().distanceSquaredTo(target) <= GameConstants.VISION_RADIUS_SQUARED){
+                Explore.exploredBroadcast = true;
+            }
             if(Explore.exploredBroadcast){
                 rc.setIndicatorString("EXPLORING AROUND FLAG BROADCAST");
                 Explore.getTargetAroundBroadcast(target);

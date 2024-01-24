@@ -18,7 +18,7 @@ public class BotDuck extends Globals {
             try {
                 if (pf == null)
                     pf = new PathFind();
-                if (turnCount % 100 == 0){
+                if (rc.getRoundNum() % 100 == 0){
                     Explore.exploredBroadcast = false;
                 }
                 Comm.turn_starts();

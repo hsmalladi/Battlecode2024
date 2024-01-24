@@ -36,7 +36,7 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
         }
         else {
             pf.moveTowards(Comm.allyFlagLocs[flagDuck-1]);
-            if (rc.readSharedArray(flagDuck + 50) >= 25) {
+            if (rc.readSharedArray(flagDuck + 50) >= 50) {
                 flagDuck = 0;
             }
         }

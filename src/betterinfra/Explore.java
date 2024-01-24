@@ -72,7 +72,7 @@ public class Explore extends Globals{
         while(tries-- > 0){
             if (flagExploreLoc != null) return;
             MapLocation newLoc = new MapLocation((int) (Math.random() * (maxX - minX)) + minX, (int) (Math.random() * (maxY - minY)) + minY);
-            if(rc.getLocation().distanceSquaredTo(flagExploreLoc) > GameConstants.VISION_RADIUS_SQUARED){
+            if(rc.getLocation().distanceSquaredTo(newLoc) > GameConstants.VISION_RADIUS_SQUARED){
                 flagExploreLoc = newLoc;
             }
         }

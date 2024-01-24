@@ -7,7 +7,8 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
 
     public static void play() throws GameActionException {
         if (alertEnemyHasOurFlag()) {
-            System.out.println("ENEMY HAS OUR FLAG");
+            System.out.println("ENEMY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
+            //51, 52, 53
             if (rc.readSharedArray(flagDuck + 50) == 0) {
                 rc.writeSharedArray(flagDuck + 50, 1);
             }
@@ -34,7 +35,10 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
             }
         }
         else {
-            pf.moveTowards(Map.flagSpawnLocations[flagDuck-1]);
+            pf.moveTowards(Comm.allyFlagLocs[flagDuck-1]);
+            if (rc.readSharedArray(flagDuck + 50) >= 25) {
+                flagDuck = 0;
+            }
         }
     }
 
@@ -48,6 +52,9 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
                     return false;
                 }
             }
+        }
+        else {
+            return false;
         }
         return true;
     }
@@ -89,13 +96,12 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
         if (rc.canBuild(TrapType.STUN, rc.getLocation())) {
             rc.build(TrapType.STUN, rc.getLocation());
         }
-        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+        Direction dir = rc.getLocation().directionTo(Map.center);
 
-        for (MapLocation ad : adj) {
-            if (rc.canBuild(TrapType.EXPLOSIVE, ad)) {
-                rc.build(TrapType.EXPLOSIVE, ad);
-            }
+        if (rc.canBuild(TrapType.WATER, rc.getLocation().add(dir))) {
+            rc.build(TrapType.WATER, rc.getLocation().add(dir));
         }
+
 
     }
 

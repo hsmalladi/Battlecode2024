@@ -108,16 +108,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             rc.setIndicatorString("GOING TO COMMED FLAG");
             return target;
         }
-        target = Explore.getBroadcastFlagTarget();
-        if(target != null){
-            if(rc.getLocation().distanceSquaredTo(target) <= GameConstants.VISION_RADIUS_SQUARED){
-                Explore.exploredBroadcast = true;
-            }
-            if(Explore.exploredBroadcast){
-                rc.setIndicatorString("EXPLORING AROUND FLAG BROADCAST");
-                Explore.getTargetAroundBroadcast(target);
-            }else{
-                rc.setIndicatorString("GOING TO BROADCAST FLAG");
+        if(!Explore.exploredBroadcast){
+            target = Explore.getBroadcastFlagTarget();
+            if(target != null){
+                if(rc.getLocation().distanceSquaredTo(target) <= 5){
+                    Explore.exploredBroadcast = true;
+                }
                 return target;
             }
         }

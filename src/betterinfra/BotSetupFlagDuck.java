@@ -39,7 +39,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         if (rc.canSpawn(Map.flagSpawnLocations[flagDuck-1])) {
             rc.spawn(Map.flagSpawnLocations[flagDuck-1]);
             exploreLocation = Map.allyFlagLocations[flagDuck-1];
-            rc.setIndicatorString(String.valueOf(Map.flagSpawnLocations[flagDuck-1]));
+//            rc.setIndicatorString(String.valueOf(Map.flagSpawnLocations[flagDuck-1]));
             return true;
         }
         return false;

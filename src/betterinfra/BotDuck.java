@@ -18,6 +18,9 @@ public class BotDuck extends Globals {
             try {
                 if (pf == null)
                     pf = new PathFind();
+                if (rc.getRoundNum() % 100 == 0){
+                    Explore.exploredBroadcast = false;
+                }
                 Comm.turn_starts();
                 turnCount += 1;
                 play();
@@ -59,18 +62,5 @@ public class BotDuck extends Globals {
             }
         }
         return false;
-    }
-
-    public static MapLocation findClosest(MapLocation ref, ArrayList<MapLocation> locations) {
-        int maxDistance = 100000;
-        MapLocation best = null;
-        for (MapLocation loc : locations) {
-            int distTo = ref.distanceSquaredTo(loc);
-            if (distTo < maxDistance) {
-                maxDistance = distTo;
-                best = loc;
-            }
-        }
-        return best;
     }
 }

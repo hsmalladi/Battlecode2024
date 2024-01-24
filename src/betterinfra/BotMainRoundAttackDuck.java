@@ -88,6 +88,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
         if (micro.doMicro()) return;
         MapLocation target = getTarget();
+        rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
     }
 
@@ -97,15 +98,24 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             return target;
         }
-        //TODO: ADD ENEMY FLAG AND SPAWN TARGET
-        target = closestFlag();
-        if (target != null){
-            rc.setIndicatorString("GOING TO BROADCAST");
+        target = Explore.getFlagTarget();
+        if (target !=  null){
+            rc.setIndicatorString("GOING TO COMMED FLAG");
             return target;
         }
-        //TODO: MAKE SMARTER THAN JUST CHOOSING ONE SPOT
-//        target = Map.enemySpawnLocations[0];
-//        if (target != null) return target;
+        target = Explore.getBroadcastFlagTarget();
+        if(target != null){
+            if(rc.getLocation().distanceSquaredTo(target) <= GameConstants.VISION_RADIUS_SQUARED){
+                Explore.exploredBroadcast = true;
+            }
+            if(Explore.exploredBroadcast){
+                rc.setIndicatorString("EXPLORING AROUND FLAG BROADCAST");
+                Explore.getTargetAroundBroadcast(target);
+            }else{
+                rc.setIndicatorString("GOING TO BROADCAST FLAG");
+                return target;
+            }
+        }
         rc.setIndicatorString("I'm DUMB. GOING TO RANDOM LOC");
         return Explore.getExploreTarget();
     }
@@ -126,24 +136,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         return null;
     }
 
-    private static MapLocation closestFlag() throws GameActionException {
-        ArrayList<MapLocation> flagLocs = new ArrayList<>();
-        for (int i = Comm.ENEMY_FLAG_FIRST; i <= Comm.ENEMY_FLAG_LAST; i++) {
-            MapLocation loc = Comm.getLocation(i);
-            if (loc != null && !Comm.isCarried(i)) {
-                flagLocs.add(loc);
-            }
-        }
-        if (flagLocs.size() == 0) {
-            MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
-            for (MapLocation flagLoc : broadcastLocs) {
-                flagLocs.add(flagLoc);
-            }
-        }
 
-        MapLocation closestFlag = findClosest(rc.getLocation(), flagLocs);
-        return closestFlag;
-    }
 
     private static MapLocation getClosestVisionFlag() throws GameActionException {
         int dist = 10000;

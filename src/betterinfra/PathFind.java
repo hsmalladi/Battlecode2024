@@ -227,7 +227,6 @@ public class PathFind extends Globals {
                 }
             }
         }
-        rc.setIndicatorString(indicator);
         lastPathingTarget = location;
         lastPathingTurn = turnCount;
     }

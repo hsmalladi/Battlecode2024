@@ -1,7 +1,7 @@
-package betterinfra;
+package smurf;
 
 import battlecode.common.*;
-import betterinfra.utils.FastIterableIntSet;
+import smurf.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

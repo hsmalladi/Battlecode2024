@@ -1,4 +1,4 @@
-package betterinfra;
+package smurf;
 
 import battlecode.common.*;
 
@@ -8,9 +8,9 @@ import java.util.List;
 public class BotMainRoundDuck extends BotDuck {
 
     private static final int
-                    ATTACK_DUCK = 1,
-                    FLAG_CARRIER = 2,
-                    FLAG_DEFENSE_DUCK = 3;
+            ATTACK_DUCK = 1,
+            FLAG_CARRIER = 2,
+            FLAG_DEFENSE_DUCK = 3;
 
     private static int myRole = -1;
 

@@ -144,16 +144,16 @@ public class PathFind extends Globals {
                 if (dirCanPass || dirRightCanPass || dirLeftCanPass) {
                     if (dirCanPass && rc.canMove(dir)) {
                         rc.move(dir);
-                    } else if (rc.canFill(rc.getLocation().add(dir))) {
-                        rc.fill(rc.getLocation().add(dir));
                     } else if (dirRightCanPass && rc.canMove(dir.rotateRight())) {
                         rc.move(dir.rotateRight());
-                    } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
-                        rc.fill(rc.getLocation().add(dir.rotateRight()));
-                    } else if (dirLeftCanPass && rc.canMove(dir.rotateLeft())) {
+                    }  else if (dirLeftCanPass && rc.canMove(dir.rotateLeft())) {
                         rc.move(dir.rotateLeft());
                     } else if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
                         rc.fill(rc.getLocation().add(dir.rotateLeft()));
+                    } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
+                        rc.fill(rc.getLocation().add(dir.rotateRight()));
+                    } else if (rc.canFill(rc.getLocation().add(dir))) {
+                        rc.fill(rc.getLocation().add(dir));
                     }
                 } else {
                     //encounters obstacle; run simulation to determine best way to go

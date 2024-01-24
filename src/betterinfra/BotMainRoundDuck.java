@@ -21,6 +21,10 @@ public class BotMainRoundDuck extends BotDuck {
     public static void play() throws GameActionException {
         GlobalUpgrades.useGlobalUpgrade();
         if (!rc.isSpawned()) {
+            if (flagDuck != 0) {
+                System.out.println("DIED ENEMY PROLLY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
+                rc.writeSharedArray(flagDuck + 50, rc.readSharedArray(flagDuck + 50) +  1);
+            }
             smartSpawn();
         }
         if (rc.isSpawned()) {

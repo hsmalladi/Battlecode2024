@@ -106,7 +106,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return target;
         }
         if(!Explore.exploredBroadcast){
-            target = Explore.getBroadcastFlagTarget();
+            target = Explore.randomBroadcast();
             if(target != null){
                 if(rc.getLocation().distanceSquaredTo(target) <= 5){
                     Explore.exploredBroadcast = true;

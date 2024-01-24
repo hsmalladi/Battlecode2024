@@ -3,11 +3,13 @@ package smurf;
 import battlecode.common.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Explore extends Globals {
     static MapLocation exploreLoc = null;
 
     static MapLocation flagExploreLoc = null;
+    static MapLocation randomBroadCast = null;
 
     public static boolean exploredBroadcast = false;
 
@@ -34,6 +36,14 @@ public class Explore extends Globals {
         }
         MapLocation closestFlag = findClosest(rc.getLocation(), flagLocs);
         return closestFlag;
+    }
+
+    public static MapLocation randomBroadcast() throws GameActionException {
+        MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
+        if (randomBroadCast == null) {
+            randomBroadCast = broadcastLocs[rng.nextInt(3)];
+        }
+        return randomBroadCast;
     }
 
     public static MapLocation protectFlagHolder() throws GameActionException {

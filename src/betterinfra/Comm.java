@@ -27,13 +27,14 @@ public class Comm extends Globals {
     final static int FLAG_SETUP_COMM = 0;
     final static int EXPLORER_COMM = 1;
     final static int ENEMY_FLAG_HELD = 10;
-    final static int ENEMY_FLAG_FIRST = 58;
-    final static int ENEMY_FLAG_LAST = 60;
+    final static int ENEMY_FLAG_INDEX_HELPER = 38;
+    final static int ENEMY_FLAG_FIRST = 48;
+    final static int ENEMY_FLAG_LAST = 50;
     public static int symmetry;
     public static boolean isSymmetryConfirmed;
     public static boolean needSymmetryReport;
     public static boolean[] isSymEliminated = new boolean[3];
-    public static int[] flagIDs = new int[6];
+    // public static int[] flagIDs = new int[6];
 
     private static final int ARRAY_LENGTH = 64; // this is how much we use rn
     private static final int SYM_BIT = 48;
@@ -70,26 +71,33 @@ public class Comm extends Globals {
         }
     }
 
-    public static int flagIDToIdx(int flagID, Team team) {
-        if (flagIDs == null) {
-            flagIDs = new int[6];
-        }
-        int j = 0;
+    public static int flagIDToIdx(int flagID, Team team) throws GameActionException {
+        // printArray(flagIDs);
+        int j = ENEMY_FLAG_INDEX_HELPER;
         if (team.equals(rc.getTeam().opponent())) j += 3;
         for (int i = j; i<j+3; i++) {
-            if (flagIDs[i] == 0) {
-                flagIDs[i] = flagID;
+            int num = rc.readSharedArray(j);
+            if (num == 0) {
+                rc.writeSharedArray(i, flagID);
                 return i;
-            } else if (flagIDs[i] == flagID) {
+            } else if (num == flagID) {
                 return i;
             }
         }
         return 0;
     }
 
+    public static void printArray(int[] a) {
+        String s = "[";
+        for (int i = 0; i < a.length; i++) {
+            s += a[i] + ",";
+        }
+        System.out.println(s + "]");
+    }
+
 
     public static void updateFlagInfo(MapLocation loc, boolean isCarried, int idx) throws GameActionException {
-        idx = idx + ENEMY_FLAG_FIRST - 3;
+        idx = idx - ENEMY_FLAG_INDEX_HELPER + ENEMY_FLAG_FIRST - 3;
         int locInt = loc2int(loc);
         locInt = locInt << 1;
         if (isCarried) {

@@ -20,7 +20,7 @@ public class BotMainRoundFlagDuck extends BotMainRoundDuck {
             pf.moveTowards(closestSpawn());
             return;
         }
-        if (flagMicro.doMicro()) return;
+        //if (flagMicro.doMicro()) return;
         pf.moveTowards(closestSpawn());
     }
 

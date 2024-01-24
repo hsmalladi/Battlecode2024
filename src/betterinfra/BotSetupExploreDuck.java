@@ -79,8 +79,10 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     private static void digToLv6() throws GameActionException {
         if (rc.getLevel(SkillType.BUILD) < 6) {
             for (MapLocation adj : Map.getAdjacentLocations(rc.getLocation())) {
-                if (rc.canDig(adj)) {
-                    rc.dig(adj);
+                if (adj.x % 2 == 0 && adj.y % 2 == 0) {
+                    if (rc.canDig(adj)) {
+                        rc.dig(adj);
+                    }
                 }
             }
         }

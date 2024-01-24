@@ -148,28 +148,4 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     }
 
 
-
-    public static boolean buildTrapsWithin3Tiles(int flagDuck) throws GameActionException {
-        MapInfo[] trapsLocations = rc.senseNearbyMapInfos(Map.allyFlagLocations[flagDuck-1], 6);
-        if (trapsLocations.length > 0) {
-            for (MapInfo trapLoc : trapsLocations) {
-                if (trapLoc.getTrapType() == TrapType.NONE) {
-                    if (rc.canBuild(TrapType.EXPLOSIVE, trapLoc.getMapLocation())) {
-                        rc.build(TrapType.EXPLOSIVE, trapLoc.getMapLocation());
-                        return false;
-                    }
-                }
-            }
-
-            for (MapInfo trapLoc : trapsLocations) {
-                if (trapLoc.getTrapType() == TrapType.NONE && trapLoc.isPassable()) {
-                    sprintv2.PathFind.moveTowards(rc, trapLoc.getMapLocation());
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
 }

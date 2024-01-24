@@ -11,6 +11,8 @@ public class Explore extends Globals {
 
     public static boolean exploredBroadcast = false;
 
+    public static boolean exploredCorner = false;
+
     //TODO: SMARTER EXPLORATION
     public static MapLocation getFlagTarget() throws GameActionException {
         ArrayList<MapLocation> flagLocs = new ArrayList<>();
@@ -40,6 +42,16 @@ public class Explore extends Globals {
             if (r.hasFlag()) {
                 Direction d = r.getLocation().directionTo(Map.getClosestLocation(r.getLocation(), Map.allySpawnLocations));
                 return r.getLocation().add(d.opposite());
+            }
+        }
+        return null;
+    }
+
+    public static MapLocation attackFlagHolder() throws GameActionException {
+        RobotInfo[] robotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        for (RobotInfo r : robotInfos) {
+            if (r.hasFlag()) {
+                return r.getLocation();
             }
         }
         return null;

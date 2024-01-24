@@ -89,9 +89,16 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         target = Explore.protectFlagHolder();
         if (target != null){
-            rc.setIndicatorString("Protect FlAG IN VISION");
+            rc.setIndicatorString("PROTECT FlAG IN VISION");
             return target;
         }
+
+        target = Explore.attackFlagHolder();
+        if (target != null){
+            rc.setIndicatorString("ATTACK FlAG IN VISION");
+            return target;
+        }
+
 
         target = Explore.getFlagTarget();
         if (target !=  null){
@@ -107,6 +114,18 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 return target;
             }
         }
+
+        if(!Explore.exploredCorner){
+            target = Map.getClosestLocation(rc.getLocation(), Map.corners);
+            if(target != null){
+                if(rc.getLocation().distanceSquaredTo(target) <= 5){
+                    Explore.exploredCorner = true;
+                }
+                return target;
+            }
+        }
+
+
 
         rc.setIndicatorString("I'm DUMB. GOING TO RANDOM LOC");
         return Explore.getExploreTarget();

@@ -170,10 +170,10 @@ public class Micro extends Globals {
             if (inRange() && !M.inRange()) return true;
             if (!inRange() && M.inRange()) return false;
 
-            if(!severelyHurt){
-                if (alliesTargeting > M.alliesTargeting) return true;
-                if (alliesTargeting < M.alliesTargeting) return false;
-            }
+//            if(!severelyHurt){
+//                if (alliesTargeting > M.alliesTargeting) return true;
+//                if (alliesTargeting < M.alliesTargeting) return false;
+//            }
 
             if (inRange()) return minDistanceToEnemy >= M.minDistanceToEnemy;
             else return minDistanceToEnemy <= M.minDistanceToEnemy;

@@ -8,7 +8,13 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
     public static void play() throws GameActionException {
         if (alertEnemyHasOurFlag()) {
             System.out.println("ENEMY HAS OUR FLAG");
-            rc.writeSharedArray(flagDuck, 1);
+            if (rc.readSharedArray(flagDuck + 50) == 0) {
+                rc.writeSharedArray(flagDuck + 50, 1);
+            }
+            else {
+                rc.writeSharedArray(flagDuck + 50, rc.readSharedArray(flagDuck + 50) +  1);
+            }
+
         }
         protectFlag();
     }
@@ -38,6 +44,7 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
         if (rc.canSenseLocation(Comm.allyFlagLocs[flagDuck-1])) {
             for (FlagInfo f : flags) {
                 if (f.getLocation().equals(Comm.allyFlagLocs[flagDuck-1])) {
+                    rc.writeSharedArray(flagDuck + 50, 0);
                     return false;
                 }
             }

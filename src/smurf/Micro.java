@@ -1,9 +1,6 @@
 package smurf;
 
-import battlecode.common.Direction;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotInfo;
-import battlecode.common.SkillType;
+import battlecode.common.*;
 
 import static battlecode.common.GameConstants.*;
 
@@ -24,9 +21,9 @@ public class Micro extends Globals {
 
     double baseDamage = Constants.BASE_DAMAGE;
 
-    double[] DPS = new double[]{baseDamage,baseDamage*1.05,baseDamage*1.07,baseDamage*1.1,baseDamage*1.20,baseDamage*1.35, baseDamage*1.6};
+    double[] DPS = new double[]{baseDamage,baseDamage*1.05,baseDamage*1.07,baseDamage*1.1,baseDamage*1.30,baseDamage*1.35, baseDamage*1.6};
 
-    double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.93, ATTACK_COOLDOWN*0.9, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.65, ATTACK_COOLDOWN*0.4};
+    double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.93, ATTACK_COOLDOWN*0.9, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.65, ATTACK_COOLDOWN * 0.4};
     int MAX_MICRO_BYTECODE = 25000;
 
     Micro(){
@@ -63,7 +60,7 @@ public class Micro extends Globals {
             if(unit.hasFlag()){
                 continue;
             }
-            currentDPS = DPS[unit.getAttackLevel()];
+            currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
             microInfo[2].updateEnemy(unit);
@@ -81,7 +78,7 @@ public class Micro extends Globals {
                 if (unit.hasFlag()){
                     continue;
                 }
-                currentDPS = DPS[unit.getAttackLevel()];
+                currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
                 microInfo[0].updateAlly(unit);
                 microInfo[1].updateAlly(unit);
                 microInfo[2].updateAlly(unit);
@@ -130,8 +127,8 @@ public class Micro extends Globals {
             else{
                 if(!hurt){
                     if(canAttack){
-                        this.DPSreceived -= myDPS;
-                        this.alliesTargeting += myDPS;
+                        this.DPSreceived -= myDPS / myAttackCooldown;
+                        this.alliesTargeting += myDPS / myAttackCooldown;
                     }
                     minDistanceToEnemy = VISION_RADIUS_SQUARED;
                 } else minDistanceToEnemy = INF;

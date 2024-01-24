@@ -9,6 +9,7 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
         if (alertEnemyHasOurFlag()) {
             //System.out.println("ENEMY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
             //51, 52, 53
+            // System.out.println("ENEMY HAS OUR FLAG");
             if (rc.readSharedArray(flagDuck + 50) == 0) {
                 rc.writeSharedArray(flagDuck + 50, 1);
             }

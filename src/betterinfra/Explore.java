@@ -59,19 +59,24 @@ public class Explore extends Globals{
     public static MapLocation getTargetAroundBroadcast(MapLocation broadcastLocation) {
         if (flagExploreLoc != null && rc.getLocation().distanceSquaredTo(flagExploreLoc) <= GameConstants.VISION_RADIUS_SQUARED) flagExploreLoc = null;
         if (flagExploreLoc == null){
-            getRandomTargetNearFlag(broadcastLocation);
+            getRandomTargetNearFlag(15, broadcastLocation);
         }
         return flagExploreLoc;
     }
 
-    public static void getRandomTargetNearFlag(MapLocation broadcastLocation) {
+    public static void getRandomTargetNearFlag(int tries, MapLocation broadcastLocation) {
         int maxX = Math.min(rc.getMapWidth(), broadcastLocation.x + Constants.MAX_BROADCAST_DISTANCE + 1);
         int maxY = Math.min(rc.getMapHeight(), broadcastLocation.y + Constants.MAX_BROADCAST_DISTANCE + 1);
         int minX = Math.max(0, broadcastLocation.x - Constants.MAX_BROADCAST_DISTANCE);
         int minY = Math.max(0, broadcastLocation.y - Constants.MAX_BROADCAST_DISTANCE);
-        if (flagExploreLoc != null) return;
-        MapLocation newLoc = new MapLocation((int) (Math.random() * (maxX - minX)) + minX, (int) (Math.random() * (maxY - minY)) + minY);
-        flagExploreLoc = newLoc;
+        while(tries-- > 0){
+            if (flagExploreLoc != null) return;
+            MapLocation newLoc = new MapLocation((int) (Math.random() * (maxX - minX)) + minX, (int) (Math.random() * (maxY - minY)) + minY);
+            if(rc.getLocation().distanceSquaredTo(flagExploreLoc) > GameConstants.VISION_RADIUS_SQUARED){
+                flagExploreLoc = newLoc;
+            }
+        }
+
     }
 
 

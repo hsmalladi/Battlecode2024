@@ -6,6 +6,7 @@ import battlecode.common.*;
 public class BotMainRoundFlagDuck extends BotMainRoundDuck {
 
 
+
     public static void play() throws GameActionException {
         tryMoveBack();
     }

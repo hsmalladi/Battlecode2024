@@ -21,9 +21,9 @@ public class Micro extends Globals {
 
     double baseDamage = Constants.BASE_DAMAGE;
 
-    double[] DPS = new double[]{baseDamage,baseDamage*1.05,baseDamage*1.1,baseDamage*1.15,baseDamage*1.20,baseDamage*1.3, baseDamage*1.5};
+    double[] DPS = new double[]{baseDamage,baseDamage*1.05,baseDamage*1.07,baseDamage*1.1,baseDamage*1.30,baseDamage*1.35, baseDamage*1.6};
 
-    double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.85, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.7, ATTACK_COOLDOWN*0.6};
+    double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.93, ATTACK_COOLDOWN*0.9, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.65, ATTACK_COOLDOWN * 0.4};
     int MAX_MICRO_BYTECODE = 25000;
 
     Micro(){

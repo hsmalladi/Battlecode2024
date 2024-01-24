@@ -19,7 +19,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             }
             MapRecorder.recordSym(500);
 
-            if (builderDuck == 1){
+            if (builderDuck != 0){
                 digToLv6();
             }
 

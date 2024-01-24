@@ -85,6 +85,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         MapLocation closestEnemyFlag = getClosestVisionFlag();
         if (closestEnemyFlag != null) {
             pf.moveTowards(closestEnemyFlag);
+            return;
         }
         if (micro.doMicro()) return;
         MapLocation target = getTarget();

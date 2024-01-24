@@ -127,8 +127,8 @@ public class Micro extends Globals {
             else{
                 if(!hurt){
                     if(canAttack){
-                        this.DPSreceived -= myDPS;
-                        this.alliesTargeting += myDPS;
+                        this.DPSreceived -= myDPS / myAttackCooldown;
+                        this.alliesTargeting += myDPS / myAttackCooldown;
                     }
                     minDistanceToEnemy = VISION_RADIUS_SQUARED;
                 } else minDistanceToEnemy = INF;

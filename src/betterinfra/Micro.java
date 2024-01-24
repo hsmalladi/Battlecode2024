@@ -60,7 +60,7 @@ public class Micro extends Globals {
             if(unit.hasFlag()){
                 continue;
             }
-            currentDPS = DPS[unit.getAttackLevel()];
+            currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
             microInfo[2].updateEnemy(unit);
@@ -78,7 +78,7 @@ public class Micro extends Globals {
                 if (unit.hasFlag()){
                     continue;
                 }
-                currentDPS = DPS[unit.getAttackLevel()];
+                currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
                 microInfo[0].updateAlly(unit);
                 microInfo[1].updateAlly(unit);
                 microInfo[2].updateAlly(unit);

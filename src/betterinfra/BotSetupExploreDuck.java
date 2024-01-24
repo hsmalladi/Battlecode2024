@@ -52,7 +52,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 exploreLocation = Map.corners[val];
                 rc.writeSharedArray(Comm.EXPLORER_COMM, val + 1);
                 isExploring = true;
-                rc.setIndicatorString(String.valueOf(exploreLocation));
+//                rc.setIndicatorString(String.valueOf(exploreLocation));
             }
         }
 

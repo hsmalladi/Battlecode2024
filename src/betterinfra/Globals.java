@@ -5,6 +5,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 import battlecode.common.Team;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Globals {
@@ -54,6 +55,18 @@ public class Globals {
         }
     }
 
+    public static MapLocation findClosest(MapLocation ref, ArrayList<MapLocation> locations) {
+        int maxDistance = 100000;
+        MapLocation best = null;
+        for (MapLocation loc : locations) {
+            int distTo = ref.distanceSquaredTo(loc);
+            if (distTo < maxDistance) {
+                maxDistance = distTo;
+                best = loc;
+            }
+        }
+        return best;
+    }
 
 
 

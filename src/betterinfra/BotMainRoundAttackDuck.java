@@ -93,6 +93,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         pf.moveTowards(target);
     }
 
+
+    /*
+    TODO: THERE ARE 3 ROLES, EITHER GO TO FLAG, PROTECT OUR FLAG, OR PROTECT FLAG HOLDER.
+     */
     private static MapLocation getTarget() throws GameActionException{
         MapLocation target = getBestTarget();
         if (target != null){
@@ -120,6 +124,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         rc.setIndicatorString("I'm DUMB. GOING TO RANDOM LOC");
         return Explore.getExploreTarget();
     }
+
 
     private static MapLocation getBestTarget() throws GameActionException{
         MoveTarget bestTarget = null;

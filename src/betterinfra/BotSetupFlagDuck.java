@@ -27,10 +27,9 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             Comm.readFlagLocation();
             calculateOptimalFlagLocation();
             moveToLocation();
-            Comm.commFlagLocation(rc.getLocation(), flagDuck);
+            Comm.commFlagLocationDropped(flagDuck);
             if (rc.hasFlag() && rc.getLocation().equals(exploreLocation)) {
                 dropFlag();
-                Comm.commFlagLocationDropped(flagDuck);
                 buildDefenses();
             }
         }

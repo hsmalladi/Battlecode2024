@@ -51,6 +51,10 @@ public class BotMainRoundDuck extends BotDuck {
         }
     }
 
+
+
+
+
     private static void tryFlagPickUp() throws GameActionException {
         for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {
             if (rc.canPickupFlag(loc.getLocation())) {

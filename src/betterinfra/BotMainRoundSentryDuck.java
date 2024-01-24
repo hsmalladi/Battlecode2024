@@ -6,17 +6,14 @@ import battlecode.common.*;
 public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
 
     public static void play() throws GameActionException {
+        if (alertEnemyHasOurFlag()) {
+            System.out.println("ENEMY HAS OUR FLAG");
+            rc.writeSharedArray(flagDuck, 1);
+        }
         protectFlag();
     }
 
     public static void protectFlag() throws GameActionException {
-        RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-        rc.setIndicatorString("ENEMIES: " + enemies.length);
-
-
-        if (rc.canWriteSharedArray(flagDuck, enemies.length)) {
-            rc.writeSharedArray(flagDuck, enemies.length);
-        }
         FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
         tryAttack();
         tryHeal();
@@ -33,6 +30,19 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
         else {
             pf.moveTowards(Map.flagSpawnLocations[flagDuck-1]);
         }
+    }
+
+    private static boolean alertEnemyHasOurFlag() throws GameActionException {
+        FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
+
+        if (rc.canSenseLocation(Comm.allyFlagLocs[flagDuck-1])) {
+            for (FlagInfo f : flags) {
+                if (f.getLocation().equals(Comm.allyFlagLocs[flagDuck-1])) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private static void tryAttack() throws GameActionException {

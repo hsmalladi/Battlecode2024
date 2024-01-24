@@ -42,6 +42,7 @@ public class BotDuck extends Globals {
         if (turnCount < GameConstants.SETUP_ROUNDS) {
             BotSetupDuck.play();
         } else if (turnCount == GameConstants.SETUP_ROUNDS) {
+            Comm.readFlagLocation();
             BotSetupDuck.exit();
         } else {
             BotMainRoundDuck.play();

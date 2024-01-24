@@ -1,6 +1,9 @@
-package betterinfra;
+package smurf;
 
-import battlecode.common.*;
+import battlecode.common.FlagInfo;
+import battlecode.common.GameActionException;
+import battlecode.common.GameConstants;
+import battlecode.common.MapLocation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +25,7 @@ public class BotMainRoundDuck extends BotDuck {
         GlobalUpgrades.useGlobalUpgrade();
         if (!rc.isSpawned()) {
             if (flagDuck != 0) {
-                //System.out.println("DIED ENEMY PROLLY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
+                System.out.println("DIED ENEMY PROLLY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
                 rc.writeSharedArray(flagDuck + 50, rc.readSharedArray(flagDuck + 50) +  1);
             }
             smartSpawn();

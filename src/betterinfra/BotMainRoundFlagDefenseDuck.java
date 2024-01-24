@@ -2,6 +2,7 @@ package betterinfra;
 
 import battlecode.common.*;
 
+
 public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
 
     public static void play() throws GameActionException {
@@ -16,12 +17,22 @@ public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
         if (rc.canWriteSharedArray(flagDuck, enemies.length)) {
             rc.writeSharedArray(flagDuck, enemies.length);
         }
-
+        FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
         tryAttack();
         tryHeal();
         if (micro.doMicro()) return;
-
-        pf.moveTowards(Map.allyFlagLocations[flagDuck-1]);
+        if (flags.length > 0) {
+            Comm.allyFlagLocs[flagDuck-1] = flags[0].getLocation();
+            if (!rc.getLocation().equals(Comm.allyFlagLocs[flagDuck-1])) {
+                pf.moveTowards(Comm.allyFlagLocs[flagDuck - 1]);
+            }
+            else {
+                tryTrap();
+            }
+        }
+        else {
+            pf.moveTowards(Map.flagSpawnLocations[flagDuck-1]);
+        }
     }
 
     private static void tryAttack() throws GameActionException {
@@ -53,6 +64,22 @@ public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
         if(bestTarget != null && rc.canHeal(bestTarget.mloc)){
             rc.heal(bestTarget.mloc);
         }
+    }
+
+    private static void tryTrap() throws GameActionException {
+        if(!rc.isActionReady()) return;
+
+        if (rc.canBuild(TrapType.STUN, rc.getLocation())) {
+            rc.build(TrapType.STUN, rc.getLocation());
+        }
+        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
+
+        for (MapLocation ad : adj) {
+            if (rc.canBuild(TrapType.EXPLOSIVE, ad)) {
+                rc.build(TrapType.EXPLOSIVE, ad);
+            }
+        }
+
     }
 
 }

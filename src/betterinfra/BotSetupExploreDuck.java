@@ -26,9 +26,15 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
                 explore();
             } else {
-                lineUpAtDam();
+                if (turnCount > 180) {
+                    if (!isNextToDam()) {
+                        pf.moveTowards(Map.center);
+                    }
+                }
+                else {
+                    lineUpAtDam();
+                }
             }
-
         }
     }
 

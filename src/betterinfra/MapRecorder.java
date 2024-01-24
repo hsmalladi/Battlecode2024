@@ -22,7 +22,7 @@ public class MapRecorder extends Globals {
         int val = vals[loc.x * Map.mapHeight + loc.y];
         if ((val & SEEN_BIT) == 0)
             return true;
-        if ((val & PASSABLE_BIT) == 0)
+        if ((val & PASSABLE_BIT) == 0 && (val & DAM_BIT) == 0)
             return false;
         else {
             return true;
@@ -45,11 +45,14 @@ public class MapRecorder extends Globals {
             int x = info.getMapLocation().x;
             int y = info.getMapLocation().y;
             char val = SEEN_BIT;
-            if (!info.isWall() && !info.isDam())
+            if (!info.isWall())
                 val |= PASSABLE_BIT;
             if (!Comm.isSymmetryConfirmed) {
                 if (info.isWall())
                     val |= WALL_BIT;
+                if (info.isDam()) {
+                    val |= DAM_BIT;
+                }
 
                 int symVal;
                 boolean isSym;

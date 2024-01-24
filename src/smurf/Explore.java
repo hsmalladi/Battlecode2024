@@ -40,10 +40,13 @@ public class Explore extends Globals {
 
     public static MapLocation randomBroadcast() throws GameActionException {
         MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
-        if (randomBroadCast == null) {
-            randomBroadCast = broadcastLocs[rng.nextInt(3)];
+        if (broadcastLocs.length > 0) {
+            if (randomBroadCast == null) {
+                randomBroadCast = broadcastLocs[rng.nextInt(broadcastLocs.length)];
+            }
+            return randomBroadCast;
         }
-        return randomBroadCast;
+        return null;
     }
 
     public static MapLocation protectFlagHolder() throws GameActionException {

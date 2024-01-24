@@ -88,6 +88,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
         if (micro.doMicro()) return;
         MapLocation target = getTarget();
+        rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
     }
 

@@ -1,9 +1,6 @@
 package betterinfra;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
+import battlecode.common.*;
 
 
 public class BotMainRoundFlagDuck extends BotMainRoundDuck {
@@ -15,19 +12,13 @@ public class BotMainRoundFlagDuck extends BotMainRoundDuck {
 
     private static void tryMoveBack() throws GameActionException {
         if(!rc.isMovementReady()) return;
-        captureFlag();
+        MapLocation closestSpawn = closestSpawn();
+        if(closestSpawn.distanceSquaredTo(rc.getLocation()) < GameConstants.VISION_RADIUS_SQUARED){
+            pf.moveTowards(closestSpawn());
+            return;
+        }
         if (flagMicro.doMicro()) return;
         pf.moveTowards(closestSpawn());
-    }
-
-    private static void captureFlag() throws GameActionException {
-        MapLocation tar = closestSpawn();
-        if (tar.distanceSquaredTo(rc.getLocation()) < 2) {
-            Direction dir = rc.getLocation().directionTo(tar);
-            if (rc.canMove(dir)) {
-                rc.move(dir);
-            }
-        }
     }
 
     private static MapLocation closestSpawn() {

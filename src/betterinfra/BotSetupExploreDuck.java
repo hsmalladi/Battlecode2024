@@ -33,6 +33,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 }
                 else {
                     lineUpAtDam();
+                    Comm.readFlagLocation();
                 }
             }
         }

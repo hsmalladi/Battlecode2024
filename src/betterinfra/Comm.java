@@ -127,13 +127,7 @@ public class Comm extends Globals {
             changedIndexes.clear();
         }
     }
-    public static void reportEnemyFlags(MapLocation location) {
-        if (!location.equals(int2loc(readBits(numFlagsReported * 12, 12)))) {
-                enemyFlags[numFlagsReported] = location;
-                writeBits(numFlagsReported * 12, 12, loc2int(location));
-                numFlagsReported += 1;
-        }
-    }
+
     public static void eliminateSym(int sym) throws GameActionException {
         isSymEliminated[sym] = true;
         if (rc.canWriteSharedArray(0, 0)) {

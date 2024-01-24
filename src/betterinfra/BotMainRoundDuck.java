@@ -36,7 +36,7 @@ public class BotMainRoundDuck extends BotDuck {
             } else if (myRole == FLAG_CARRIER){
                 BotMainRoundFlagDuck.play();
             } else {
-                BotMainRoundFlagDefenseDuck.play();
+                BotMainRoundSentryDuck.play();
             }
         }
     }

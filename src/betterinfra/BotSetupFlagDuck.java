@@ -31,6 +31,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             if (rc.hasFlag() && rc.getLocation().equals(exploreLocation)) {
                 dropFlag();
                 Comm.commFlagLocationDropped(flagDuck);
+                buildDefenses();
             }
         }
     }
@@ -140,8 +141,9 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             rc.build(TrapType.STUN, rc.getLocation());
         }
         for (MapLocation loc : adj){
-            if(rc.canBuild(TrapType.EXPLOSIVE, loc)) {
-                rc.build(TrapType.EXPLOSIVE, loc);
+            if(rc.canBuild(TrapType.WATER, loc)) {
+                rc.build(TrapType.WATER, loc);
+                break;
             }
         }
     }

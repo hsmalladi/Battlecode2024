@@ -3,7 +3,7 @@ package betterinfra;
 import battlecode.common.*;
 
 
-public class BotMainRoundFlagDefenseDuck extends BotSetupFlagDuck {
+public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
 
     public static void play() throws GameActionException {
         protectFlag();

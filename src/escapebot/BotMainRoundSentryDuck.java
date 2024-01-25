@@ -7,7 +7,7 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
 
     public static void play() throws GameActionException {
         if (alertEnemyHasOurFlag()) {
-            System.out.println("ENEMY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
+            Debug.log("ENEMY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
             //51, 52, 53
             if (rc.readSharedArray(flagDuck + 50) == 0) {
                 rc.writeSharedArray(flagDuck + 50, 1);

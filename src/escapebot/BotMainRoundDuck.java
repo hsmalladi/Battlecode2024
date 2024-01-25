@@ -55,7 +55,8 @@ public class BotMainRoundDuck extends BotDuck {
     private static void determineRole() {
         if (flagDuck != 0) {
             myRole = FLAG_DEFENSE_DUCK;
-        } else if (rc.hasFlag()) {
+        } else if (rc.hasFlag() || escaping) {
+            Debug.log("I AM A FLAG DUCK");
             myRole = FLAG_CARRIER;
         } else {
             myRole = ATTACK_DUCK;
@@ -64,24 +65,26 @@ public class BotMainRoundDuck extends BotDuck {
 
     private static void tryFlagDropOff() throws GameActionException {
         try {
+            if (!rc.isSpawned())
+                escaping = false;
             if (!rc.isSpawned() && amHoldingFlag && !rc.hasFlag()) {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 roundDied = rc.getRoundNum();
-                System.out.println("I DIED HOLDING FLAG");
+                Debug.log("I DIED HOLDING FLAG");
             }
             else if (!rc.hasFlag() && amHoldingFlag) {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 Comm.updateFlagInfo(null, false, myFlagHolding);
-                System.out.println("DROPPED OFF FLAG " + myFlagHolding);
+                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             if (rc.getRoundNum() == roundDied + 4) {
                 Comm.updateFlagInfo(null, false, myFlagHolding);
-                System.out.println("RESETTING FLAG LOCATION");
+                Debug.log("RESETTING FLAG LOCATION");
             }
         } catch (Exception e) {
-            System.out.println("HELLO HELLO HELLO HELLO");
+            Debug.log("HELLO HELLO HELLO HELLO");
         }
     }
 
@@ -92,7 +95,7 @@ public class BotMainRoundDuck extends BotDuck {
             if (rc.canPickupFlag(loc.getLocation())) {
                 rc.pickupFlag(loc.getLocation());
                 myFlagHolding = Comm.flagIDToIdx(loc.getID(), rc.getTeam().opponent());
-                System.out.println("PICKED UP FLAG " + myFlagHolding);
+                Debug.log("PICKED UP FLAG " + myFlagHolding);
                 goingToFlag = false;
                 amHoldingFlag = true;
                 rc.writeSharedArray(Comm.ENEMY_FLAG_HELD, 1);

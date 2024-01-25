@@ -1,8 +1,10 @@
-package smurfv2;
+package escapebot;
+
+import smurfv2.Globals;
 
 public class Debug extends Globals {
 
-    public static boolean DEBUGGING = true;
+    public static boolean DEBUGGING = false;
 
 
     public static void log(String s) {

@@ -142,25 +142,21 @@ public class PathFind extends Globals {
                 boolean dirRightCanPass = canPass(dir.rotateRight(), dir);
                 boolean dirLeftCanPass = canPass(dir.rotateLeft(), dir);
                 if (dirCanPass || dirRightCanPass || dirLeftCanPass) {
-                    if (dirCanPass && rc.canMove(dir)) {
+                    if (dirCanPass && rc.canMove(dir) && !escaping) {
                         rc.move(dir);
-                    } else if (dirRightCanPass && rc.canMove(dir.rotateRight())) {
+                    } else if (dirRightCanPass && rc.canMove(dir.rotateRight()) && !escaping) {
                         rc.move(dir.rotateRight());
-                    }  else if (dirLeftCanPass && rc.canMove(dir.rotateLeft())) {
+                    }  else if (dirLeftCanPass && rc.canMove(dir.rotateLeft()) && !escaping) {
                         rc.move(dir.rotateLeft());
                     } else {
-                        if (rc.hasFlag() && rc.getRoundNum() > 200 && rc.canDropFlag(rc.getLocation())) {
+                        if (rc.hasFlag() && rc.canDropFlag(rc.getLocation()) && rc.getRoundNum() > 200) {
                             if (rc.senseNearbyRobots(-1, rc.getTeam()).length == 0) {
                                 rc.dropFlag(rc.getLocation());
+                                escaping = true;
                             }
                         }
-                        if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
-                            rc.fill(rc.getLocation().add(dir.rotateLeft()));
-                        } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
-                            rc.fill(rc.getLocation().add(dir.rotateRight()));
-                        } else if (rc.canFill(rc.getLocation().add(dir))) {
-                            rc.fill(rc.getLocation().add(dir));
-                        }
+                        fillHelper(dir);
+
                     }
                 } else {
                     //encounters obstacle; run simulation to determine best way to go
@@ -236,6 +232,19 @@ public class PathFind extends Globals {
         }
         lastPathingTarget = location;
         lastPathingTurn = turnCount;
+    }
+
+    public static void fillHelper(Direction dir) throws GameActionException {
+        if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
+            if (escaping) escaping = false;
+            rc.fill(rc.getLocation().add(dir.rotateLeft()));
+        } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
+            if (escaping) escaping = false;
+            rc.fill(rc.getLocation().add(dir.rotateRight()));
+        } else if (rc.canFill(rc.getLocation().add(dir))) {
+            if (escaping) escaping = false;
+            rc.fill(rc.getLocation().add(dir));
+        }
     }
 
     static int getSteps(MapLocation a, MapLocation b) {

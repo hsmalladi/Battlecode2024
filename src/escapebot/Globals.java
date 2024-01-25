@@ -16,6 +16,7 @@ public class Globals {
     static boolean gettingCrumb = false;
     static boolean reachedTarget = false;
     static boolean buildDefenses = false;
+    static boolean escaping = false;
     public static RobotController rc;
 
     public static Micro micro;

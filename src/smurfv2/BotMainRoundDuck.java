@@ -68,20 +68,20 @@ public class BotMainRoundDuck extends BotDuck {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 roundDied = rc.getRoundNum();
-                System.out.println("I DIED HOLDING FLAG");
+                Debug.log("I DIED HOLDING FLAG");
             }
             else if (!rc.hasFlag() && amHoldingFlag) {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 Comm.updateFlagInfo(null, false, myFlagHolding);
-                System.out.println("DROPPED OFF FLAG " + myFlagHolding);
+                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             if (rc.getRoundNum() == roundDied + 4) {
                 Comm.updateFlagInfo(null, false, myFlagHolding);
-                System.out.println("RESETTING FLAG LOCATION");
+                Debug.log("RESETTING FLAG LOCATION");
             }
         } catch (Exception e) {
-            System.out.println("HELLO HELLO HELLO HELLO");
+            Debug.log("HELLO HELLO HELLO HELLO");
         }
     }
 
@@ -92,7 +92,7 @@ public class BotMainRoundDuck extends BotDuck {
             if (rc.canPickupFlag(loc.getLocation())) {
                 rc.pickupFlag(loc.getLocation());
                 myFlagHolding = Comm.flagIDToIdx(loc.getID(), rc.getTeam().opponent());
-                System.out.println("PICKED UP FLAG " + myFlagHolding);
+                Debug.log("PICKED UP FLAG " + myFlagHolding);
                 goingToFlag = false;
                 amHoldingFlag = true;
                 rc.writeSharedArray(Comm.ENEMY_FLAG_HELD, 1);

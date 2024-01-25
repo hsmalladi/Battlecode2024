@@ -184,7 +184,7 @@ public class Comm extends Globals {
             }
         }
         if (numPossible == 0) {
-            System.out.println("impossible that no sym is correct, guess rotation");
+            Debug.log("impossible that no sym is correct, guess rotation");
             symmetry = 0;
             numPossible = 1;
         }

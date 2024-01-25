@@ -56,7 +56,6 @@ public class BotMainRoundDuck extends BotDuck {
         if (flagDuck != 0) {
             myRole = FLAG_DEFENSE_DUCK;
         } else if (rc.hasFlag() || escaping) {
-            Debug.log("I AM A FLAG DUCK");
             myRole = FLAG_CARRIER;
         } else {
             myRole = ATTACK_DUCK;
@@ -91,6 +90,8 @@ public class BotMainRoundDuck extends BotDuck {
 
 
     private static void tryFlagPickUp() throws GameActionException {
+        if (escaping)
+            return;
         for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {
             if (rc.canPickupFlag(loc.getLocation())) {
                 rc.pickupFlag(loc.getLocation());

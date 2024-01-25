@@ -52,7 +52,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static void macro() throws GameActionException {
-        rc.setIndicatorString("ATTACK");
+        // rc.setIndicatorString("ATTACK");
         tryAttack();
         tryAttack();
         tryHeal();

@@ -155,7 +155,16 @@ public class PathFind extends Globals {
                                 escaping = true;
                             }
                         }
-                        fillHelper(dir);
+                        if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
+                            // if (escaping) escaping = false;
+                            rc.fill(rc.getLocation().add(dir.rotateLeft()));
+                        } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
+                            // if (escaping) escaping = false;
+                            rc.fill(rc.getLocation().add(dir.rotateRight()));
+                        } else if (rc.canFill(rc.getLocation().add(dir))) {
+                            // if (escaping) escaping = false;
+                            rc.fill(rc.getLocation().add(dir));
+                        }
 
                     }
                 } else {
@@ -232,19 +241,6 @@ public class PathFind extends Globals {
         }
         lastPathingTarget = location;
         lastPathingTurn = turnCount;
-    }
-
-    public static void fillHelper(Direction dir) throws GameActionException {
-        if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
-            if (escaping) escaping = false;
-            rc.fill(rc.getLocation().add(dir.rotateLeft()));
-        } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
-            if (escaping) escaping = false;
-            rc.fill(rc.getLocation().add(dir.rotateRight()));
-        } else if (rc.canFill(rc.getLocation().add(dir))) {
-            if (escaping) escaping = false;
-            rc.fill(rc.getLocation().add(dir));
-        }
     }
 
     static int getSteps(MapLocation a, MapLocation b) {

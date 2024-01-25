@@ -1,4 +1,4 @@
-package smurf;
+package smurfv2;
 
 import battlecode.common.*;
 
@@ -43,7 +43,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         //System.out.println(Arrays.toString(Map.enemySpawnLocations));
         updateFlagLocations();
     }
-    
+
     public static boolean init() throws GameActionException {
         int val = rc.readSharedArray(Comm.EXPLORER_COMM);
         setupLocation = new MapLocation(0, 0);
@@ -95,15 +95,15 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     }
 
     private static void lineUpAtDam() throws GameActionException {
-       if (isNextToDam()) {
-           reachedTarget = true;
-           comEmptySpotsNextToDam();
-           return;
-       }
+        if (isNextToDam()) {
+            reachedTarget = true;
+            comEmptySpotsNextToDam();
+            return;
+        }
 
-       MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
+        MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
 
-       for (MapInfo mapInfo : mapInfos) {
+        for (MapInfo mapInfo : mapInfos) {
             if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
@@ -116,14 +116,14 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                     }
                 }
             }
-       }
-       if (rc.readSharedArray(12) != 4444){
-           setupLocation = Map.intToLocation(rc.readSharedArray(12));
-       }
-       else {
-           setupLocation = Map.center;
-       }
-       pf.moveTowards(setupLocation);
+        }
+        if (rc.readSharedArray(12) != 4444){
+            setupLocation = Map.intToLocation(rc.readSharedArray(12));
+        }
+        else {
+            setupLocation = Map.center;
+        }
+        pf.moveTowards(setupLocation);
     }
 
     private static void comEmptySpotsNextToDam() throws GameActionException {

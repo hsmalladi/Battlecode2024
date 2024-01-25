@@ -66,6 +66,8 @@ public class BotMainRoundDuck extends BotDuck {
         try {
             if (!rc.isSpawned())
                 escaping = false;
+            if (escaping)
+                return;
             if (!rc.isSpawned() && amHoldingFlag && !rc.hasFlag()) {
                 amHoldingFlag = false;
                 goingToFlag = true;
@@ -79,7 +81,7 @@ public class BotMainRoundDuck extends BotDuck {
                 Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             if (rc.getRoundNum() == roundDied + 4) {
-                Comm.updateFlagInfo(null, false, myFlagHolding);
+                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding-Comm.ENEMY_FLAG_INDEX_HELPER], false, myFlagHolding);
                 Debug.log("RESETTING FLAG LOCATION");
             }
         } catch (Exception e) {

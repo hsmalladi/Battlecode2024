@@ -27,6 +27,8 @@ import escapebot.utils.FastIterableIntSet;
  *
  */
 public class Comm extends Globals {
+
+
     final static int FLAG_SETUP_COMM = 0;
     final static int EXPLORER_COMM = 1;
     final static int ENEMY_FLAG_HELD = 10;
@@ -45,7 +47,7 @@ public class Comm extends Globals {
     public static int numFlagsReported = 0;
 
     private static boolean needFlagUpdate = false;
-    public static MapLocation[] enemyFlags = new MapLocation[NUM_FLAGS];
+    public static MapLocation[] enemyFlagsInitial = new MapLocation[NUM_FLAGS];
 
     public static MapLocation[] allyFlagLocs = new MapLocation[NUM_FLAGS];
 
@@ -62,6 +64,11 @@ public class Comm extends Globals {
                     needSymUpdate = true;
                 }
                 buffered_share_array[i] = rc.readSharedArray(i);
+            }
+        }
+        for (int i = ENEMY_FLAG_FIRST; i <= ENEMY_FLAG_LAST; i++) {
+            if (enemyFlagsInitial[i-ENEMY_FLAG_FIRST] == null && rc.readSharedArray(i) != 0)  {
+                enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i));
             }
         }
         if (needSymUpdate || Globals.turnCount == 0) {

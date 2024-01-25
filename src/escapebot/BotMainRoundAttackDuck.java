@@ -104,6 +104,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             rc.setIndicatorString("GOING TO COMMED FLAG");
             return target;
         }
+
         if(!Explore.exploredBroadcast){
             target = Explore.randomBroadcast();
             if(target != null){

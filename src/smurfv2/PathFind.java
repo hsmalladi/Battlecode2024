@@ -149,10 +149,6 @@ public class PathFind extends Globals {
                     }  else if (dirLeftCanPass && rc.canMove(dir.rotateLeft())) {
                         rc.move(dir.rotateLeft());
                     } else {
-                        if (rc.getRoundNum() >= 200 && rc.hasFlag() && rc.canDropFlag(rc.getLocation())) {
-                            rc.dropFlag(rc.getLocation());
-                            System.out.println("DROPPING THE FLAG BECAUSE I AM TRAPPED");
-                        }
                         if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
                             rc.fill(rc.getLocation().add(dir.rotateLeft()));
                         } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {

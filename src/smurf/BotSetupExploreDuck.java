@@ -2,8 +2,6 @@ package smurf;
 
 import battlecode.common.*;
 
-import java.util.Arrays;
-
 public class BotSetupExploreDuck extends BotSetupDuck {
     static MapLocation setupLocation;
 

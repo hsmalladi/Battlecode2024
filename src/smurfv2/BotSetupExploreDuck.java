@@ -31,6 +31,9 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 }
                 else {
                     lineUpAtDam();
+                    if (isNextToDam()) {
+                        buildTrapsAtDam();
+                    }
                 }
             }
         }
@@ -40,7 +43,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         //System.out.println(Arrays.toString(Map.enemySpawnLocations));
         updateFlagLocations();
     }
-    
+
     public static boolean init() throws GameActionException {
         int val = rc.readSharedArray(Comm.EXPLORER_COMM);
         setupLocation = new MapLocation(0, 0);
@@ -92,15 +95,15 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     }
 
     private static void lineUpAtDam() throws GameActionException {
-       if (isNextToDam()) {
-           reachedTarget = true;
-           comEmptySpotsNextToDam();
-           return;
-       }
+        if (isNextToDam()) {
+            reachedTarget = true;
+            comEmptySpotsNextToDam();
+            return;
+        }
 
-       MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
+        MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
 
-       for (MapInfo mapInfo : mapInfos) {
+        for (MapInfo mapInfo : mapInfos) {
             if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
@@ -113,14 +116,14 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                     }
                 }
             }
-       }
-       if (rc.readSharedArray(12) != 4444){
-           setupLocation = Map.intToLocation(rc.readSharedArray(12));
-       }
-       else {
-           setupLocation = Map.center;
-       }
-       pf.moveTowards(setupLocation);
+        }
+        if (rc.readSharedArray(12) != 4444){
+            setupLocation = Map.intToLocation(rc.readSharedArray(12));
+        }
+        else {
+            setupLocation = Map.center;
+        }
+        pf.moveTowards(setupLocation);
     }
 
     private static void comEmptySpotsNextToDam() throws GameActionException {
@@ -160,6 +163,28 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         if (isExploring) {
             if (rc.isMovementReady()) {
                 pf.moveTowards(exploreLocation);
+            }
+        }
+    }
+
+    private static void buildTrapsAtDam() throws GameActionException {
+        if (rc.getCrumbs() > 500) {
+            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+            if (oppRobotInfos.length > 0) {
+                boolean build = true;
+                for (MapLocation adj : Map.getAdjacentLocationsNoCorners(rc.getLocation())) {
+                    if (rc.canSenseLocation(adj)) {
+
+                        if (rc.senseMapInfo(adj).getTrapType() != TrapType.NONE){
+                            build = false;
+                        }
+                    }
+                }
+                if (build) {
+                    if (rc.canBuild(TrapType.STUN, rc.getLocation())) {
+                        rc.build(TrapType.STUN, rc.getLocation());
+                    }
+                }
             }
         }
     }

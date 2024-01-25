@@ -223,6 +223,18 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 }
             }
         }
+        else {
+            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+            if (rc.getCrumbs() > 500) {
+                if (oppRobotInfos.length > 0) {
+                    MapLocation me = rc.getLocation();
+                    Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
+                    if (rc.canBuild(TrapType.STUN, me.add(dir))) {
+                        rc.build(TrapType.STUN, me.add(dir));
+                    }
+                }
+            }
+        }
         tryWaterTrap();
     }
 

@@ -1,4 +1,4 @@
-package smurfv2;
+package escapebot;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;

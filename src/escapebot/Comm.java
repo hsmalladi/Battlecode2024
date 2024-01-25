@@ -1,10 +1,10 @@
-package smurfv2;
+package escapebot;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
-import smurfv2.utils.FastIterableIntSet;
+import escapebot.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

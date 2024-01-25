@@ -33,6 +33,9 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 }
                 else {
                     lineUpAtDam();
+                    if (isNextToDam()) {
+                        buildTrapsAtDam();
+                    }
                 }
             }
         }
@@ -162,6 +165,28 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         if (isExploring) {
             if (rc.isMovementReady()) {
                 pf.moveTowards(exploreLocation);
+            }
+        }
+    }
+
+    private static void buildTrapsAtDam() throws GameActionException {
+        if (rc.getCrumbs() > 500) {
+            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+            if (oppRobotInfos.length > 0) {
+                boolean build = true;
+                for (MapLocation adj : Map.getAdjacentLocationsNoCorners(rc.getLocation())) {
+                    if (rc.canSenseLocation(adj)) {
+
+                        if (rc.senseMapInfo(adj).getTrapType() != TrapType.NONE){
+                            build = false;
+                        }
+                    }
+                }
+                if (build) {
+                    if (rc.canBuild(TrapType.STUN, rc.getLocation())) {
+                        rc.build(TrapType.STUN, rc.getLocation());
+                    }
+                }
             }
         }
     }

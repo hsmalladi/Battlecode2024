@@ -148,12 +148,18 @@ public class PathFind extends Globals {
                         rc.move(dir.rotateRight());
                     }  else if (dirLeftCanPass && rc.canMove(dir.rotateLeft())) {
                         rc.move(dir.rotateLeft());
-                    } else if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
-                        rc.fill(rc.getLocation().add(dir.rotateLeft()));
-                    } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
-                        rc.fill(rc.getLocation().add(dir.rotateRight()));
-                    } else if (rc.canFill(rc.getLocation().add(dir))) {
-                        rc.fill(rc.getLocation().add(dir));
+                    } else {
+                        if (rc.getRoundNum() >= 200 && rc.hasFlag() && rc.canDropFlag(rc.getLocation())) {
+                            rc.dropFlag(rc.getLocation());
+                            System.out.println("DROPPING THE FLAG BECAUSE I AM TRAPPED");
+                        }
+                        if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
+                            rc.fill(rc.getLocation().add(dir.rotateLeft()));
+                        } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
+                            rc.fill(rc.getLocation().add(dir.rotateRight()));
+                        } else if (rc.canFill(rc.getLocation().add(dir))) {
+                            rc.fill(rc.getLocation().add(dir));
+                        }
                     }
                 } else {
                     //encounters obstacle; run simulation to determine best way to go

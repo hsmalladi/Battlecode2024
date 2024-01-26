@@ -68,7 +68,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         tryAttack();
         tryHeal();
         tryTrap();
-
     }
 
     private static void tryMove() throws GameActionException {

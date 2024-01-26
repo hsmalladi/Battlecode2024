@@ -66,7 +66,9 @@ public class BotMainRoundDuck extends BotDuck {
         try {
             if (!rc.isSpawned() && escaping) {
                 escaping = false;
-
+                amHoldingFlag = false;
+                Debug.log("I DIED ESCAPING");
+                roundDied = rc.getRoundNum();
             }
             else if (!rc.isSpawned() && amHoldingFlag && !rc.hasFlag()) {
                 amHoldingFlag = false;
@@ -74,7 +76,7 @@ public class BotMainRoundDuck extends BotDuck {
                 roundDied = rc.getRoundNum();
                 Debug.log("I DIED HOLDING FLAG");
             }
-            else if (!rc.hasFlag() && amHoldingFlag) {
+            else if (!rc.hasFlag() && amHoldingFlag && !escaping) {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 Comm.updateFlagInfo(null, false, myFlagHolding);

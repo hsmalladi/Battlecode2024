@@ -141,21 +141,22 @@ public class PathFind extends Globals {
                         rc.move(dir.rotateLeft());
                     } else {
                         if (rc.hasFlag() && rc.canDropFlag(rc.getLocation()) && rc.getRoundNum() > 200) {
-                            if (rc.senseNearbyRobots(-1, rc.getTeam()).length == 0) {
-                                rc.dropFlag(rc.getLocation());
-                                escaping = true;
-                            }
+                            // if (rc.senseNearbyRobots(-1, rc.getTeam()).length == 0) {
+                            rc.dropFlag(rc.getLocation());
+                            escaping = true;
+                            Debug.log("I AM NOW ESCAPING");
+
                         }
                         if (rc.canFill(rc.getLocation().add(dir))) {
-                            // if (escaping) escaping = false;
+                            if (escaping) escaping = false;
                             rc.fill(rc.getLocation().add(dir));
                         }
                         else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
-                            // if (escaping) escaping = false;
+                            if (escaping) escaping = false;
                             rc.fill(rc.getLocation().add(dir.rotateRight()));
                         }
                         else if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
-                            // if (escaping) escaping = false;
+                            if (escaping) escaping = false;
                             rc.fill(rc.getLocation().add(dir.rotateLeft()));
                         }
 

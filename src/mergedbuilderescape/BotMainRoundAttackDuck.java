@@ -70,12 +70,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return target;
         }
 
-        target = Explore.attackFlagHolder();
-        if (target != null){
-            rc.setIndicatorString("ATTACK FlAG IN VISION");
-            return target;
-        }
-
         target = getBestTarget();
         if (target != null){
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");

@@ -5,7 +5,6 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
 
 public class Globals {

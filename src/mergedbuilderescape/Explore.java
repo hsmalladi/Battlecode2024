@@ -62,6 +62,9 @@ public class Explore extends Globals {
     public static MapLocation protectFlagHolder() throws GameActionException {
         RobotInfo[] robotInfos = rc.senseNearbyRobots(-1, rc.getTeam());
         for (RobotInfo r : robotInfos) {
+            if(r.getLocation().distanceSquaredTo(rc.getLocation()) <= 4){
+                continue;
+            }
             if (r.hasFlag()) {
                 Direction d = r.getLocation().directionTo(Map.getClosestLocation(r.getLocation(), Map.allySpawnLocations));
                 return r.getLocation().add(d.opposite());

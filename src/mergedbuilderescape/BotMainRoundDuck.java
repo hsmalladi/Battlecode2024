@@ -63,7 +63,7 @@ public class BotMainRoundDuck extends BotDuck {
 
     private static void tryFlagDropOff() throws GameActionException {
         try {
-            if (escaping) {
+            if (escaping && rc.isSpawned()) {
                 FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam().opponent());
                 for (FlagInfo flag : flags) {
                     if (flag.isPickedUp() && Comm.flagIDToIdx(flag.getID(), rc.getTeam().opponent()) == myFlagHolding) {

@@ -80,8 +80,13 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     TODO: THERE ARE 3 ROLES, EITHER GO TO FLAG, PROTECT OUR FLAG, OR PROTECT FLAG HOLDER.
      */
     private static MapLocation getTarget() throws GameActionException{
+        MapLocation target = Explore.protectFlagHolder();
+        if (target != null){
+            rc.setIndicatorString("PROTECT FlAG IN VISION");
+            return target;
+        }
 
-        MapLocation target = Explore.attackFlagHolder();
+        target = Explore.attackFlagHolder();
         if (target != null){
             rc.setIndicatorString("ATTACK FlAG IN VISION");
             return target;

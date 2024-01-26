@@ -20,7 +20,6 @@ public class Globals {
     static boolean amHoldingFlag = false;
     static boolean escaping = false;
     public static RobotController rc;
-    public static HashSet<MapLocation> allySpawn;
 
     public static Micro micro;
     public static MicroFlag flagMicro;

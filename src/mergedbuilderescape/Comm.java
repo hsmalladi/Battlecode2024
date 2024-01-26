@@ -84,13 +84,6 @@ public class Comm extends Globals {
                 enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i) >> 1);
             }
         }
-
-        if (allySpawn == null) {
-            allySpawn = new HashSet<>();
-            for (MapLocation loc : rc.getAllySpawnLocations()) {
-                allySpawn.add(loc);
-            }
-        }
         if (needSymUpdate || Globals.turnCount == 0) {
             updateSym();
         }

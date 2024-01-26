@@ -65,7 +65,7 @@ public class BotMainRoundDuck extends BotDuck {
 
     private static void tryFlagDropOff() throws GameActionException {
         try {
-            if (amHoldingFlag && allySpawn.contains(rc.getLocation())) {
+            if (amHoldingFlag && contains(Map.allySpawnLocations, rc.getLocation())) {
                 amHoldingFlag = false;
                 escaping = false;
                 goingToFlag = true;
@@ -99,6 +99,14 @@ public class BotMainRoundDuck extends BotDuck {
             e.printStackTrace();
             Debug.log("HELLO HELLO HELLO HELLO");
         }
+    }
+
+    private static boolean contains(MapLocation[] locs, MapLocation curr) {
+        for (MapLocation l : locs) {
+            if (l.equals(curr))
+                return true;
+        }
+        return false;
     }
 
 

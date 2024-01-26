@@ -144,6 +144,7 @@ public class PathFind extends Globals {
                             // if (rc.senseNearbyRobots(-1, rc.getTeam()).length == 0) {
                             rc.dropFlag(rc.getLocation());
                             escaping = true;
+                            amHoldingFlag = false;
                             Debug.log("I AM NOW ESCAPING");
 
                         }

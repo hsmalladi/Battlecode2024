@@ -6,6 +6,8 @@ import battlecode.common.MapLocation;
 import battlecode.common.Team;
 import mergedbuilderescape.utils.FastIterableIntSet;
 
+import java.util.HashSet;
+
 /**
  * The following code is partially
  * from https://github.com/carlguo866/battlecode23-gonefishin/tree/main/src/submit24_US_qual and is
@@ -80,6 +82,13 @@ public class Comm extends Globals {
         for (int i = ENEMY_FLAG_FIRST; i <= ENEMY_FLAG_LAST; i++) {
             if (enemyFlagsInitial[i-ENEMY_FLAG_FIRST] == null && rc.readSharedArray(i) != 0)  {
                 enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i) >> 1);
+            }
+        }
+
+        if (allySpawn == null) {
+            allySpawn = new HashSet<>();
+            for (MapLocation loc : rc.getAllySpawnLocations()) {
+                allySpawn.add(loc);
             }
         }
         if (needSymUpdate || Globals.turnCount == 0) {

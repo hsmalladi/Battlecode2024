@@ -18,7 +18,6 @@ public class BotMainRoundDuck extends BotDuck {
     private static int myRole = -1;
 
     public static int myFlagHolding = -1;
-    static boolean amHoldingFlag = false;
     private static int roundDied = -1;
 
 
@@ -76,8 +75,16 @@ public class BotMainRoundDuck extends BotDuck {
                 roundDied = rc.getRoundNum();
                 Debug.log("I DIED HOLDING FLAG");
             }
+            else if (amHoldingFlag && allySpawn.contains(rc.getLocation())) {
+                amHoldingFlag = false;
+                escaping = false;
+                goingToFlag = true;
+                Comm.updateFlagInfo(null, false, myFlagHolding);
+                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
+            }
             else if (!rc.hasFlag() && amHoldingFlag && !escaping) {
                 amHoldingFlag = false;
+                escaping = false;
                 goingToFlag = true;
                 Comm.updateFlagInfo(null, false, myFlagHolding);
                 Debug.log("DROPPED OFF FLAG " + myFlagHolding);

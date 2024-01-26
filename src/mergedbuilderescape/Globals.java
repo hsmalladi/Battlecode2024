@@ -5,6 +5,7 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 
 public class Globals {
@@ -16,8 +17,10 @@ public class Globals {
     static boolean gettingCrumb = false;
     static boolean reachedTarget = false;
     static boolean buildDefenses = false;
+    static boolean amHoldingFlag = false;
     static boolean escaping = false;
     public static RobotController rc;
+    public static HashSet<MapLocation> allySpawn;
 
     public static Micro micro;
     public static MicroFlag flagMicro;

@@ -1,4 +1,4 @@
-package escapebot;
+package oldescapebot;
 
 import battlecode.common.*;
 

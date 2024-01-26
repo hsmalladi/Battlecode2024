@@ -1,7 +1,7 @@
-package escapebot;
+package oldescapebot;
 
 import battlecode.common.*;
-import escapebot.utils.FastIterableIntSet;
+import oldescapebot.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

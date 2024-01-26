@@ -9,11 +9,9 @@ public class MoveTarget extends Globals {
     MapLocation mloc;
 
     boolean isBetterThan(MoveTarget t){
-        if(priority <= 1) return false;
         if (t == null) return true;
-        if (t.priority <= 1) return true;
         if(priority > t.priority) return true;
-        if(priority < t.priority) return true;
+        if(priority < t.priority) return false;
         return health <= t.health;
     }
 

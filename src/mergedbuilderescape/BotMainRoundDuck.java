@@ -6,9 +6,7 @@ import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 public class BotMainRoundDuck extends BotDuck {
 
@@ -92,7 +90,7 @@ public class BotMainRoundDuck extends BotDuck {
                 Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             if (rc.getRoundNum() == roundDied + 5) {
-                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding-Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
+                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding- Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
                 Debug.log("RESETTING FLAG LOCATION");
             }
         } catch (Exception e) {

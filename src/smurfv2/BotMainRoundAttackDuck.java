@@ -289,7 +289,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryHeal() throws GameActionException {
         if(!rc.isActionReady()) return;
-        RobotInfo[] enemyRobots = rc.senseNearbyRobots(rc.getLocation(), GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+        RobotInfo[] enemyRobots = rc.senseNearbyRobots(rc.getLocation(), GameConstants.ATTACK_RADIUS_SQUARED + 12, rc.getTeam().opponent());
         if (enemyRobots.length > 0){
             return;
         }

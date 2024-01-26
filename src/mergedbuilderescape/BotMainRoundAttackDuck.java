@@ -214,17 +214,34 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 rc.setIndicatorString("BUILDING LOTS OF TRAPS");
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
+
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
-                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
+                    if (rc.canSenseLocation(me.add(dir))) {
+                        if (!rc.senseMapInfo(me.add(dir)).isWater()) {
+                            rc.build(TrapType.EXPLOSIVE, me.add(dir));
+                        }
+                    }
                 }
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()))) {
-                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
+                    if (rc.canSenseLocation(me.add(dir.rotateLeft()))) {
+                        if (!rc.senseMapInfo(me.add(dir.rotateLeft())).isWater()) {
+                            rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
+                        }
+                    }
                 }
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight()))) {
-                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
+                    if (rc.canSenseLocation(me.add(dir.rotateRight()))) {
+                        if (!rc.senseMapInfo(me.add(dir.rotateRight())).isWater()) {
+                            rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
+                        }
+                    }
                 }
                 else if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
-                    rc.build(TrapType.EXPLOSIVE, me);
+                    if (rc.canSenseLocation(me)) {
+                        if (!rc.senseMapInfo(me).isWater()) {
+                            rc.build(TrapType.EXPLOSIVE, me);
+                        }
+                    }
                 }
             }
             else if (oppRobotInfos.length > 0) {

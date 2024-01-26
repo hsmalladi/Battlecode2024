@@ -92,16 +92,15 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return target;
         }
 
+        target = getBestTarget();
+        if (target != null){
+            rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
+            return target;
+        }
 
         target = Explore.getFlagTarget();
         if (target !=  null){
             rc.setIndicatorString("GOING TO COMMED FLAG");
-            return target;
-        }
-
-        target = getBestTarget();
-        if (target != null){
-            rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             return target;
         }
 

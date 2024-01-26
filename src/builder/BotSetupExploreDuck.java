@@ -24,22 +24,17 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                     exploreLocation = Map.getRandomLocation(rng);
                     reachedTarget = false;
                 }
-                if (rc.getCrumbs() > 6000) {
+                if (rc.getCrumbs() > 2500) {
                     digToLv(6);
                 }
                 else {
-                    digToLv(rc.getCrumbs() / 1000);
+                    digToLv(rc.getCrumbs() / 500);
                 }
 
             }
 
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
-                if (builderDuck !=0) {
-                    builderExplore();
-                }
-                else {
-                    explore();
-                }
+                explore();
             }
             else {
                 if (builderDuck != 0) {

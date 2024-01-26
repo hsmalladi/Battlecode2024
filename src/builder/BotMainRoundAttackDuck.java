@@ -6,37 +6,23 @@ import battlecode.common.*;
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     public static void play() throws GameActionException {
-        if (turnCount < GameConstants.SETUP_ROUNDS + 20) {
-            retrieveCrumbs();
+        if (builderDuck != 0) {
+            tryTrap();
         }
-        else {
-            gettingCrumb = false;
-        }
-
-        if (!gettingCrumb) {
-            macro();
-        } else {
-            tryAttack();
-            tryHeal();
-        }
+        macro();
     }
 
-    private static void retrieveCrumbs() throws GameActionException {
+    private static MapLocation retrieveCrumbs() throws GameActionException {
         //Retrieve all crumb locations within robot vision radius
         MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
         if (crumbLocations.length > 0) {
             MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
             if (reachable(closestCrumb)) {
                 rc.setIndicatorString("Getting Crumb");
-                gettingCrumb = true;
-                if (rc.isMovementReady()) {
-                    pf.moveTowards(closestCrumb);
-                }
-                isExploring = false;
+                return closestCrumb;
             }
-        } else {
-            gettingCrumb = false;
         }
+        return null;
     }
 
     private static boolean reachable(MapLocation location) throws GameActionException {
@@ -53,11 +39,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void macro() throws GameActionException {
         // rc.setIndicatorString("ATTACK");
-        if (builderDuck != 0) {
-            tryTrap();
-
-        }
-
         tryAttack();
         tryAttack();
         tryHeal();
@@ -134,7 +115,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             }
         }
 
+        target = retrieveCrumbs();
 
+        if (target !=  null){
+            rc.setIndicatorString("GOING TO CRUMB");
+            return target;
+        }
 
         rc.setIndicatorString("I'm DUMB. GOING TO RANDOM LOC");
         return Explore.getExploreTarget();
@@ -206,7 +192,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     public static void tryTrap() throws GameActionException {
         if (builderDuck != 0) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-            if (oppRobotInfos.length >= 3) {
+            if (oppRobotInfos.length >= 5) {
+                rc.setIndicatorString("BUILDING LOTS OF TRAPS");
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
@@ -218,11 +205,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight()))) {
                     rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
                 }
-                if (rc.canBuild(TrapType.STUN, me)) {
-                    rc.build(TrapType.STUN, me);
+                else if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
+                    rc.build(TrapType.EXPLOSIVE, me);
                 }
             }
             else if (oppRobotInfos.length > 0) {
+                rc.setIndicatorString("BUILDING SOME TRAPS");
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
@@ -235,7 +223,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
         else {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-            if (rc.getCrumbs() > 500) {
+            if (rc.getCrumbs() > 1000) {
                 if (oppRobotInfos.length > 0) {
                     MapLocation me = rc.getLocation();
                     Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));

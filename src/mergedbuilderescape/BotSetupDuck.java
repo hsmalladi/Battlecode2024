@@ -1,4 +1,4 @@
-package escapebot;
+package mergedbuilderescape;
 
 
 import battlecode.common.GameActionException;

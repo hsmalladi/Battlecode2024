@@ -1,4 +1,4 @@
-package escapebot;
+package mergedbuilderescape;
 
 import battlecode.common.*;
 
@@ -94,22 +94,6 @@ public class BotSetupFlagDuck extends BotSetupDuck {
                 }
             }
         }
-    }
-
-    private static boolean fillWaterFlagDuck() throws GameActionException {
-        Direction dir = rc.getLocation().directionTo(exploreLocation);
-        MapLocation water = rc.getLocation().add(dir);
-        if (rc.canSenseLocation(water)) {
-            if (rc.senseMapInfo(water).isWater()) {
-                dropFlag();
-                if (rc.canFill(water)) {
-                    rc.fill(water);
-                }
-                return true;
-            }
-        }
-        return false;
-
     }
 
     private static void holdFlag() throws GameActionException {

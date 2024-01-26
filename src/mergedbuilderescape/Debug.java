@@ -1,4 +1,4 @@
-package escapebot;
+package mergedbuilderescape;
 
 import smurfv2.Globals;
 

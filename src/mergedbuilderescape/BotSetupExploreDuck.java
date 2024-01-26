@@ -1,6 +1,8 @@
-package escapebot;
+package mergedbuilderescape;
 
 import battlecode.common.*;
+
+import static builder.BotMainRoundAttackDuck.closestEnemy;
 
 public class BotSetupExploreDuck extends BotSetupDuck {
     static MapLocation setupLocation;
@@ -18,12 +20,27 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             MapRecorder.recordSym(500);
 
             if (builderDuck != 0){
-                digToLv6();
+                if (turnCount == 2 || reachedTarget){
+                    exploreLocation = Map.getRandomLocation(rng);
+                    reachedTarget = false;
+                }
+                if (rc.getCrumbs() > 2500) {
+                    digToLv(6);
+                }
+                else {
+                    digToLv(rc.getCrumbs() / 500);
+                }
+
             }
 
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
                 explore();
-            } else {
+            }
+            else {
+                if (builderDuck != 0) {
+                    buildTrapsAtDam();
+                }
+
                 if (turnCount > 180) {
                     if (!isNextToDam()) {
                         pf.moveTowards(Map.center);
@@ -77,8 +94,8 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         return false;
     }
 
-    private static void digToLv6() throws GameActionException {
-        if (rc.getLevel(SkillType.BUILD) < 6) {
+    private static void digToLv(int level) throws GameActionException {
+        if (rc.getLevel(SkillType.BUILD) < level) {
             for (MapLocation adj : Map.getAdjacentLocations(rc.getLocation())) {
                 if (adj.x % 2 == 0 && adj.y % 2 == 0) {
                     if (rc.canDig(adj)) {
@@ -167,8 +184,38 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         }
     }
 
+    private static void builderExplore() throws GameActionException {
+        isExploring = true;
+        if (flagDuck == 0)
+            retrieveCrumbs();
+        if (isExploring) {
+            if (rc.isMovementReady()) {
+                pf.follow(exploreLocation);
+            }
+        }
+    }
+
     private static void buildTrapsAtDam() throws GameActionException {
-        if (rc.getCrumbs() > 500) {
+        if (builderDuck !=0 ){
+            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+            if (oppRobotInfos.length > 0) {
+                MapLocation me = rc.getLocation();
+                Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
+                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
+                    rc.build(TrapType.STUN, me.add(dir));
+                }
+                if (rc.canBuild(TrapType.STUN, me.add(dir.rotateLeft()))) {
+                    rc.build(TrapType.STUN, me.add(dir.rotateLeft()));
+                }
+                if (rc.canBuild(TrapType.STUN, me.add(dir.rotateRight()))) {
+                    rc.build(TrapType.STUN, me.add(dir.rotateRight()));
+                }
+                else if (rc.canBuild(TrapType.STUN, me)) {
+                    rc.build(TrapType.STUN, me);
+                }
+            }
+        }
+        else if (rc.getCrumbs() > 500) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
             if (oppRobotInfos.length > 0) {
                 boolean build = true;

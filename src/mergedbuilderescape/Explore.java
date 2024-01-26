@@ -1,4 +1,4 @@
-package escapebot;
+package mergedbuilderescape;
 
 import battlecode.common.*;
 
@@ -42,6 +42,17 @@ public class Explore extends Globals {
         if (broadcastLocs.length > 0) {
             if (randomBroadCast == null) {
                 randomBroadCast = broadcastLocs[rng.nextInt(broadcastLocs.length)];
+            }
+            return randomBroadCast;
+        }
+        return null;
+    }
+
+    public static MapLocation randomBroadcastBuilder(int builder) throws GameActionException {
+        MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
+        if (broadcastLocs.length > 0) {
+            if (randomBroadCast == null) {
+                randomBroadCast = broadcastLocs[builder % broadcastLocs.length];
             }
             return randomBroadCast;
         }

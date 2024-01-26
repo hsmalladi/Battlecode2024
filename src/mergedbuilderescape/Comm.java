@@ -1,7 +1,10 @@
-package escapebot;
+package mergedbuilderescape;
 
-import battlecode.common.*;
-import escapebot.utils.FastIterableIntSet;
+import battlecode.common.FlagInfo;
+import battlecode.common.GameActionException;
+import battlecode.common.MapLocation;
+import battlecode.common.Team;
+import mergedbuilderescape.utils.FastIterableIntSet;
 
 /**
  * The following code is partially
@@ -66,7 +69,7 @@ public class Comm extends Globals {
             }
         }
         if (rc.isSpawned()) {
-            for (FlagInfo flag : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent())) {
+            for (FlagInfo flag : rc.senseNearbyFlags(-1, rc.getTeam().opponent())) {
                 int index = flagIDToIdx(flag.getID(), flag.getTeam());
                 // Debug.log("INDEX " + index + " " + rc.readSharedArray(index));
                 if (rc.readSharedArray(index) == 0) {
@@ -76,15 +79,12 @@ public class Comm extends Globals {
         }
         for (int i = ENEMY_FLAG_FIRST; i <= ENEMY_FLAG_LAST; i++) {
             if (enemyFlagsInitial[i-ENEMY_FLAG_FIRST] == null && rc.readSharedArray(i) != 0)  {
-                // Debug.log(rc.readSharedArray(i)+"");
                 enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i) >> 1);
-                // Debug.log("ENEMY FLAG FOUND " + enemyFlagsInitial[i-ENEMY_FLAG_FIRST].toString());
             }
         }
         if (needSymUpdate || Globals.turnCount == 0) {
             updateSym();
         }
-
     }
 
     public static int flagIDToIdx(int flagID, Team team) throws GameActionException {
@@ -118,7 +118,6 @@ public class Comm extends Globals {
 
     public static void updateFlagInfo(MapLocation loc, boolean isCarried, int idx) throws GameActionException {
         int locInt = loc2int(loc);
-        // Debug.log("INDEX HERE " + idx + " " + loc.toString() + " " + locInt);
         locInt = locInt << 1;
         if (isCarried) {
             locInt += 1;

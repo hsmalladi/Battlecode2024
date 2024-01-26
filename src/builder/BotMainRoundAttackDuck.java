@@ -1,4 +1,4 @@
-package escapebot;
+package builder;
 
 import battlecode.common.*;
 
@@ -53,6 +53,11 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void macro() throws GameActionException {
         // rc.setIndicatorString("ATTACK");
+        if (builderDuck != 0) {
+            tryTrap();
+
+        }
+
         tryAttack();
         tryAttack();
         tryHeal();
@@ -60,6 +65,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         tryAttack();
         tryHeal();
         tryTrap();
+
     }
 
     private static void tryMove() throws GameActionException {
@@ -76,21 +82,16 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
 
-    /*
-    TODO: THERE ARE 3 ROLES, EITHER GO TO FLAG, PROTECT OUR FLAG, OR PROTECT FLAG HOLDER.
-     */
     private static MapLocation getTarget() throws GameActionException{
-
-
-        MapLocation target = Explore.attackFlagHolder();
+        MapLocation target = Explore.protectFlagHolder();
         if (target != null){
-            rc.setIndicatorString("ATTACK FlAG IN VISION");
+            rc.setIndicatorString("PROTECT FlAG IN VISION");
             return target;
         }
 
-        target = Explore.getFlagTarget();
-        if (target !=  null){
-            rc.setIndicatorString("GOING TO COMMED FLAG");
+        target = Explore.attackFlagHolder();
+        if (target != null){
+            rc.setIndicatorString("ATTACK FlAG IN VISION");
             return target;
         }
 
@@ -100,12 +101,24 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return target;
         }
 
+        target = Explore.getFlagTarget();
+        if (target !=  null){
+            rc.setIndicatorString("GOING TO COMMED FLAG");
+            return target;
+        }
+
         if(!Explore.exploredBroadcast){
-            target = Explore.randomBroadcast();
+            if (builderDuck !=0) {
+                target = Explore.randomBroadcastBuilder(builderDuck);
+            }
+            else {
+                target = Explore.randomBroadcast();
+            }
             if(target != null){
                 if(rc.getLocation().distanceSquaredTo(target) <= 5){
                     Explore.exploredBroadcast = true;
                 }
+                rc.setIndicatorString("GOING TO BROADCAST FLAG");
                 return target;
             }
         }
@@ -116,6 +129,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 if(rc.getLocation().distanceSquaredTo(target) <= 5){
                     Explore.exploredCorner = true;
                 }
+                rc.setIndicatorString("GOING TO CORNER");
                 return target;
             }
         }
@@ -195,14 +209,14 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             if (oppRobotInfos.length >= 3) {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
-                    rc.build(TrapType.STUN, me.add(dir));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
                 }
-                if (rc.canBuild(TrapType.STUN, me.add(dir.rotateLeft()))) {
-                    rc.build(TrapType.STUN, me.add(dir.rotateLeft()));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
                 }
-                if (rc.canBuild(TrapType.STUN, me.add(dir.rotateRight()))) {
-                    rc.build(TrapType.STUN, me.add(dir.rotateRight()));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight()))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
                 }
                 if (rc.canBuild(TrapType.STUN, me)) {
                     rc.build(TrapType.STUN, me);
@@ -211,8 +225,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             else if (oppRobotInfos.length > 0) {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
-                    rc.build(TrapType.STUN, me.add(dir));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
                 }
                 if (rc.canBuild(TrapType.STUN, me)) {
                     rc.build(TrapType.STUN, me);

@@ -259,8 +259,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 rc.setIndicatorString("BUILDING SOME TRAPS");
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
-                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
+                if (rc.canSenseLocation(me.add(dir))) {
+                    if (!rc.senseMapInfo(me.add(dir)).isWater()) {
+                        rc.build(TrapType.EXPLOSIVE, me.add(dir));
+                    }
                 }
                 if (rc.canBuild(TrapType.STUN, me)) {
                     rc.build(TrapType.STUN, me);

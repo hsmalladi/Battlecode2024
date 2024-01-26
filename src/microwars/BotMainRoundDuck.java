@@ -1,13 +1,11 @@
-package mergedbuilderescape;
+package microwars;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class BotMainRoundDuck extends BotDuck {
@@ -20,6 +18,7 @@ public class BotMainRoundDuck extends BotDuck {
     private static int myRole = -1;
 
     public static int myFlagHolding = -1;
+    static boolean amHoldingFlag = false;
     private static int roundDied = -1;
 
 
@@ -77,22 +76,14 @@ public class BotMainRoundDuck extends BotDuck {
                 roundDied = rc.getRoundNum();
                 Debug.log("I DIED HOLDING FLAG");
             }
-            else if (amHoldingFlag && allySpawn.contains(rc.getLocation())) {
-                amHoldingFlag = false;
-                escaping = false;
-                goingToFlag = true;
-                Comm.updateFlagInfo(null, false, myFlagHolding);
-                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
-            }
             else if (!rc.hasFlag() && amHoldingFlag && !escaping) {
                 amHoldingFlag = false;
-                escaping = false;
                 goingToFlag = true;
                 Comm.updateFlagInfo(null, false, myFlagHolding);
                 Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             if (rc.getRoundNum() == roundDied + 5) {
-                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding-Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
+                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding- Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
                 Debug.log("RESETTING FLAG LOCATION");
             }
         } catch (Exception e) {
@@ -121,16 +112,20 @@ public class BotMainRoundDuck extends BotDuck {
     }
 
     public static void smartSpawn() throws GameActionException {
-        ArrayList<MapLocation> random = new ArrayList<>();
-
-        for (MapLocation l : Map.allySpawnLocations) {
-            random.add(l);
-        }
-        Collections.shuffle(random);
-
-        for (MapLocation loc : random) {
-            if (rc.canSpawn(loc)) {
-                rc.spawn(loc);
+        for (int i = 1; i < 4; i++) {
+            int numEnemies = rc.readSharedArray(i);
+            if (numEnemies >= 1) {
+                List<MapLocation> sorted = Arrays.asList(Map.allySpawnLocations);
+                Map.sortCoordinatesByDistance(sorted, Map.allyFlagLocations[i-1]);
+                for (MapLocation loc : sorted) {
+                    if (rc.canSpawn(loc)) {
+                        rc.spawn(loc);
+                        break;
+                    }
+                }
+            }
+            else {
+                trySpawn();
             }
         }
     }

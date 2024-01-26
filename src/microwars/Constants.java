@@ -1,4 +1,4 @@
-package mergedbuilderescape;
+package microwars;
 
 import battlecode.common.Direction;
 
@@ -7,7 +7,7 @@ public class Constants {
 
     final static int CRITICAL_HEALTH = 60;
 
-    final static int EXPLORE_ROUNDS = 125;
+    final static int EXPLORE_ROUNDS = 100;
 
     /** Array containing all the possible movement directions. */
     public static final Direction[] directions = {

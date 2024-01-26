@@ -148,15 +148,15 @@ public class PathFind extends Globals {
                             Debug.log("I AM NOW ESCAPING");
 
                         }
-                        if (rc.canFill(rc.getLocation().add(dir))) {
+                        if (rc.canFill(rc.getLocation().add(dir)) && canDigMod2(rc.getLocation().add(dir))) {
                             if (escaping) escaping = false;
                             rc.fill(rc.getLocation().add(dir));
                         }
-                        else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
+                        else if (rc.canFill(rc.getLocation().add(dir.rotateRight())) && canDigMod2(rc.getLocation().add(dir.rotateRight()))) {
                             if (escaping) escaping = false;
                             rc.fill(rc.getLocation().add(dir.rotateRight()));
                         }
-                        else if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
+                        else if (rc.canFill(rc.getLocation().add(dir.rotateLeft())) && canDigMod2(rc.getLocation().add(dir.rotateLeft()))) {
                             if (escaping) escaping = false;
                             rc.fill(rc.getLocation().add(dir.rotateLeft()));
                         }
@@ -185,7 +185,7 @@ public class PathFind extends Globals {
                         indicator += "permblocked";
                     } else if (rc.canMove(dir)) {
                         rc.move(dir);
-                    } else if (rc.canFill(rc.getLocation().add(dir))) {
+                    } else if (rc.canFill(rc.getLocation().add(dir)) && canDigMod2(rc.getLocation().add(dir))) {
                         rc.fill(rc.getLocation().add(dir));
                     }
                 }
@@ -226,7 +226,7 @@ public class PathFind extends Globals {
                         (currentTurnDir == 0?prv[pathingCnt - 1].rotateLeft():prv[pathingCnt - 1].rotateRight());
                 if (rc.canMove(moveDir)) {
                     rc.move(moveDir);
-                } else if (rc.canFill(rc.getLocation().add(moveDir))) {
+                } else if (rc.canFill(rc.getLocation().add(moveDir)) && canDigMod2(rc.getLocation().add(moveDir))) {
                     rc.fill(rc.getLocation().add(moveDir));
                 } else {
                     // a robot blocking us while we are following wall, wait
@@ -384,6 +384,31 @@ public class PathFind extends Globals {
     static boolean canPass(Direction dir) throws GameActionException {
         return canPass(dir, dir);
     }
+
+    static boolean canDigMod2(MapLocation location) throws GameActionException {
+        if ((location.x + location.y) % 2 == 1) {
+            return true;
+        }
+        MapLocation[] adj = Map.getAdjacentLocationsNoCorners(location);
+
+        if (rc.canSenseLocation(location)) {
+            MapInfo map = rc.senseMapInfo(location);
+            if (map.getCrumbs() != 0) {
+                return true;
+            }
+        }
+
+        for (MapLocation a : adj) {
+            if (rc.canSenseLocation(a)) {
+                MapInfo m = rc.senseMapInfo(a);
+                if (m.isWall() || m.isDam()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 
     static Direction Dxy2dir(int dx, int dy) {
         if (dx == 0 && dy == 0) return Direction.CENTER;

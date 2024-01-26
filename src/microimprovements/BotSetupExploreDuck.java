@@ -38,7 +38,10 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             }
             else {
                 if (builderDuck != 0) {
-                    buildTrapsAtDam();
+                    if (rc.getCrumbs() > 680) {
+                        buildTrapsAtDam();
+                    }
+
                 }
 
                 if (turnCount > 180) {
@@ -48,7 +51,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 }
                 else {
                     lineUpAtDam();
-                    if (isNextToDam()) {
+                    if (isNextToDam() && rc.getCrumbs() > 680) {
                         buildTrapsAtDam();
                     }
                 }
@@ -215,7 +218,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 }
             }
         }
-        else if (rc.getCrumbs() > 500) {
+        else {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
             if (oppRobotInfos.length > 0) {
                 boolean build = true;

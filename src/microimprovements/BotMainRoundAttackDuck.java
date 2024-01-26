@@ -6,10 +6,15 @@ import battlecode.common.*;
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     public static void play() throws GameActionException {
-        if (rc.getActionCooldownTurns() < 10) {
-            tryTrap();
+        if (rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0 && turnCount < 220) {
+            retrieveCrumbsMove();
         }
-        macro();
+        if (!gettingCrumb) {
+            if (rc.getActionCooldownTurns() < 10) {
+                tryTrap();
+            }
+            macro();
+        }
     }
 
     private static MapLocation retrieveCrumbs() throws GameActionException {
@@ -23,6 +28,23 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             }
         }
         return null;
+    }
+
+    private static void retrieveCrumbsMove() throws GameActionException {
+        //Retrieve all crumb locations within robot vision radius
+        MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
+        if (crumbLocations.length > 0) {
+            MapLocation closestCrumb = mergedbuilderescape.Map.getClosestLocation(rc.getLocation(), crumbLocations);
+            if (reachable(closestCrumb)) {
+                rc.setIndicatorString("Getting Crumb");
+                gettingCrumb = true;
+                if (rc.isMovementReady()) {
+                    pf.moveTowards(closestCrumb);
+                }
+
+            }
+        }
+        gettingCrumb = false;
     }
 
     private static boolean reachable(MapLocation location) throws GameActionException {
@@ -225,7 +247,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             }
         }
         else {
-            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(9, rc.getTeam().opponent());
             if (rc.getCrumbs() > 1000) {
                 if (oppRobotInfos.length > 0) {
                     MapLocation me = rc.getLocation();

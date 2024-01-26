@@ -1,10 +1,10 @@
-package mergedbuilderescape;
+package healingupgrades;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
-import mergedbuilderescape.utils.FastIterableIntSet;
+import healingupgrades.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

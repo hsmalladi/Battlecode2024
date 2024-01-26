@@ -1,4 +1,4 @@
-package mergedbuilderescape;
+package healingupgrades;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;

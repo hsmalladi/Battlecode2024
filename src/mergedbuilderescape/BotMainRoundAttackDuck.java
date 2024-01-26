@@ -77,6 +77,11 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             pf.moveTowards(closestEnemyFlag);
             return;
         }
+        MapLocation closestAllyDroppedFlag = getClosestDroppedAllyFlag();
+        if(closestAllyDroppedFlag != null){
+            pf.moveTowards(closestAllyDroppedFlag);
+            return;
+        }
         if (micro.doMicro()) return;
         MapLocation target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
@@ -166,7 +171,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         MapLocation closestFlag = null;
         FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
         for (FlagInfo flag : flags) {
-            if (!flag.isPickedUp() && rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist)
+            if (rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist)
             {
                 closestFlag = flag.getLocation();
                 dist = rc.getLocation().distanceSquaredTo(flag.getLocation());
@@ -175,22 +180,28 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         return closestFlag;
     }
 
-    private static MapLocation getClosestBroadcastFlag() throws GameActionException {
-        int mindist = 100000;
-        MapLocation closestFlag = null;
-        MapLocation[] flagLocations = rc.senseBroadcastFlagLocations();
-        for (MapLocation flagLoc : flagLocations){
-            int flagDist = rc.getLocation().distanceSquaredTo(flagLoc);
-            if (flagDist < mindist){
-                mindist = flagDist;
-                closestFlag = flagLoc;
+    // Comm.AllyFlagLocations
+    private static MapLocation getClosestDroppedAllyFlag()  throws GameActionException {
+        int dist = 10000;
+        MapLocation[] initialAllyFlagLocations = Comm.allyFlagLocs;
+        FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam());
+
+        MapLocation closestDroppedAllyFlag = null;
+        for (FlagInfo flag: flags){
+            boolean isInitialLoc = false;
+            for(MapLocation initialFlagLoc: initialAllyFlagLocations){
+                if(initialFlagLoc == flag.getLocation()){
+                    isInitialLoc = true;
+                }
+            }
+            if(!isInitialLoc){
+                if(rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist){
+                    closestDroppedAllyFlag = flag.getLocation();
+                    dist = rc.getLocation().distanceSquaredTo(flag.getLocation());
+                }
             }
         }
-        if (closestFlag != null){
-            return closestFlag;
-        }
-
-        return null;
+        return closestDroppedAllyFlag;
     }
 
     private static MapLocation getRandomTarget(int tries) {

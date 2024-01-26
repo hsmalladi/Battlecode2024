@@ -190,7 +190,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         for (FlagInfo flag: flags){
             boolean isInitialLoc = false;
             for(MapLocation initialFlagLoc: initialAllyFlagLocations){
-                if(initialFlagLoc == flag.getLocation()){
+                if(initialFlagLoc.equals(flag.getLocation())){
                     isInitialLoc = true;
                 }
             }

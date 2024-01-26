@@ -34,7 +34,12 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             }
 
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
-                explore();
+                if (builderDuck !=0) {
+                    builderExplore();
+                }
+                else {
+                    explore();
+                }
             }
             else {
                 if (builderDuck != 0) {
@@ -180,6 +185,17 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         if (isExploring) {
             if (rc.isMovementReady()) {
                 pf.moveTowards(exploreLocation);
+            }
+        }
+    }
+
+    private static void builderExplore() throws GameActionException {
+        isExploring = true;
+        if (flagDuck == 0)
+            retrieveCrumbs();
+        if (isExploring) {
+            if (rc.isMovementReady()) {
+                pf.follow(exploreLocation);
             }
         }
     }

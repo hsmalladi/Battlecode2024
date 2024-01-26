@@ -16,9 +16,6 @@ public class PathFind extends Globals {
         for (int i = starting_i; i < starting_i + 8; i++) {
             Direction dir = Constants.directions[i % 8];
             if (rc.canMove(dir)) rc.move(dir);
-            else if (rc.canFill(rc.getLocation().add(dir))) {
-                rc.fill(rc.getLocation().add(dir));
-            }
         }
     }
 
@@ -26,16 +23,10 @@ public class PathFind extends Globals {
         if (rc.isMovementReady() && dir != Direction.CENTER) {
             if (rc.canMove(dir) && canPass(dir)) {
                 rc.move(dir);
-            } else if (rc.canFill(rc.getLocation().add(dir))) {
-                rc.fill(rc.getLocation().add(dir));
             } else if (rc.canMove(dir.rotateRight()) && canPass(dir.rotateRight(), dir)) {
                 rc.move(dir.rotateRight());
-            } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
-                rc.fill(rc.getLocation().add(dir.rotateRight()));
             } else if (rc.canMove(dir.rotateLeft()) && canPass(dir.rotateLeft(), dir)) {
                 rc.move(dir.rotateLeft());
-            } else if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
-                rc.fill(rc.getLocation().add(dir.rotateLeft()));
             } else {
                 randomMove();
             }
@@ -155,15 +146,17 @@ public class PathFind extends Globals {
                                 escaping = true;
                             }
                         }
-                        if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
-                            // if (escaping) escaping = false;
-                            rc.fill(rc.getLocation().add(dir.rotateLeft()));
-                        } else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
-                            // if (escaping) escaping = false;
-                            rc.fill(rc.getLocation().add(dir.rotateRight()));
-                        } else if (rc.canFill(rc.getLocation().add(dir))) {
+                        if (rc.canFill(rc.getLocation().add(dir))) {
                             // if (escaping) escaping = false;
                             rc.fill(rc.getLocation().add(dir));
+                        }
+                        else if (rc.canFill(rc.getLocation().add(dir.rotateRight()))) {
+                            // if (escaping) escaping = false;
+                            rc.fill(rc.getLocation().add(dir.rotateRight()));
+                        }
+                        else if (rc.canFill(rc.getLocation().add(dir.rotateLeft()))) {
+                            // if (escaping) escaping = false;
+                            rc.fill(rc.getLocation().add(dir.rotateLeft()));
                         }
 
                     }

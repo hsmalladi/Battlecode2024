@@ -81,7 +81,7 @@ public class BotMainRoundDuck extends BotDuck {
                 Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             if (rc.getRoundNum() == roundDied + 5) {
-                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding-Comm.ENEMY_FLAG_INDEX_HELPER-3], false, myFlagHolding);
+                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding-Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
                 Debug.log("RESETTING FLAG LOCATION");
             }
         } catch (Exception e) {
@@ -99,6 +99,7 @@ public class BotMainRoundDuck extends BotDuck {
             if (rc.canPickupFlag(loc.getLocation())) {
                 rc.pickupFlag(loc.getLocation());
                 myFlagHolding = Comm.flagIDToIdx(loc.getID(), rc.getTeam().opponent());
+                Comm.updateFlagInfo(rc.getLocation(), true, myFlagHolding);
                 Debug.log("PICKED UP FLAG " + myFlagHolding);
                 goingToFlag = false;
                 amHoldingFlag = true;

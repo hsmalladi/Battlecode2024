@@ -1,9 +1,6 @@
 package escapebot;
 
-import battlecode.common.FlagInfo;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.Team;
+import battlecode.common.*;
 import escapebot.utils.FastIterableIntSet;
 
 /**
@@ -32,7 +29,9 @@ public class Comm extends Globals {
     final static int FLAG_SETUP_COMM = 0;
     final static int EXPLORER_COMM = 1;
     final static int ENEMY_FLAG_HELD = 10;
-    final static int ENEMY_FLAG_INDEX_HELPER = 39;
+    final static int FRIENDLY_FLAG_INDEX_HELPER = 39;
+    final static int ENEMY_FLAG_INDEX_HELPER = 42;
+    final static int FRIENDLY_FLAG_SAFE = 45;
     final static int ENEMY_FLAG_FIRST = 48;
     final static int ENEMY_FLAG_LAST = 50;
     public static int symmetry;
@@ -66,32 +65,43 @@ public class Comm extends Globals {
                 buffered_share_array[i] = rc.readSharedArray(i);
             }
         }
+        if (rc.isSpawned()) {
+            for (FlagInfo flag : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent())) {
+                int index = flagIDToIdx(flag.getID(), flag.getTeam());
+                // Debug.log("INDEX " + index + " " + rc.readSharedArray(index));
+                if (rc.readSharedArray(index) == 0) {
+                    updateFlagInfo(flag.getLocation(), flag.isPickedUp(), index);
+                }
+            }
+        }
         for (int i = ENEMY_FLAG_FIRST; i <= ENEMY_FLAG_LAST; i++) {
             if (enemyFlagsInitial[i-ENEMY_FLAG_FIRST] == null && rc.readSharedArray(i) != 0)  {
-                enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i));
+                // Debug.log(rc.readSharedArray(i)+"");
+                enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i) >> 1);
+                // Debug.log("ENEMY FLAG FOUND " + enemyFlagsInitial[i-ENEMY_FLAG_FIRST].toString());
             }
         }
         if (needSymUpdate || Globals.turnCount == 0) {
             updateSym();
         }
-        if (rc.isSpawned()) {
-            for (FlagInfo flag : rc.senseNearbyFlags(-1)) {
-                updateFlagInfo(flag.getLocation(), flag.isPickedUp(), flagIDToIdx(flag.getID(), flag.getTeam()));
-            }
-        }
+
     }
 
     public static int flagIDToIdx(int flagID, Team team) throws GameActionException {
         // printArray(flagIDs);
-        int j = ENEMY_FLAG_INDEX_HELPER;
-        if (team.equals(rc.getTeam().opponent())) j += 3;
-        for (int i = j; i < j+3; i++) {
+        int j = 0;
+        if (rc.getTeam().equals(team)) {
+            j = FRIENDLY_FLAG_INDEX_HELPER;
+        } else {
+            j = ENEMY_FLAG_INDEX_HELPER;
+        }
+        for (int i = j; i < j+NUM_FLAGS; i++) {
             int num = rc.readSharedArray(i);
             if (num == 0) {
                 rc.writeSharedArray(i, flagID);
-                return i;
+                return i+NUM_FLAGS*2;
             } else if (num == flagID) {
-                return i;
+                return i+NUM_FLAGS*2;
             }
         }
         return -1;
@@ -107,8 +117,8 @@ public class Comm extends Globals {
 
 
     public static void updateFlagInfo(MapLocation loc, boolean isCarried, int idx) throws GameActionException {
-        idx = idx - ENEMY_FLAG_INDEX_HELPER + ENEMY_FLAG_FIRST - 3;
         int locInt = loc2int(loc);
+        // Debug.log("INDEX HERE " + idx + " " + loc.toString() + " " + locInt);
         locInt = locInt << 1;
         if (isCarried) {
             locInt += 1;

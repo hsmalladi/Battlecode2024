@@ -65,7 +65,14 @@ public class BotMainRoundDuck extends BotDuck {
 
     private static void tryFlagDropOff() throws GameActionException {
         try {
-            if (!rc.isSpawned() && escaping) {
+            if (amHoldingFlag && allySpawn.contains(rc.getLocation())) {
+                amHoldingFlag = false;
+                escaping = false;
+                goingToFlag = true;
+                Comm.updateFlagInfo(null, false, myFlagHolding);
+                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
+            }
+            else if (!rc.isSpawned() && escaping) {
                 escaping = false;
                 amHoldingFlag = false;
                 Debug.log("I DIED ESCAPING");
@@ -76,13 +83,6 @@ public class BotMainRoundDuck extends BotDuck {
                 goingToFlag = true;
                 roundDied = rc.getRoundNum();
                 Debug.log("I DIED HOLDING FLAG");
-            }
-            else if (amHoldingFlag && allySpawn.contains(rc.getLocation())) {
-                amHoldingFlag = false;
-                escaping = false;
-                goingToFlag = true;
-                Comm.updateFlagInfo(null, false, myFlagHolding);
-                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             else if (!rc.hasFlag() && amHoldingFlag && !escaping) {
                 amHoldingFlag = false;

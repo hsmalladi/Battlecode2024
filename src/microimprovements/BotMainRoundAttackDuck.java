@@ -6,7 +6,7 @@ import battlecode.common.*;
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     public static void play() throws GameActionException {
-        if (rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0 && turnCount < 220) {
+        if (turnCount < 220 && rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0) {
             retrieveCrumbsMove();
         }
         if (!gettingCrumb) {

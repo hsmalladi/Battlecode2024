@@ -1,4 +1,4 @@
-package microimprovements;
+package microwars;
 
 import battlecode.common.*;
 

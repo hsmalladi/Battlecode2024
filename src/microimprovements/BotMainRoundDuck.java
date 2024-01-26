@@ -1,13 +1,11 @@
-package mergedbuilderescape;
+package microimprovements;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class BotMainRoundDuck extends BotDuck {
@@ -114,16 +112,20 @@ public class BotMainRoundDuck extends BotDuck {
     }
 
     public static void smartSpawn() throws GameActionException {
-        ArrayList<MapLocation> random = new ArrayList<>();
-
-        for (MapLocation l : Map.allySpawnLocations) {
-            random.add(l);
-        }
-        Collections.shuffle(random);
-
-        for (MapLocation loc : random) {
-            if (rc.canSpawn(loc)) {
-                rc.spawn(loc);
+        for (int i = 1; i < 4; i++) {
+            int numEnemies = rc.readSharedArray(i);
+            if (numEnemies >= 1) {
+                List<MapLocation> sorted = Arrays.asList(Map.allySpawnLocations);
+                Map.sortCoordinatesByDistance(sorted, Map.allyFlagLocations[i-1]);
+                for (MapLocation loc : sorted) {
+                    if (rc.canSpawn(loc)) {
+                        rc.spawn(loc);
+                        break;
+                    }
+                }
+            }
+            else {
+                trySpawn();
             }
         }
     }

@@ -1,4 +1,4 @@
-package mergedbuilderescape;
+package microimprovements;
 
 import battlecode.common.*;
 
@@ -6,7 +6,7 @@ import battlecode.common.*;
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     public static void play() throws GameActionException {
-        if (builderDuck != 0) {
+        if (rc.getActionCooldownTurns() < 10) {
             tryTrap();
         }
         macro();
@@ -195,7 +195,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     public static void tryTrap() throws GameActionException {
         if (builderDuck != 0) {
             RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-            if (oppRobotInfos.length >= 5 && rc.getCrumbs() > 1000) {
+            if (oppRobotInfos.length >= 5) {
                 rc.setIndicatorString("BUILDING LOTS OF TRAPS");
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
@@ -233,6 +233,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     if (rc.canBuild(TrapType.STUN, me.add(dir))) {
                         rc.build(TrapType.STUN, me.add(dir));
                     }
+                    else if (rc.canBuild(TrapType.STUN, me)) {
+                        rc.build(TrapType.STUN, me);
+                    }
+
                 }
             }
         }

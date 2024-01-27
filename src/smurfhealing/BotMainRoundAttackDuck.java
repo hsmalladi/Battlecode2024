@@ -2,6 +2,8 @@ package smurfhealing;
 
 import battlecode.common.*;
 
+import static smurfhealing.BotSetupExploreDuck.checkValidTrap;
+
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
@@ -226,28 +228,28 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
 
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
                     if (rc.canSenseLocation(me.add(dir))) {
                         if (!rc.senseMapInfo(me.add(dir)).isWater()) {
                             rc.build(TrapType.EXPLOSIVE, me.add(dir));
                         }
                     }
                 }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()))) {
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft())) && checkValidTrap(me.add(dir.rotateLeft()), dir)) {
                     if (rc.canSenseLocation(me.add(dir.rotateLeft()))) {
                         if (!rc.senseMapInfo(me.add(dir.rotateLeft())).isWater()) {
                             rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
                         }
                     }
                 }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight()))) {
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight())) && checkValidTrap(me.add(dir.rotateRight()), dir)) {
                     if (rc.canSenseLocation(me.add(dir.rotateRight()))) {
                         if (!rc.senseMapInfo(me.add(dir.rotateRight())).isWater()) {
                             rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
                         }
                     }
                 }
-                else if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
+                else if (rc.canBuild(TrapType.EXPLOSIVE, me) && checkValidTrap(me, dir)) {
                     if (rc.canSenseLocation(me)) {
                         if (!rc.senseMapInfo(me).isWater()) {
                             rc.build(TrapType.EXPLOSIVE, me);
@@ -261,7 +263,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
                 if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
                     if (rc.canSenseLocation(me.add(dir))) {
-                        if (!rc.senseMapInfo(me.add(dir)).isWater()) {
+                        if (!rc.senseMapInfo(me.add(dir)).isWater() && checkValidTrap(me.add(dir), dir)) {
                             rc.build(TrapType.EXPLOSIVE, me.add(dir));
                         }
                     }
@@ -275,7 +277,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     }
                 }
                 if (build) {
-                    if (rc.canBuild(TrapType.STUN, me)) {
+                    if (rc.canBuild(TrapType.STUN, me) && checkValidTrap(me, dir)) {
                         rc.build(TrapType.STUN, me);
                     }
                 }
@@ -296,7 +298,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                         }
                     }
                     if (build) {
-                        if (rc.canBuild(TrapType.STUN, me.add(dir))) {
+                        if (rc.canBuild(TrapType.STUN, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
                             rc.build(TrapType.STUN, me.add(dir));
                         }
                     }
@@ -310,7 +312,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                         }
                     }
                     if (build) {
-                        if (rc.canBuild(TrapType.STUN, me)) {
+                        if (rc.canBuild(TrapType.STUN, me) && checkValidTrap(me, dir)) {
                             rc.build(TrapType.STUN, me);
                         }
                     }

@@ -9,7 +9,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         if (turnCount < 220 && rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0) {
             retrieveCrumbsMove();
         }
-        if (!gettingCrumb) {
+        if (!gettingCrumb || turnCount >= 220) {
             if (rc.getActionCooldownTurns() < 5) {
                 tryTrap();
             }

@@ -1,9 +1,7 @@
 package smurfhealing;
 
-import battlecode.common.Direction;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotInfo;
-import battlecode.common.SkillType;
+import battlecode.common.*;
+import jdk.nashorn.internal.objects.Global;
 
 import static battlecode.common.GameConstants.*;
 
@@ -11,7 +9,6 @@ public class Micro extends Globals {
 
     final int INF = 1000000;
     Direction[] dirs = Direction.values();
-    boolean attacker = false;
     boolean shouldPlaySafe = false;
     boolean alwaysInRange = false;
     boolean hurt = false;
@@ -47,8 +44,13 @@ public class Micro extends Globals {
     }
     static double currentDPS = 0;
 
+    static double currentOpponentDPS = 0;
+
     static double currentHPS = 0;
+
+    static double currentOpponentHPS = 0;
     static boolean canAttack;
+
 
     boolean doMicro(){try{
         if (!rc.isMovementReady()) return false;
@@ -72,6 +74,28 @@ public class Micro extends Globals {
         if(!canAttack) alwaysInRange = true;
         if(severelyHurt) alwaysInRange = true;
 
+        GlobalUpgrade[] ourGlobalUpgrades = rc.getGlobalUpgrades(rc.getTeam());
+        GlobalUpgrade[] opponentGlobalUpgrades = rc.getGlobalUpgrades(rc.getTeam().opponent());
+
+        for (GlobalUpgrade upgrade: ourGlobalUpgrades){
+            if (upgrade.equals(GlobalUpgrade.ATTACK)){
+                myDPS = 60;
+                currentDPS = 60;
+            } else if(upgrade.equals(GlobalUpgrade.HEALING)){
+                myHPS = 50;
+                currentHPS = 50;
+            }
+        }
+
+        for (GlobalUpgrade upgrade: opponentGlobalUpgrades){
+            if (upgrade.equals(GlobalUpgrade.ATTACK)){
+                currentOpponentDPS = 50;
+            } else if(upgrade.equals(GlobalUpgrade.HEALING)){
+                currentOpponentHPS = 50;
+            }
+        }
+
+
         MicroInfo[] microInfo = new MicroInfo[9];
         for (int i = 0; i < 9; ++i) microInfo[i] = new MicroInfo(dirs[i]);
 
@@ -79,8 +103,8 @@ public class Micro extends Globals {
             if(unit.hasFlag()){
                 continue;
             }
-            currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
-            currentHPS = HPS[unit.getHealLevel()] / HEAL_COOLDOWN_COST[unit.getHealLevel()];
+            currentOpponentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
+            currentOpponentHPS = HPS[unit.getHealLevel()] / HEAL_COOLDOWN_COST[unit.getHealLevel()];
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
             microInfo[2].updateEnemy(unit);
@@ -160,8 +184,8 @@ public class Micro extends Globals {
             if(!canMove) return;
             int dist = unit.getLocation().distanceSquaredTo(location);
             if (dist < minDistanceToEnemy)  minDistanceToEnemy = dist;
-            if (dist <= ATTACK_RADIUS_SQUARED) DPSreceived += currentDPS;
-            if (dist <= VISION_RADIUS_SQUARED) enemiesTargeting += currentDPS;
+            if (dist <= ATTACK_RADIUS_SQUARED) DPSreceived += currentOpponentDPS;
+            if (dist <= VISION_RADIUS_SQUARED) enemiesTargeting += currentOpponentDPS;
         }
 
         void updateAlly(RobotInfo unit){

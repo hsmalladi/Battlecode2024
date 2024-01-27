@@ -398,6 +398,10 @@ public class PathFind extends Globals {
             }
         }
 
+        if (location.x == 0 || location.x == Map.mapWidth -1 || location.y ==0 || location.y == Map.mapHeight -1) {
+            return true;
+        }
+
         for (MapLocation a : adj) {
             if (rc.canSenseLocation(a)) {
                 MapInfo m = rc.senseMapInfo(a);

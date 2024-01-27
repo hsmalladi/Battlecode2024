@@ -86,18 +86,22 @@ public class BotMainRoundDuck extends BotDuck {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 roundDied = rc.getRoundNum();
+                Comm.unCarry(myFlagHolding);
                 Debug.log("I DIED HOLDING FLAG " + myFlagHolding);
             }
             else if (!rc.isSpawned() && escaping) {
                 escaping = false;
                 amHoldingFlag = false;
                 goingToFlag = true;
+                Comm.unCarry(myFlagHolding);
                 Debug.log("I DIED ESCAPING WITH FLAG " + myFlagHolding);
                 roundDied = rc.getRoundNum();
             }
-            if (rc.getRoundNum() == roundDied + 5) {
-                Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding- Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
-                Debug.log("RESETTING FLAG " + myFlagHolding + " LOCATION" );
+            if (rc.getRoundNum() == roundDied + GameConstants.FLAG_DROPPED_RESET_ROUNDS) {
+                if (!Comm.isCarried(myFlagHolding)) {
+                    Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding - Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
+                    Debug.log("RESETTING FLAG " + myFlagHolding + " LOCATION");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

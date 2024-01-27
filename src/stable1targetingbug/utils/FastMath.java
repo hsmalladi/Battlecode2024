@@ -1,4 +1,4 @@
-package mergedbuilderescape.utils;
+package stable1targetingbug.utils;
 
 import battlecode.common.Direction;
 import battlecode.common.MapLocation;

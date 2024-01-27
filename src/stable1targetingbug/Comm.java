@@ -1,10 +1,10 @@
-package mergedbuilderescape;
+package stable1targetingbug;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
-import mergedbuilderescape.utils.FastIterableIntSet;
+import stable1targetingbug.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

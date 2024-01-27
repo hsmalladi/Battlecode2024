@@ -1,4 +1,4 @@
-package mergedbuilderescape;
+package stable1targetingbug;
 
 public class Util {
     static boolean hurt(int h){

@@ -1,4 +1,4 @@
-package mergedbuilderescape;
+package stable1targetingbug;
 
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;

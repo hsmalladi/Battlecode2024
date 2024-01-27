@@ -1,4 +1,4 @@
-package mergedbuilderescape;
+package stable1targetingbug;
 
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;

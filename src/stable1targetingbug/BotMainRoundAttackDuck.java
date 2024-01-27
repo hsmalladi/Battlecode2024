@@ -1,4 +1,4 @@
-package mergedbuilderescape;
+package stable1targetingbug;
 
 import battlecode.common.*;
 
@@ -34,7 +34,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         //Retrieve all crumb locations within robot vision radius
         MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
         if (crumbLocations.length > 0) {
-            MapLocation closestCrumb = mergedbuilderescape.Map.getClosestLocation(rc.getLocation(), crumbLocations);
+            MapLocation closestCrumb = stable1targetingbug.Map.getClosestLocation(rc.getLocation(), crumbLocations);
             if (reachable(closestCrumb)) {
                 rc.setIndicatorString("Getting Crumb");
                 gettingCrumb = true;
@@ -171,7 +171,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         MapLocation closestFlag = null;
         FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
         for (FlagInfo flag : flags) {
-            if (rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist)
+            if (!flag.isPickedUp() && rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist)
             {
                 closestFlag = flag.getLocation();
                 dist = rc.getLocation().distanceSquaredTo(flag.getLocation());

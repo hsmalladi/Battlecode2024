@@ -1,7 +1,7 @@
-package mergedbuilderescape;
+package stable1targetingbug;
 
 import battlecode.common.*;
-import mergedbuilderescape.utils.FastMath;
+import stable1targetingbug.utils.FastMath;
 
 
 /**

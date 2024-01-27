@@ -1,4 +1,4 @@
-package smurfhealing;
+package stableversion2;
 
 import smurfv2.Globals;
 

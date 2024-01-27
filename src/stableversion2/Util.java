@@ -1,4 +1,4 @@
-package smurfhealing;
+package stableversion2;
 
 public class Util {
     static boolean hurt(int h){

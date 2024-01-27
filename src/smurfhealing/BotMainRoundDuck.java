@@ -85,8 +85,12 @@ public class BotMainRoundDuck extends BotDuck {
             else if (!rc.isSpawned() && amHoldingFlag) {
                 amHoldingFlag = false;
                 goingToFlag = true;
-                roundDied = rc.getRoundNum();
-                Comm.unCarry(myFlagHolding);
+                int val = rc.readSharedArray(myFlagHolding + Comm.SHIFT_ADD);
+                if (val == rc.getID()) {
+                    Comm.unCarry(myFlagHolding);
+                    roundDied = rc.getRoundNum();
+                    Debug.log("I WAS STILL THE LAST TO HOLD THE FLAG");
+                }
                 Debug.log("I DIED HOLDING FLAG " + myFlagHolding);
             }
             else if (!rc.isSpawned() && escaping) {
@@ -94,8 +98,13 @@ public class BotMainRoundDuck extends BotDuck {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 Comm.unCarry(myFlagHolding);
+                int val = rc.readSharedArray(myFlagHolding + Comm.SHIFT_ADD);
+                if (val == rc.getID()) {
+                    Comm.unCarry(myFlagHolding);
+                    roundDied = rc.getRoundNum();
+                    Debug.log("I WAS STILL THE LAST TO HOLD THE FLAG");
+                }
                 Debug.log("I DIED ESCAPING WITH FLAG " + myFlagHolding);
-                roundDied = rc.getRoundNum();
             }
             if (rc.getRoundNum() == roundDied + GameConstants.FLAG_DROPPED_RESET_ROUNDS) {
                 if (!Comm.isCarried(myFlagHolding) && rc.readSharedArray(myFlagHolding) != 0) {
@@ -133,6 +142,8 @@ public class BotMainRoundDuck extends BotDuck {
                 }
                 amHoldingFlag = true;
                 Comm.updateFlagInfo(rc.getLocation(), true, myFlagHolding);
+                rc.writeSharedArray(myFlagHolding + Comm.SHIFT_ADD, rc.getID());
+                Debug.log("ROBOT " +rc.getID() + " HAS PICKED UP THE FLAG AND WRITING TO " + (myFlagHolding+Comm.SHIFT_ADD));
                 Debug.log("PICKED UP FLAG " + myFlagHolding);
                 goingToFlag = false;
                 // rc.writeSharedArray(Comm.ENEMY_FLAG_HELD, 1);

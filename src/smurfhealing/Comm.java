@@ -38,6 +38,7 @@ public class Comm extends Globals {
     final static int ENEMY_FLAG_FIRST = 48;
     final static int ENEMY_FLAG_LAST = 50;
     final static int ENEMY_FLAGS_NUM_IDX = 51;
+    final static int SHIFT_ADD = 4;
     public static int symmetry;
     public static boolean isSymmetryConfirmed;
     public static boolean needSymmetryReport;

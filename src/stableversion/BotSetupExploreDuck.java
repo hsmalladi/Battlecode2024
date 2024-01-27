@@ -124,7 +124,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
 
         for (MapInfo mapInfo : mapInfos) {
-            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
+            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL && !mapInfo.isWall()) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
                     if (rc.canSenseLocation(location)) {
@@ -149,7 +149,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     private static void comEmptySpotsNextToDam() throws GameActionException {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
         for (MapInfo mapInfo : mapInfos) {
-            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
+            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL && !mapInfo.isWall()) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
                     if (rc.canSenseLocation(location)) {

@@ -1,4 +1,4 @@
-package stable1targetingbug;
+package stableversion;
 
 import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;

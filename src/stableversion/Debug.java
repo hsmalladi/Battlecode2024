@@ -1,4 +1,4 @@
-package stable1targetingbug;
+package stableversion;
 
 import smurfv2.Globals;
 

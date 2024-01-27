@@ -1,4 +1,4 @@
-package stable1targetingbug;
+package stableversion;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;

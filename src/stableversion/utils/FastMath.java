@@ -1,4 +1,4 @@
-package stable1targetingbug.utils;
+package stableversion.utils;
 
 import battlecode.common.Direction;
 import battlecode.common.MapLocation;

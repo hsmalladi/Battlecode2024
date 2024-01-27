@@ -1,4 +1,4 @@
-package stable1targetingbug.utils;
+package stableversion.utils;
 
 /**
  * The following code is from https://github.com/carlguo866/battlecode23-gonefishin/tree/main/src/submit24_US_qual/util and is

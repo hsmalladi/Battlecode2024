@@ -1,4 +1,4 @@
-package stable1targetingbug;
+package stableversion;
 
 public class Util {
     static boolean hurt(int h){

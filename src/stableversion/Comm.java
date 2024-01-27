@@ -1,10 +1,10 @@
-package stable1targetingbug;
+package stableversion;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
-import stable1targetingbug.utils.FastIterableIntSet;
+import stableversion.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

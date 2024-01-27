@@ -1,4 +1,4 @@
-package stable1targetingbug;
+package healingmicro;
 
 import battlecode.common.*;
 
@@ -100,7 +100,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     private static void digToLv(int level) throws GameActionException {
         if (rc.getLevel(SkillType.BUILD) < level) {
             for (MapLocation adj : Map.getAdjacentLocations(rc.getLocation())) {
-                if ((adj.x % 2 + adj.y) % 2 == 0) {
+                if (adj.x % 2 == 0 && adj.y % 2 == 0) {
                     if (rc.canDig(adj)) {
                         rc.dig(adj);
                     }

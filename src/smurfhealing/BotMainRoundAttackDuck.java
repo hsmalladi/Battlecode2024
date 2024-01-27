@@ -1,4 +1,4 @@
-package stableversion2;
+package smurfhealing;
 
 import battlecode.common.*;
 

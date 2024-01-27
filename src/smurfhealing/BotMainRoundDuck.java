@@ -86,14 +86,14 @@ public class BotMainRoundDuck extends BotDuck {
                 amHoldingFlag = false;
                 goingToFlag = true;
                 roundDied = rc.getRoundNum();
-                // Comm.unCarry(myFlagHolding);
+                Comm.unCarry(myFlagHolding);
                 Debug.log("I DIED HOLDING FLAG " + myFlagHolding);
             }
             else if (!rc.isSpawned() && escaping) {
                 escaping = false;
                 amHoldingFlag = false;
                 goingToFlag = true;
-                // Comm.unCarry(myFlagHolding);
+                Comm.unCarry(myFlagHolding);
                 Debug.log("I DIED ESCAPING WITH FLAG " + myFlagHolding);
                 roundDied = rc.getRoundNum();
             }

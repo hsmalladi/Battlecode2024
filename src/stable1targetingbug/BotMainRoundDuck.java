@@ -70,6 +70,7 @@ public class BotMainRoundDuck extends BotDuck {
                         escaping = false;
                         amHoldingFlag = false;
                         goingToFlag = true;
+                        return;
                     }
                 }
             }
@@ -79,31 +80,24 @@ public class BotMainRoundDuck extends BotDuck {
                 goingToFlag = true;
                 Comm.updateFlagInfo(null, false, myFlagHolding);
                 Comm.increaseFlagsCaptured();
-                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
+                Debug.log("DROPPED OFF FLAG IN ALLY " + myFlagHolding);
+            }
+            else if (!rc.isSpawned() && amHoldingFlag) {
+                amHoldingFlag = false;
+                goingToFlag = true;
+                roundDied = rc.getRoundNum();
+                Debug.log("I DIED HOLDING FLAG " + myFlagHolding);
             }
             else if (!rc.isSpawned() && escaping) {
                 escaping = false;
                 amHoldingFlag = false;
-                Debug.log("I DIED ESCAPING");
-                roundDied = rc.getRoundNum();
-            }
-            else if (!rc.isSpawned() && amHoldingFlag && !rc.hasFlag()) {
-                amHoldingFlag = false;
                 goingToFlag = true;
+                Debug.log("I DIED ESCAPING WITH FLAG " + myFlagHolding);
                 roundDied = rc.getRoundNum();
-                Debug.log("I DIED HOLDING FLAG");
-            }
-            else if (!rc.hasFlag() && amHoldingFlag && !escaping) {
-                amHoldingFlag = false;
-                escaping = false;
-                goingToFlag = true;
-                Comm.updateFlagInfo(null, false, myFlagHolding);
-                Comm.increaseFlagsCaptured();
-                Debug.log("DROPPED OFF FLAG " + myFlagHolding);
             }
             if (rc.getRoundNum() == roundDied + 5) {
                 Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding- Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
-                Debug.log("RESETTING FLAG LOCATION");
+                Debug.log("RESETTING FLAG " + myFlagHolding + " LOCATION" );
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,13 +120,18 @@ public class BotMainRoundDuck extends BotDuck {
             return;
         for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {
             if (rc.canPickupFlag(loc.getLocation())) {
-                rc.pickupFlag(loc.getLocation());
                 myFlagHolding = Comm.flagIDToIdx(loc.getID(), rc.getTeam().opponent());
+                rc.pickupFlag(loc.getLocation());
+                if (contains(Map.allySpawnLocations, rc.getLocation())) {
+                    Debug.log("PICKED UP FLAG " + myFlagHolding + " AND DROPPED IT OFF");
+                    Comm.updateFlagInfo(null, false, myFlagHolding);
+                    return;
+                }
+                amHoldingFlag = true;
                 Comm.updateFlagInfo(rc.getLocation(), true, myFlagHolding);
                 Debug.log("PICKED UP FLAG " + myFlagHolding);
                 goingToFlag = false;
-                amHoldingFlag = true;
-                rc.writeSharedArray(Comm.ENEMY_FLAG_HELD, 1);
+                // rc.writeSharedArray(Comm.ENEMY_FLAG_HELD, 1);
                 break;
             }
         }

@@ -1,9 +1,6 @@
 package stableversion;
 
-import battlecode.common.Direction;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotInfo;
-import battlecode.common.SkillType;
+import battlecode.common.*;
 
 import static battlecode.common.GameConstants.*;
 
@@ -36,6 +33,8 @@ public class Micro extends Globals {
         myAttackCooldown = ATTACK_COOLDOWN_COST[rc.getLevel(SkillType.ATTACK)];
     }
     static double currentDPS = 0;
+
+    static double currentHPS = 0;
     static boolean canAttack;
 
     boolean doMicro(){try{

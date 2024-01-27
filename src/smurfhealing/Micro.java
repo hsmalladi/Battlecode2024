@@ -20,22 +20,34 @@ public class Micro extends Globals {
     static double myDPS;
     static double myAttackCooldown;
 
+    static double myHPS;
+
+    static double myHealCooldown;
+
     boolean severelyHurt = false;
 
     double baseDamage = Constants.BASE_DAMAGE;
 
+    double baseHeal = Constants.BASE_HEAL;
+
     double[] DPS = new double[]{baseDamage,baseDamage*1.05,baseDamage*1.07,baseDamage*1.1,baseDamage*1.30,baseDamage*1.35, baseDamage*1.6};
 
+    double[] HPS = new double[]{baseHeal, baseHeal*1.03, baseHeal*1.05, baseHeal*1.07, baseHeal*1.10, baseHeal*1.15, baseHeal*1.25};
     double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.93, ATTACK_COOLDOWN*0.9, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.65, ATTACK_COOLDOWN * 0.4};
-    int MAX_MICRO_BYTECODE = 25000;
+    double[] HEAL_COOLDOWN_COST = new double[]{HEAL_COOLDOWN, HEAL_COOLDOWN*0.95, HEAL_COOLDOWN*0.9,HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN* 0.75};
 
     Micro(){
         myRange = ATTACK_RADIUS_SQUARED;
         myVisionRange = VISION_RADIUS_SQUARED;
         myDPS = DPS[rc.getLevel(SkillType.ATTACK)];
+        myHPS = HPS[rc.getLevel(SkillType.HEAL)];
         myAttackCooldown = ATTACK_COOLDOWN_COST[rc.getLevel(SkillType.ATTACK)];
+        myHealCooldown = HEAL_COOLDOWN_COST[rc.getLevel(SkillType.HEAL)];
+
     }
     static double currentDPS = 0;
+
+    static double currentHPS = 0;
     static boolean canAttack;
 
     boolean doMicro(){try{
@@ -68,6 +80,7 @@ public class Micro extends Globals {
                 continue;
             }
             currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
+            currentHPS = HPS[unit.getHealLevel()] / HEAL_COOLDOWN_COST[unit.getHealLevel()];
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
             microInfo[2].updateEnemy(unit);
@@ -79,24 +92,25 @@ public class Micro extends Globals {
             microInfo[8].updateEnemy(unit);
         }
 
-        if (myDPS > 0) {
-            units = rc.senseNearbyRobots(myVisionRange, rc.getTeam());
-            for (RobotInfo unit : units) {
-                if (unit.hasFlag()){
-                    continue;
-                }
-                currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
-                microInfo[0].updateAlly(unit);
-                microInfo[1].updateAlly(unit);
-                microInfo[2].updateAlly(unit);
-                microInfo[3].updateAlly(unit);
-                microInfo[4].updateAlly(unit);
-                microInfo[5].updateAlly(unit);
-                microInfo[6].updateAlly(unit);
-                microInfo[7].updateAlly(unit);
-                microInfo[8].updateAlly(unit);
+        units = rc.senseNearbyRobots(myVisionRange, rc.getTeam());
+        for (RobotInfo unit : units) {
+            if (unit.hasFlag()){
+                continue;
             }
+            currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
+            currentHPS = HPS[unit.getHealLevel()] / HEAL_COOLDOWN_COST[unit.getHealLevel()];
+
+            microInfo[0].updateAlly(unit);
+            microInfo[1].updateAlly(unit);
+            microInfo[2].updateAlly(unit);
+            microInfo[3].updateAlly(unit);
+            microInfo[4].updateAlly(unit);
+            microInfo[5].updateAlly(unit);
+            microInfo[6].updateAlly(unit);
+            microInfo[7].updateAlly(unit);
+            microInfo[8].updateAlly(unit);
         }
+
 
         MicroInfo bestMicro = microInfo[8];
         for (int i = 0; i < 8; ++i) {
@@ -153,6 +167,7 @@ public class Micro extends Globals {
         void updateAlly(RobotInfo unit){
             if (!canMove) return;
             int dist = unit.getLocation().distanceSquaredTo(location);
+            if (dist <= ATTACK_RADIUS_SQUARED) DPSreceived -= currentHPS;
             if (dist <= VISION_RADIUS_SQUARED) alliesTargeting += currentDPS;
         }
 

@@ -3,7 +3,9 @@ package smurfhealing;
 import battlecode.common.Direction;
 
 public class Constants {
-    final static double BASE_DAMAGE = 150;
+    static double BASE_DAMAGE = 150;
+
+    static double BASE_HEAL = 80;
 
     final static int CRITICAL_HEALTH = 150;
 

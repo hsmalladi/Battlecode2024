@@ -44,7 +44,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
 
                 }
 
-                if (turnCount > 180) {
+                if (turnCount > 185) {
                     if (!isNextToDam()) {
                         pf.moveTowards(Map.center);
                     }
@@ -168,7 +168,8 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(rc.getLocation());
         for (MapLocation adj : adjacent) {
             if (rc.canSenseLocation(adj)) {
-                if (rc.senseMapInfo(adj).isDam()) {
+                MapInfo ad = rc.senseMapInfo(adj);
+                if (ad.isDam() && !ad.isWall()) {
                     return true;
                 }
             }

@@ -1,4 +1,4 @@
-package smurfhealing;
+package stableversion2;
 
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;

@@ -1,10 +1,10 @@
-package smurfhealing;
+package stableversion2;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
-import smurfhealing.utils.FastIterableIntSet;
+import stableversion2.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

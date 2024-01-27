@@ -1,4 +1,4 @@
-package smurfhealing;
+package stableversion2;
 
 import battlecode.common.*;
 
@@ -205,16 +205,16 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             if (oppRobotInfos.length > 0) {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
                     rc.build(TrapType.EXPLOSIVE, me.add(dir));
                 }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()))) {
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft())) && checkValidTrap(me.add(dir.rotateLeft()), dir)) {
                     rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
                 }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight()))) {
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight())) && checkValidTrap(me.add(dir.rotateRight()), dir)) {
                     rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
                 }
-                else if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
+                else if (rc.canBuild(TrapType.EXPLOSIVE, me) && checkValidTrap(me, dir)) {
                     rc.build(TrapType.EXPLOSIVE, me);
                 }
             }
@@ -225,7 +225,6 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 boolean build = true;
                 for (MapLocation adj : Map.getAdjacentLocationsNoCorners(rc.getLocation())) {
                     if (rc.canSenseLocation(adj)) {
-
                         if (rc.senseMapInfo(adj).getTrapType() != TrapType.NONE){
                             build = false;
                         }
@@ -238,6 +237,29 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 }
             }
         }
+    }
+
+    public static boolean checkValidTrap(MapLocation location, Direction d) throws GameActionException {
+        MapLocation front = location.add(d);
+        MapLocation left = location.add(d.rotateLeft());
+        MapLocation right = location.add(d.rotateRight());
+        boolean build = false;
+        if (rc.canSenseLocation(front)) {
+            if (!rc.senseMapInfo(front).isWall()) {
+                build = true;
+            }
+        }
+        if (rc.canSenseLocation(left)) {
+            if (!rc.senseMapInfo(left).isWall()) {
+                build = true;
+            }
+        }
+        if (rc.canSenseLocation(right)) {
+            if (!rc.senseMapInfo(right).isWall()) {
+                build = true;
+            }
+        }
+        return build;
     }
 
     private static void retrieveCrumbs() throws GameActionException {

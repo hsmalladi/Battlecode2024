@@ -1,4 +1,4 @@
-package smurfhealing.utils;
+package stableversion2.utils;
 
 import battlecode.common.Direction;
 import battlecode.common.MapLocation;

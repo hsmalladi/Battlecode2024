@@ -1,7 +1,7 @@
-package smurfhealing;
+package stableversion2;
 
 import battlecode.common.*;
-import smurfhealing.utils.FastMath;
+import stableversion2.utils.FastMath;
 
 
 /**

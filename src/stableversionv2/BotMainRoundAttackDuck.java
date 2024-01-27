@@ -1,8 +1,8 @@
-package stableversion2;
+package stableversionv2;
 
 import battlecode.common.*;
 
-import static stableversion2.BotSetupExploreDuck.checkValidTrap;
+import static smurfhealing.BotSetupExploreDuck.checkValidTrap;
 
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {

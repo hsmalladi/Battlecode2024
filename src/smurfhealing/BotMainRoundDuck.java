@@ -97,7 +97,7 @@ public class BotMainRoundDuck extends BotDuck {
                 escaping = false;
                 amHoldingFlag = false;
                 goingToFlag = true;
-                Comm.unCarry(myFlagHolding);
+                // Comm.unCarry(myFlagHolding);
                 int val = rc.readSharedArray(myFlagHolding + Comm.SHIFT_ADD);
                 if (val == rc.getID()) {
                     Comm.unCarry(myFlagHolding);
@@ -106,7 +106,8 @@ public class BotMainRoundDuck extends BotDuck {
                 }
                 Debug.log("I DIED ESCAPING WITH FLAG " + myFlagHolding);
             }
-            if (rc.getRoundNum() == roundDied + GameConstants.FLAG_DROPPED_RESET_ROUNDS) {
+            if (rc.getRoundNum() >= roundDied + GameConstants.FLAG_DROPPED_RESET_ROUNDS) {
+                roundDied = -1;
                 if (!Comm.isCarried(myFlagHolding) && rc.readSharedArray(myFlagHolding) != 0) {
                     Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding - Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
                     Debug.log("RESETTING FLAG " + myFlagHolding + " LOCATION");

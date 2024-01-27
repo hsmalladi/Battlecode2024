@@ -1,7 +1,6 @@
 package smurfhealing;
 
 import battlecode.common.*;
-import jdk.nashorn.internal.objects.Global;
 
 import static battlecode.common.GameConstants.*;
 

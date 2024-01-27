@@ -1,4 +1,4 @@
-package stableversion2;
+package stableversionv2;
 
 public class Util {
     static boolean hurt(int h){

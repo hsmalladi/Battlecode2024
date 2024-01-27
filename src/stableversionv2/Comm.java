@@ -1,10 +1,10 @@
-package stableversion2;
+package stableversionv2;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
-import stableversion2.utils.FastIterableIntSet;
+import stableversionv2.utils.FastIterableIntSet;
 
 /**
  * The following code is partially

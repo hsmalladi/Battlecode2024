@@ -1,4 +1,4 @@
-package stableversion2;
+package stableversionv2;
 
 import battlecode.common.Clock;
 import battlecode.common.GameActionException;

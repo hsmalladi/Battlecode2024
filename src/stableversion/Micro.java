@@ -43,11 +43,15 @@ public class Micro extends Globals {
         shouldPlaySafe = false;
         severelyHurt = Util.hurt(rc.getHealth());
         RobotInfo[] units = rc.senseNearbyRobots(myVisionRange, rc.getTeam().opponent());
+        if(units.length == 0) return false;
         canAttack = rc.isActionReady();
 
         int uIndex = units.length;
-        if (uIndex > 0){
-            shouldPlaySafe = true;
+        if (uIndex-- > 0){
+            RobotInfo r = units[uIndex];
+            if (!r.hasFlag()){
+                shouldPlaySafe = true;
+            }
         }
         if (!shouldPlaySafe) return false;
 
@@ -126,7 +130,7 @@ public class Micro extends Globals {
         public MicroInfo(Direction dir){
             this.dir = dir;
             this.location = rc.getLocation().add(dir);
-            if(!rc.canMove(dir)) canMove = false;
+            if(dir != Direction.CENTER && !rc.canMove(dir)) canMove = false;
             else{
                 if(!hurt){
                     if(canAttack){

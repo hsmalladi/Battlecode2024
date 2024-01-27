@@ -1,4 +1,4 @@
-package stable1targetingbug;
+package stableversion;
 
 import battlecode.common.*;
 
@@ -44,7 +44,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
 
                 }
 
-                if (turnCount > 180) {
+                if (turnCount > 185) {
                     if (!isNextToDam()) {
                         pf.moveTowards(Map.center);
                     }
@@ -124,7 +124,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
 
         for (MapInfo mapInfo : mapInfos) {
-            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
+            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL && !mapInfo.isWall()) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
                     if (rc.canSenseLocation(location)) {
@@ -149,7 +149,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     private static void comEmptySpotsNextToDam() throws GameActionException {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
         for (MapInfo mapInfo : mapInfos) {
-            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL) {
+            if (mapInfo.isDam() && mapInfo.getTeamTerritory() == Team.NEUTRAL && !mapInfo.isWall()) {
                 MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(mapInfo.getMapLocation());
                 for (MapLocation location : adjacent) {
                     if (rc.canSenseLocation(location)) {
@@ -168,7 +168,8 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         MapLocation[] adjacent = Map.getAdjacentLocationsNoCorners(rc.getLocation());
         for (MapLocation adj : adjacent) {
             if (rc.canSenseLocation(adj)) {
-                if (rc.senseMapInfo(adj).isDam()) {
+                MapInfo ad = rc.senseMapInfo(adj);
+                if (ad.isDam() && !ad.isWall()) {
                     return true;
                 }
             }

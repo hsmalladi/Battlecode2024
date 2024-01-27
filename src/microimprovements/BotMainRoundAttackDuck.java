@@ -34,7 +34,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         //Retrieve all crumb locations within robot vision radius
         MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
         if (crumbLocations.length > 0) {
-            MapLocation closestCrumb = stable1targetingbug.Map.getClosestLocation(rc.getLocation(), crumbLocations);
+            MapLocation closestCrumb = stableversion.Map.getClosestLocation(rc.getLocation(), crumbLocations);
             if (reachable(closestCrumb)) {
                 rc.setIndicatorString("Getting Crumb");
                 gettingCrumb = true;

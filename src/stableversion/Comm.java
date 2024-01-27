@@ -1,10 +1,10 @@
-package stable1targetingbug;
+package stableversion;
 
 import battlecode.common.FlagInfo;
 import battlecode.common.GameActionException;
 import battlecode.common.MapLocation;
 import battlecode.common.Team;
-import stable1targetingbug.utils.FastIterableIntSet;
+import stableversion.utils.FastIterableIntSet;
 
 /**
  * The following code is partially
@@ -129,6 +129,13 @@ public class Comm extends Globals {
             rc.writeSharedArray(idx, locInt);
         }
 
+    }
+
+    public static void unCarry(int idx) throws GameActionException {
+        int value = rc.readSharedArray(idx);
+        value = value >> 1;
+        value = value << 1;
+        rc.writeSharedArray(idx, value);
     }
 
 

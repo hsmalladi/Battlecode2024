@@ -1,4 +1,4 @@
-package stable1targetingbug.utils;
+package stableversion.utils;
 
 /**
  * Interface to represent ints up to 65535 (2^16-1)

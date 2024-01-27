@@ -1,7 +1,7 @@
-package stable1targetingbug;
+package stableversion;
 
 import battlecode.common.*;
-import stable1targetingbug.utils.FastMath;
+import stableversion.utils.FastMath;
 
 
 /**

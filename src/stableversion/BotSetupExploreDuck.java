@@ -205,17 +205,17 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             if (oppRobotInfos.length > 0) {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.STUN, me.add(dir))) {
-                    rc.build(TrapType.STUN, me.add(dir));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
                 }
-                if (rc.canBuild(TrapType.STUN, me.add(dir.rotateLeft()))) {
-                    rc.build(TrapType.STUN, me.add(dir.rotateLeft()));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
                 }
-                if (rc.canBuild(TrapType.STUN, me.add(dir.rotateRight()))) {
-                    rc.build(TrapType.STUN, me.add(dir.rotateRight()));
+                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight()))) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
                 }
-                else if (rc.canBuild(TrapType.STUN, me)) {
-                    rc.build(TrapType.STUN, me);
+                else if (rc.canBuild(TrapType.EXPLOSIVE, me)) {
+                    rc.build(TrapType.EXPLOSIVE, me);
                 }
             }
         }

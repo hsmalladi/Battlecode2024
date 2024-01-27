@@ -266,8 +266,18 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                         }
                     }
                 }
-                if (rc.canBuild(TrapType.STUN, me)) {
-                    rc.build(TrapType.STUN, me);
+                boolean build = true;
+                for (MapLocation adj : Map.getAdjacentLocations(me)) {
+                    if (rc.canSenseLocation(adj)) {
+                        if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
+                            build = false;
+                        }
+                    }
+                }
+                if (build) {
+                    if (rc.canBuild(TrapType.STUN, me)) {
+                        rc.build(TrapType.STUN, me);
+                    }
                 }
             }
         }
@@ -277,13 +287,33 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 if (oppRobotInfos.length > 0) {
                     MapLocation me = rc.getLocation();
                     Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                    if (rc.canBuild(TrapType.STUN, me.add(dir))) {
-                        rc.build(TrapType.STUN, me.add(dir));
+                    boolean build = true;
+                    for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
+                        if (rc.canSenseLocation(adj)) {
+                            if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
+                                build = false;
+                            }
+                        }
                     }
-                    else if (rc.canBuild(TrapType.STUN, me)) {
-                        rc.build(TrapType.STUN, me);
+                    if (build) {
+                        if (rc.canBuild(TrapType.STUN, me.add(dir))) {
+                            rc.build(TrapType.STUN, me.add(dir));
+                        }
                     }
 
+                    build = true;
+                    for (MapLocation adj : Map.getAdjacentLocations(me)) {
+                        if (rc.canSenseLocation(adj)) {
+                            if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
+                                build = false;
+                            }
+                        }
+                    }
+                    if (build) {
+                        if (rc.canBuild(TrapType.STUN, me)) {
+                            rc.build(TrapType.STUN, me);
+                        }
+                    }
                 }
             }
         }

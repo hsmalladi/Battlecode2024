@@ -1,4 +1,4 @@
-package stableversionv2.utils;
+package stableversion2.utils;
 
 import battlecode.common.Direction;
 import battlecode.common.MapLocation;

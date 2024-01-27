@@ -1,7 +1,7 @@
-package stableversionv2;
+package stableversion2;
 
 import battlecode.common.*;
-import stableversionv2.utils.FastMath;
+import stableversion2.utils.FastMath;
 
 
 /**

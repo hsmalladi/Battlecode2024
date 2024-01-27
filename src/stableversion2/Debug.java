@@ -1,4 +1,4 @@
-package stableversionv2;
+package stableversion2;
 
 import smurfv2.Globals;
 

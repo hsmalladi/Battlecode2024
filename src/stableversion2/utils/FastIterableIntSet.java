@@ -1,4 +1,4 @@
-package stableversionv2.utils;
+package stableversion2.utils;
 
 /**
  * Interface to represent ints up to 65535 (2^16-1)

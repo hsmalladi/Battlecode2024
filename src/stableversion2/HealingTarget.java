@@ -1,10 +1,10 @@
-package stableversionv2;
+package stableversion2;
 
 import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;
 
-public class AttackTarget extends Globals {
-    int health, attackLvl, healLvl, buildLvl, maxLvl;
+public class HealingTarget extends Globals {
+    int health, attackLvl, healLvl, buildLvl, maxLvl, score;
     boolean flagHolder = false;
     MapLocation mloc;
 
@@ -12,16 +12,23 @@ public class AttackTarget extends Globals {
         return Math.max(attack, Math.max(heal, build));
     }
 
-    boolean isBetterThan(AttackTarget t){
+    int getScore(int maxLvl, int hp) { //higher scoring ducks are healed
+        return maxLvl * 100 + (800 - hp);
+    }
+
+    boolean isBetterThan(HealingTarget t) {
         if (t == null) return true;
         if (flagHolder && !t.flagHolder) return true;
         if (!flagHolder && t.flagHolder) return false;
         if (health <= t.health) return true;
         if (maxLvl > t.maxLvl) return true;
+//        if (score > t.score) return true;
         return false;
     }
 
-    AttackTarget(RobotInfo r){
+
+
+    HealingTarget(RobotInfo r){
         health = r.getHealth();
         mloc = r.getLocation();
         flagHolder = r.hasFlag();
@@ -29,6 +36,6 @@ public class AttackTarget extends Globals {
         buildLvl = r.getBuildLevel();
         healLvl = r.getHealLevel() + 1;
         maxLvl = maxLevel(attackLvl, healLvl, buildLvl);
+        score = getScore(maxLvl, health);
     }
-
 }

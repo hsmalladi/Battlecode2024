@@ -2,7 +2,7 @@ package smurfhealing;
 
 import battlecode.common.*;
 
-import static stableversionv2.BotSetupExploreDuck.checkValidTrap;
+import static stableversion2.BotSetupExploreDuck.checkValidTrap;
 
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {

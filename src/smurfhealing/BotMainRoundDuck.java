@@ -98,7 +98,7 @@ public class BotMainRoundDuck extends BotDuck {
                 roundDied = rc.getRoundNum();
             }
             if (rc.getRoundNum() == roundDied + GameConstants.FLAG_DROPPED_RESET_ROUNDS) {
-                if (!Comm.isCarried(myFlagHolding)) {
+                if (!Comm.isCarried(myFlagHolding) && rc.readSharedArray(myFlagHolding) != 0) {
                     Comm.updateFlagInfo(Comm.enemyFlagsInitial[myFlagHolding - Comm.ENEMY_FLAG_FIRST], false, myFlagHolding);
                     Debug.log("RESETTING FLAG " + myFlagHolding + " LOCATION");
                 }

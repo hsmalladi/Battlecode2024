@@ -7,6 +7,10 @@ public class Constants {
 
     static double BASE_HEAL = 80;
 
+    static double GLOBAL_ATTACK_UPGRADE = 60;
+
+    static double GLOBAL_HEALING_UPGRADE = 50;
+
     final static int CRITICAL_HEALTH = 150;
 
     final static int EXPLORE_ROUNDS = 125;

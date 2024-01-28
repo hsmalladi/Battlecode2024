@@ -119,6 +119,7 @@ public class Comm extends Globals {
 
 
     public static void updateFlagInfo(MapLocation loc, boolean isCarried, int idx) throws GameActionException {
+        Debug.log("UPDATING FLAG VALUE " + idx);
         int locInt = loc2int(loc);
         locInt = locInt << 1;
         if (isCarried) {
@@ -140,6 +141,8 @@ public class Comm extends Globals {
 
     public static void carry(int idx) throws GameActionException {
         int value = rc.readSharedArray(idx);
+        value = value >> 1;
+        value = value << 1;
         value += 1;
         rc.writeSharedArray(idx, value);
     }

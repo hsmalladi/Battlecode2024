@@ -27,6 +27,7 @@ public class BotMainRoundDuck extends BotDuck {
         GlobalUpgrades.useGlobalUpgrade();
         tryFlagDropOff();
         if (!rc.isSpawned()) {
+            goingToFlag = true;
             if (flagDuck != 0) {
                 //System.out.println("DIED ENEMY PROLLY HAS OUR FLAG" + rc.readSharedArray(flagDuck+50));
                 rc.writeSharedArray(flagDuck + 50, rc.readSharedArray(flagDuck + 50) +  1);
@@ -83,11 +84,13 @@ public class BotMainRoundDuck extends BotDuck {
                 escaping = false;
                 goingToFlag = true;
                 Comm.updateFlagInfo(null, false, myFlagHolding);
+                Comm.unCarry(myFlagHolding);
                 Comm.increaseFlagsCaptured();
                 Debug.log("DROPPED OFF FLAG IN ALLY " + myFlagHolding);
             }
             else if (!rc.isSpawned() && amHoldingFlag) {
                 amHoldingFlag = false;
+                escaping = false;
                 goingToFlag = true;
                 // roundDied = rc.getRoundNum();
                 Comm.unCarry(myFlagHolding);

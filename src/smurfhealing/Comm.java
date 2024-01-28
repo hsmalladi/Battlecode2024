@@ -51,7 +51,7 @@ public class Comm extends Globals {
     public static int numFlagsReported = 0;
 
     private static boolean needFlagUpdate = false;
-   //  public static MapLocation[] enemyFlagsInitial = new MapLocation[NUM_FLAGS];
+    public static MapLocation[] enemyFlagsInitial = new MapLocation[NUM_FLAGS];
 
     public static MapLocation[] allyFlagLocs = new MapLocation[NUM_FLAGS];
 
@@ -74,16 +74,16 @@ public class Comm extends Globals {
             for (FlagInfo flag : rc.senseNearbyFlags(-1, rc.getTeam().opponent())) {
                 int index = flagIDToIdx(flag.getID(), flag.getTeam());
                 // Debug.log("INDEX " + index + " " + rc.readSharedArray(index));
-                if (rc.readSharedArray(index) == 0 && flag.getTeam().equals(rc.getTeam().opponent())) {
+                if (rc.readSharedArray(index) == 0) {
                     updateFlagInfo(flag.getLocation(), flag.isPickedUp(), index);
                 }
             }
         }
-//        for (int i = ENEMY_FLAG_FIRST; i <= ENEMY_FLAG_LAST; i++) {
-//            if (enemyFlagsInitial[i-ENEMY_FLAG_FIRST] == null && rc.readSharedArray(i) != 0)  {
-//                enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i) >> 1);
-//            }
-//        }
+        for (int i = ENEMY_FLAG_FIRST; i <= ENEMY_FLAG_LAST; i++) {
+            if (enemyFlagsInitial[i-ENEMY_FLAG_FIRST] == null && rc.readSharedArray(i) != 0)  {
+                enemyFlagsInitial[i-ENEMY_FLAG_FIRST] = int2loc(rc.readSharedArray(i) >> 1);
+            }
+        }
         if (needSymUpdate || Globals.turnCount == 0) {
             updateSym();
         }
@@ -119,7 +119,6 @@ public class Comm extends Globals {
 
 
     public static void updateFlagInfo(MapLocation loc, boolean isCarried, int idx) throws GameActionException {
-        Debug.log("UPDATING FLAG VALUE " + idx);
         int locInt = loc2int(loc);
         locInt = locInt << 1;
         if (isCarried) {
@@ -136,14 +135,6 @@ public class Comm extends Globals {
         int value = rc.readSharedArray(idx);
         value = value >> 1;
         value = value << 1;
-        rc.writeSharedArray(idx, value);
-    }
-
-    public static void carry(int idx) throws GameActionException {
-        int value = rc.readSharedArray(idx);
-        value = value >> 1;
-        value = value << 1;
-        value += 1;
         rc.writeSharedArray(idx, value);
     }
 

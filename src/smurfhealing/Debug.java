@@ -1,5 +1,7 @@
 package smurfhealing;
 
+import smurfv2.Globals;
+
 public class Debug extends Globals {
 
     public static boolean DEBUGGING = true;

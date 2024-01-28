@@ -115,12 +115,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         broadcastLocs = rc.senseBroadcastFlagLocations();
         if (broadcastLocs.length == 0) {
-            Explore.exploredBroadcast = true;
-            Explore.exploredCorner = true;
-            Explore.randomBroadCast = null;
-        } else {
-            Explore.exploredBroadcast = false;
-            Explore.exploredCorner = false;
+            return Explore.getExploreTarget();
         }
 
         if(!Explore.exploredBroadcast){

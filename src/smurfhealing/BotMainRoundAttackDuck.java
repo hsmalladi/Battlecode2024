@@ -118,6 +118,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             Explore.exploredBroadcast = true;
             Explore.exploredCorner = true;
             Explore.randomBroadCast = null;
+        } else {
+            Explore.exploredBroadcast = false;
+            Explore.exploredCorner = false;
         }
 
         if(!Explore.exploredBroadcast){

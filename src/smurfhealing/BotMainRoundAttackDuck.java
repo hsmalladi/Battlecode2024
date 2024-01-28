@@ -391,4 +391,5 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             rc.heal(bestTarget.mloc);
         }
     }
+
 }

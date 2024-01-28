@@ -2,8 +2,6 @@ package smurfhealing;
 
 import battlecode.common.*;
 
-import static builder.BotMainRoundAttackDuck.closestEnemy;
-
 public class BotSetupExploreDuck extends BotSetupDuck {
     static MapLocation setupLocation;
 
@@ -281,6 +279,15 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         } else {
             gettingCrumb = false;
         }
+    }
+
+    public static MapLocation closestEnemy(RobotController rc, RobotInfo[] robotInfos) {
+        MapLocation[] mapLocations = new MapLocation[robotInfos.length];
+        for (int i = 0; i < robotInfos.length; i++) {
+            mapLocations[i] = robotInfos[i].getLocation();
+        }
+
+        return Map.getClosestLocation(rc.getLocation(), mapLocations);
     }
 
 }

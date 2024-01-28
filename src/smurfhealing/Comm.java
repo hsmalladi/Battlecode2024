@@ -138,6 +138,14 @@ public class Comm extends Globals {
         rc.writeSharedArray(idx, value);
     }
 
+    public static void carry(int idx) throws GameActionException {
+        int value = rc.readSharedArray(idx);
+        value = value >> 1;
+        value = value << 1;
+        value += 1;
+        rc.writeSharedArray(idx, value);
+    }
+
 
     public static MapLocation getLocation(int idx) throws GameActionException {
         int val = rc.readSharedArray(idx);

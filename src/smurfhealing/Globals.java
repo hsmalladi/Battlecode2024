@@ -19,6 +19,7 @@ public class Globals {
     static boolean amHoldingFlag = false;
     static boolean escaping = false;
     public static RobotController rc;
+    public static MapLocation[] broadcastLocs;
 
     public static Micro micro;
     public static MicroFlag flagMicro;

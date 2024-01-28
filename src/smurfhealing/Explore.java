@@ -38,7 +38,7 @@ public class Explore extends Globals {
     }
 
     public static MapLocation randomBroadcast() throws GameActionException {
-        MapLocation[] broadcastLocs = rc.senseBroadcastFlagLocations();
+        broadcastLocs = rc.senseBroadcastFlagLocations();
         if (broadcastLocs.length > 0) {
             if (randomBroadCast == null) {
                 randomBroadCast = broadcastLocs[rng.nextInt(broadcastLocs.length)];

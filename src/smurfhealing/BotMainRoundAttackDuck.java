@@ -113,6 +113,11 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return target;
         }
 
+        broadcastLocs = rc.senseBroadcastFlagLocations();
+        if (broadcastLocs.length == 0) {
+            return Explore.getExploreTarget();
+        }
+
         if(!Explore.exploredBroadcast){
             if (builderDuck !=0) {
                 target = Explore.randomBroadcastBuilder(builderDuck);
@@ -196,7 +201,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     isInitialLoc = true;
                 }
             }
-            if(!isInitialLoc){
+            if(!isInitialLoc && !flag.isPickedUp()){
                 if(rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist){
                     closestDroppedAllyFlag = flag.getLocation();
                     dist = rc.getLocation().distanceSquaredTo(flag.getLocation());

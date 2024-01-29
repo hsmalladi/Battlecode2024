@@ -1,4 +1,4 @@
-package smurfhealing;
+package usquals;
 
 public class Util {
     static boolean hurt(int h){

@@ -1,4 +1,4 @@
-package smurfhealing;
+package usquals;
 
 import battlecode.common.GameActionException;
 import battlecode.common.GlobalUpgrade;

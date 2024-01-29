@@ -1,4 +1,4 @@
-package smurfhealing.utils;
+package usquals.utils;
 
 /**
  * Interface to represent ints up to 65535 (2^16-1)

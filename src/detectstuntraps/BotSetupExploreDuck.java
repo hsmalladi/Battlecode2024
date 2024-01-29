@@ -198,7 +198,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     }
 
     private static void buildTrapsAtDam() throws GameActionException {
-        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(9, rc.getTeam().opponent());
         if (rc.getCrumbs() > 600) {
             if (oppRobotInfos.length > 0) {
                 if (rc.canBuild(TrapType.STUN, rc.getLocation())) {

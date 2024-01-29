@@ -11,12 +11,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         if (turnCount < 220 && rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0) {
             retrieveCrumbsMove();
         }
-        if (!gettingCrumb || turnCount >= 220) {
-            if (rc.getActionCooldownTurns() < 5) {
-                tryTrap();
-            }
-            macro();
-        }
+        macro();
     }
 
     private static MapLocation retrieveCrumbs() throws GameActionException {
@@ -63,13 +58,18 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void macro() throws GameActionException {
         // rc.setIndicatorString("ATTACK");
-        tryAttack();
-        tryAttack();
-        tryHeal();
+        if (rc.isActionReady()) {
+            tryAttack();
+            tryAttack();
+            tryHeal();
+        }
         tryMove();
-        tryAttack();
-        tryHeal();
-        tryTrap();
+        if (rc.isActionReady()) {
+            tryAttack();
+            tryAttack();
+            tryHeal();
+            tryTrap();
+        }
     }
 
     private static void tryMove() throws GameActionException {
@@ -367,10 +367,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryAttack() throws GameActionException {
         if(!rc.isActionReady()) return;
-        RobotInfo[] enemies = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
+        RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+
         AttackTarget bestTarget = null;
 
         for (RobotInfo enemy : enemies) {
+
             if (rc.canAttack(enemy.location)){
                 AttackTarget at = new AttackTarget(enemy);
                 if (at.isBetterThan(bestTarget)) bestTarget = at;
@@ -383,13 +385,13 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryHeal() throws GameActionException {
         if(!rc.isActionReady()) return;
-        RobotInfo[] enemyRobots = rc.senseNearbyRobots(rc.getLocation(), GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+        RobotInfo[] enemyRobots = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         if (enemyRobots.length > 0){
             if (rng.nextInt(10) > 2){
                 return;
             }
         }
-        RobotInfo[] allyRobots = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
+        RobotInfo[] allyRobots = rc.senseNearbyRobots(-1, rc.getTeam());
         HealingTarget bestTarget =  null;
         for (RobotInfo r : allyRobots) {
             if (rc.canHeal(r.getLocation())) {

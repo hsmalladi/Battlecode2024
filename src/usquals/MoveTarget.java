@@ -1,4 +1,4 @@
-package smurfhealing;
+package usquals;
 
 import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;

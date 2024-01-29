@@ -1,4 +1,4 @@
-package smurfhealing;
+package usquals;
 
 import battlecode.common.Direction;
 import battlecode.common.GameActionException;

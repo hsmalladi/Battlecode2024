@@ -1,8 +1,8 @@
-package smurfhealing;
+package usquals;
 
 import battlecode.common.*;
 
-import static smurfhealing.BotSetupExploreDuck.checkValidTrap;
+import static usquals.BotSetupExploreDuck.checkValidTrap;
 
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {

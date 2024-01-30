@@ -214,7 +214,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         if (!rc.isActionReady()) return;
         if (trapTooMuchCD(cd)) return;
-        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(9, rc.getTeam().opponent());
         if (oppRobotInfos.length == 0) return;
         MapLocation me = rc.getLocation();
         Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));

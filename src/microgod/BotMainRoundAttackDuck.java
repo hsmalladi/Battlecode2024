@@ -16,27 +16,15 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         if (!gettingCrumb || turnCount >= 220) {
             act();
-            micro();
+            if(!micro.doMicro()){
+                macro();
+            }
             act();
-            macro();
-            actNoMove();
         }
         updateStunTraps();
     }
 
-    private static void micro() throws GameActionException {
-        if (!rc.isMovementReady()) return;
-        micro.doMicro();
-    }
-
     private static void act() throws GameActionException {
-        tryTrap();
-        tryAttack();
-        tryAttack();
-        tryHeal();
-    }
-
-    private static void actNoMove() throws GameActionException {
         tryTrap();
         tryAttack();
         tryAttack();

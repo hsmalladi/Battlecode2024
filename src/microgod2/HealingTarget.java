@@ -14,10 +14,9 @@ public class HealingTarget extends Globals {
         if (t == null) return true;
         if (flagHolder && !t.flagHolder) return true;
         if (!flagHolder && t.flagHolder) return false;
-        if (health + rc.getHealAmount() > 1000) return false;
         if (numEnemies > t.numEnemies) return true;
-        if (maxLvl > t.maxLvl) return true;
         if (health <= t.health) return true;
+        if (maxLvl > t.maxLvl) return true;
         return id < t.id;
     }
 

@@ -31,12 +31,23 @@ public class Micro extends Globals {
     static double[] HPS = new double[]{baseHeal, baseHeal*1.03, baseHeal*1.05, baseHeal*1.07, baseHeal*1.10, baseHeal*1.15, baseHeal*1.25};
     static double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.93, ATTACK_COOLDOWN*0.9, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.65, ATTACK_COOLDOWN * 0.4};
     static double[] HEAL_COOLDOWN_COST = new double[]{HEAL_COOLDOWN, HEAL_COOLDOWN*0.95, HEAL_COOLDOWN*0.9,HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN* 0.75};
+    static boolean attackUpgrade;
+    static boolean healingUpgrade;
 
     static boolean opponentAttackUpgrade;
     static boolean opponentHealingUpgrade;
 
     Micro(){
+        GlobalUpgrade[] ourGlobalUpgrades = rc.getGlobalUpgrades(rc.getTeam());
         GlobalUpgrade[] opponentGlobalUpgrades = rc.getGlobalUpgrades(rc.getTeam().opponent());
+
+        for (GlobalUpgrade upgrade: ourGlobalUpgrades){
+            if (upgrade.equals(GlobalUpgrade.ATTACK)){
+                attackUpgrade = true;
+            } else if(upgrade.equals(GlobalUpgrade.HEALING)){
+                healingUpgrade = true;
+            }
+        }
 
         for (GlobalUpgrade upgrade: opponentGlobalUpgrades){
             if (upgrade.equals(GlobalUpgrade.ATTACK)){
@@ -48,13 +59,14 @@ public class Micro extends Globals {
 
         myRange = ATTACK_RADIUS_SQUARED;
         myVisionRange = VISION_RADIUS_SQUARED;
-        myDPS = (double) (rc.getAttackDamage() * rc.getHealth()) / 1000;
+        myDPS = rc.getAttackDamage();
         myHPS = rc.getHealAmount();
         myAttackCooldown = ATTACK_COOLDOWN_COST[rc.getLevel(SkillType.ATTACK)];
         myHealCooldown = HEAL_COOLDOWN_COST[rc.getLevel(SkillType.HEAL)];
 
     }
     static double currentDPS = 0;
+    static double currentHPS = 0;
 
     static double currentOpponentDPS = 0;
     static boolean canAttack;
@@ -134,7 +146,6 @@ public class Micro extends Globals {
             if(opponentAttackUpgrade){
                 currentOpponentDPS += Constants.GLOBAL_ATTACK_UPGRADE;
             }
-            currentOpponentDPS *= ((double) unit.getHealth() / 1000);
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
             microInfo[2].updateEnemy(unit);
@@ -151,7 +162,14 @@ public class Micro extends Globals {
             if (unit.hasFlag()){
                 continue;
             }
-            currentDPS = myDPS;
+            currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
+            if(attackUpgrade){
+                currentDPS += Constants.GLOBAL_ATTACK_UPGRADE;
+            }
+            currentHPS = HPS[unit.getHealLevel()] / HEAL_COOLDOWN_COST[unit.getHealLevel()];
+            if(healingUpgrade ){
+                currentHPS += Constants.GLOBAL_HEALING_UPGRADE;
+            }
             microInfo[0].updateAlly(unit);
             microInfo[1].updateAlly(unit);
             microInfo[2].updateAlly(unit);
@@ -221,6 +239,7 @@ public class Micro extends Globals {
         void updateAlly(RobotInfo unit){
             if (!canMove) return;
             int dist = unit.getLocation().distanceSquaredTo(location);
+            if (dist <= ATTACK_RADIUS_SQUARED) DPSreceived -= currentHPS;
             if (dist <= VISION_RADIUS_SQUARED) alliesTargeting += currentDPS;
         }
 

@@ -19,7 +19,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         if (!gettingCrumb || turnCount >= 220) {
             act();
             if(!micro.doMicro()){
-                macro();
+               macro();
             }
             act();
             tryTrap(20);
@@ -27,14 +27,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         updateStunTraps();
     }
 
-
     private static void act() throws GameActionException {
         tryTrap(10);
         tryAttack();
         tryAttack();
         tryHeal();
     }
-
 
     static void updateStunTraps() throws GameActionException {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
@@ -341,7 +339,11 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         RobotInfo[] enemyRobots = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         RobotInfo[] allies = rc.senseNearbyRobots(-1, rc.getTeam());
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
+
         if(rc.isMovementReady()) {
+            if (enemyRobots.length > 0) {
+                return;
+            }
             HealingTarget bestTarget =  null;
             for (RobotInfo r : healTargets) {
                 if (rc.canHeal(r.getLocation())) {
@@ -356,6 +358,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
         else {
             if (dontHeal(enemyRobots, allies)) return;
+
             HealingTarget bestTarget =  null;
             for (RobotInfo r : healTargets) {
                 if (rc.canHeal(r.getLocation())) {
@@ -363,12 +366,18 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     if (hl.isBetterThan(bestTarget)) bestTarget = hl;
                 }
             }
-            if(bestTarget != null && rc.canHeal(bestTarget.mloc)){
-                rc.heal(bestTarget.mloc);
+            if(bestTarget != null &&  rc.canHeal(bestTarget.mloc)){
+                if (enemyRobots.length == 0) {
+                    rc.heal(bestTarget.mloc);
+                }
+                else{
+                    if (bestTarget.numEnemies > 0)
+                        rc.heal(bestTarget.mloc);
+                }
+
             }
         }
     }
-
 
     private static boolean dontHeal(RobotInfo[] enemies, RobotInfo[] allies) throws GameActionException {
         MapLocation me = rc.getLocation();

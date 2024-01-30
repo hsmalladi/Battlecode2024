@@ -2,6 +2,7 @@ package microgod;
 
 import battlecode.common.Direction;
 
+
 public class Constants {
     static double BASE_DAMAGE = 150;
 
@@ -14,6 +15,9 @@ public class Constants {
     final static int CRITICAL_HEALTH = 150;
 
     final static int EXPLORE_ROUNDS = 125;
+
+    final static int BUILD_COOLDOWN = 5;
+    final static double[] BUILD_COOLDOWN_COST = new double[]{BUILD_COOLDOWN, BUILD_COOLDOWN*0.95, BUILD_COOLDOWN*0.9,BUILD_COOLDOWN*0.85, BUILD_COOLDOWN*0.80, BUILD_COOLDOWN*0.7, BUILD_COOLDOWN* 0.5};
 
     /** Array containing all the possible movement directions. */
     public static final Direction[] directions = {

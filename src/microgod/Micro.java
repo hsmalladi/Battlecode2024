@@ -22,15 +22,15 @@ public class Micro extends Globals {
 
     boolean severelyHurt = false;
 
-    double baseDamage = Constants.BASE_DAMAGE;
+    static double baseDamage = Constants.BASE_DAMAGE;
 
-    double baseHeal = Constants.BASE_HEAL;
+    static double baseHeal = Constants.BASE_HEAL;
 
-    double[] DPS = new double[]{baseDamage,baseDamage*1.05,baseDamage*1.07,baseDamage*1.1,baseDamage*1.30,baseDamage*1.35, baseDamage*1.6};
+    static double[] DPS = new double[]{baseDamage,baseDamage*1.05,baseDamage*1.07,baseDamage*1.1,baseDamage*1.30,baseDamage*1.35, baseDamage*1.6};
 
-    double[] HPS = new double[]{baseHeal, baseHeal*1.03, baseHeal*1.05, baseHeal*1.07, baseHeal*1.10, baseHeal*1.15, baseHeal*1.25};
-    double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.93, ATTACK_COOLDOWN*0.9, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.65, ATTACK_COOLDOWN * 0.4};
-    double[] HEAL_COOLDOWN_COST = new double[]{HEAL_COOLDOWN, HEAL_COOLDOWN*0.95, HEAL_COOLDOWN*0.9,HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN* 0.75};
+    static double[] HPS = new double[]{baseHeal, baseHeal*1.03, baseHeal*1.05, baseHeal*1.07, baseHeal*1.10, baseHeal*1.15, baseHeal*1.25};
+    static double[] ATTACK_COOLDOWN_COST = new double[]{ATTACK_COOLDOWN, ATTACK_COOLDOWN*0.95, ATTACK_COOLDOWN*0.93, ATTACK_COOLDOWN*0.9, ATTACK_COOLDOWN*0.8, ATTACK_COOLDOWN*0.65, ATTACK_COOLDOWN * 0.4};
+    static double[] HEAL_COOLDOWN_COST = new double[]{HEAL_COOLDOWN, HEAL_COOLDOWN*0.95, HEAL_COOLDOWN*0.9,HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN*0.85, HEAL_COOLDOWN* 0.75};
 
     static boolean opponentAttackUpgrade;
     static boolean opponentHealingUpgrade;
@@ -63,11 +63,28 @@ public class Micro extends Globals {
     static double currentOpponentHPS = 0;
     static boolean canAttack;
 
+    static MapLocation[] stunTrapsWentOff() throws GameActionException {
+        if (BotMainRoundAttackDuck.prevStunTrap == null || BotMainRoundAttackDuck.prevStunTrap.length == 0) {
+            return null;
+        }
+        MapLocation[] ret = new MapLocation[BotMainRoundAttackDuck.prevStunTrap.length];
+        int i = 0;
+        for (MapLocation stun : BotMainRoundAttackDuck.prevStunTrap) {
+            if (rc.canSenseLocation(stun)) {
+                MapInfo loc = rc.senseMapInfo(stun);
+                if (loc.getTrapType() != TrapType.STUN) {
+                    ret[i] = stun;
+                    i++;
+                }
+            }
+        }
+        return ret;
+    }
     boolean doMicro(){try{
         if (!rc.isMovementReady()) return false;
         shouldPlaySafe = false;
         severelyHurt = Util.hurt(rc.getHealth());
-        RobotInfo[] units = rc.senseNearbyRobots(myVisionRange, rc.getTeam().opponent());
+        RobotInfo[] units = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         if(units.length == 0) return false;
         canAttack = rc.isActionReady();
 
@@ -87,9 +104,22 @@ public class Micro extends Globals {
 
         MicroInfo[] microInfo = new MicroInfo[9];
         for (int i = 0; i < 9; ++i) microInfo[i] = new MicroInfo(dirs[i]);
-
+        MapLocation[] stuns = stunTrapsWentOff();
         for (RobotInfo unit : units) {
             if(unit.hasFlag()){
+                continue;
+            }
+            boolean stunned = false;
+            if (stuns != null) {
+                for (MapLocation trap : stuns) {
+                    if (trap != null && trap.isWithinDistanceSquared(unit.getLocation(), 13)) {
+                        stunned = true;
+                        break;
+                    }
+                }
+            }
+
+            if (stunned) {
                 continue;
             }
 

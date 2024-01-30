@@ -22,27 +22,16 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                     exploreLocation = Map.getRandomLocation(rng);
                     reachedTarget = false;
                 }
-                if (rc.getCrumbs() > 2500) {
+                if (rc.getCrumbs() > 2000) {
                     digToLv(6);
                 }
-                else {
-                    digToLv(rc.getCrumbs() / 500);
-                }
-
             }
 
             if (!reachedTarget && turnCount < Constants.EXPLORE_ROUNDS) {
                 explore();
             }
             else {
-                if (builderDuck != 0) {
-                    if (rc.getCrumbs() > 680) {
-                        buildTrapsAtDam();
-                    }
-
-                }
-
-                if (turnCount > 185) {
+                if (turnCount > 180) {
                     if (!isNextToDam()) {
                         pf.moveTowards(Map.center);
                     }
@@ -71,7 +60,6 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                 exploreLocation = Map.corners[val];
                 rc.writeSharedArray(Comm.EXPLORER_COMM, val + 1);
                 isExploring = true;
-//                rc.setIndicatorString(String.valueOf(exploreLocation));
             }
         }
 
@@ -186,53 +174,22 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         }
     }
 
-    private static void builderExplore() throws GameActionException {
-        isExploring = true;
-        if (flagDuck == 0)
-            retrieveCrumbs();
-        if (isExploring) {
-            if (rc.isMovementReady()) {
-                pf.follow(exploreLocation);
-            }
-        }
-    }
-
     private static void buildTrapsAtDam() throws GameActionException {
-        if (builderDuck !=0 ){
-            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-            if (oppRobotInfos.length > 0) {
-                MapLocation me = rc.getLocation();
-                Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
-                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
-                }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft())) && checkValidTrap(me.add(dir.rotateLeft()), dir)) {
-                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
-                }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight())) && checkValidTrap(me.add(dir.rotateRight()), dir)) {
-                    rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
-                }
-                else if (rc.canBuild(TrapType.EXPLOSIVE, me) && checkValidTrap(me, dir)) {
-                    rc.build(TrapType.EXPLOSIVE, me);
-                }
-            }
-        }
-        else {
-            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-            if (oppRobotInfos.length > 0) {
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(4, rc.getTeam().opponent());
+        if (oppRobotInfos.length > 0) {
+            if (rc.canBuild(TrapType.STUN, rc.getLocation())) {
                 boolean build = true;
                 for (MapLocation adj : Map.getAdjacentLocationsNoCorners(rc.getLocation())) {
                     if (rc.canSenseLocation(adj)) {
                         if (rc.senseMapInfo(adj).getTrapType() != TrapType.NONE){
                             build = false;
+                            break;
                         }
                     }
                 }
-                if (build) {
-                    if (rc.canBuild(TrapType.STUN, rc.getLocation())) {
-                        rc.build(TrapType.STUN, rc.getLocation());
-                    }
-                }
+                if (build)
+                    rc.build(TrapType.STUN, rc.getLocation());
+
             }
         }
     }
@@ -241,23 +198,23 @@ public class BotSetupExploreDuck extends BotSetupDuck {
         MapLocation front = location.add(d);
         MapLocation left = location.add(d.rotateLeft());
         MapLocation right = location.add(d.rotateRight());
-        boolean build = false;
+        int i = 0;
         if (rc.canSenseLocation(front)) {
-            if (!rc.senseMapInfo(front).isWall()) {
-                build = true;
+            if (rc.senseMapInfo(front).isWall()) {
+                i++;
             }
         }
         if (rc.canSenseLocation(left)) {
-            if (!rc.senseMapInfo(left).isWall()) {
-                build = true;
+            if (rc.senseMapInfo(left).isWall()) {
+                i++;
             }
         }
         if (rc.canSenseLocation(right)) {
-            if (!rc.senseMapInfo(right).isWall()) {
-                build = true;
+            if (rc.senseMapInfo(right).isWall()) {
+               i++;
             }
         }
-        return build;
+        return i <= 1;
     }
 
     private static void retrieveCrumbs() throws GameActionException {

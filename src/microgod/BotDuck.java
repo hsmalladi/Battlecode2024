@@ -50,11 +50,11 @@ public class BotDuck extends Globals {
         }
     }
 
-//    public static void endTurn() throws GameActionException {
-//        if (turnCount == GameConstants.SETUP_ROUNDS) {
-//            Setup.exit(rc);
-//        }
-//    }
+
+
+
+
+
 
     public static boolean trySpawn() throws GameActionException {
         for (MapLocation loc : Map.allySpawnLocations) {

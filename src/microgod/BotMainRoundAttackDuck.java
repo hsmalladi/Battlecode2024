@@ -1,18 +1,65 @@
 package microgod;
 
 import battlecode.common.*;
+import scala.collection.immutable.Stream;
+
+import java.util.ArrayList;
 
 import static microgod.BotSetupExploreDuck.checkValidTrap;
 
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
+    static MapLocation[] prevStunTrap;
     public static void play() throws GameActionException {
         if (turnCount < 220 && rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0) {
             retrieveCrumbsMove();
         }
-        macro();
+
+        if (!gettingCrumb || turnCount >= 220) {
+            act();
+            micro();
+            act();
+            macro();
+            act();
+        }
+        updateStunTraps();
     }
+
+    private static void micro() throws GameActionException {
+        if (!rc.isMovementReady()) return;
+        MapLocation closestEnemyFlag = getClosestVisionFlag();
+        if (closestEnemyFlag != null) {
+            pf.moveTowards(closestEnemyFlag);
+            return;
+        }
+        MapLocation closestAllyDroppedFlag = getClosestDroppedAllyFlag();
+        if(closestAllyDroppedFlag != null){
+            pf.moveTowards(closestAllyDroppedFlag);
+            return;
+        }
+       micro.doMicro();
+    }
+
+    private static void act() throws GameActionException {
+        tryTrap();
+        tryAttack();
+        tryAttack();
+        tryHeal();
+
+    }
+
+    static void updateStunTraps() throws GameActionException {
+        MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
+        ArrayList<MapLocation> stunTraps = new ArrayList<>();
+        for (MapInfo map : mapInfos) {
+            if (map.getTrapType() == TrapType.STUN) {
+                stunTraps.add(map.getMapLocation());
+            }
+        }
+        prevStunTrap = stunTraps.toArray(new MapLocation[0]);
+    }
+
 
     private static MapLocation retrieveCrumbs() throws GameActionException {
         //Retrieve all crumb locations within robot vision radius
@@ -57,39 +104,11 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static void macro() throws GameActionException {
-        // rc.setIndicatorString("ATTACK");
-        if (rc.isActionReady()) {
-            tryAttack();
-            tryAttack();
-            tryHeal();
-        }
-        tryMove();
-        if (rc.isActionReady()) {
-            tryAttack();
-            tryAttack();
-            tryHeal();
-            tryTrap();
-        }
-    }
-
-    private static void tryMove() throws GameActionException {
         if (!rc.isMovementReady()) return;
-        MapLocation closestEnemyFlag = getClosestVisionFlag();
-        if (closestEnemyFlag != null) {
-            pf.moveTowards(closestEnemyFlag);
-            return;
-        }
-        MapLocation closestAllyDroppedFlag = getClosestDroppedAllyFlag();
-        if(closestAllyDroppedFlag != null){
-            pf.moveTowards(closestAllyDroppedFlag);
-            return;
-        }
-        if (micro.doMicro()) return;
         MapLocation target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
     }
-
 
     private static MapLocation getTarget() throws GameActionException{
         MapLocation target = Explore.protectFlagHolder();
@@ -165,8 +184,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     private static MapLocation getBestTarget() throws GameActionException{
         MoveTarget bestTarget = null;
 
-        int dist = 10000;
-        RobotInfo[] enemies = rc.senseNearbyRobots(rc.getLocation(), GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+        RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         for(RobotInfo enemy: enemies){
             MoveTarget mt = new MoveTarget(enemy);
             if (mt.isBetterThan(bestTarget)) bestTarget = mt;
@@ -181,7 +199,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     private static MapLocation getClosestVisionFlag() throws GameActionException {
         int dist = 10000;
         MapLocation closestFlag = null;
-        FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam().opponent());
+        FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam().opponent());
         for (FlagInfo flag : flags) {
             if (!flag.isPickedUp() && rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist)
             {
@@ -216,123 +234,67 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         return closestDroppedAllyFlag;
     }
 
-    private static MapLocation getRandomTarget(int tries) {
-        MapLocation myLoc = rc.getLocation();
-        int maxX = rc.getMapWidth();
-        int maxY = rc.getMapHeight();
-        MapLocation exploreLoc = null;
-        while(tries-- > 0){
-            MapLocation newLoc = new MapLocation((int)(Math.random()*maxX), (int)(Math.random()*maxY));
-            if (myLoc.distanceSquaredTo(newLoc) > GameConstants.VISION_RADIUS_SQUARED){
-                exploreLoc = newLoc;
-            }
-        }
-        return exploreLoc;
-    }
 
     public static void tryTrap() throws GameActionException {
-        if (builderDuck != 0) {
-            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-            if (oppRobotInfos.length >= 5) {
-                rc.setIndicatorString("BUILDING LOTS OF TRAPS");
-                MapLocation me = rc.getLocation();
-                Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
 
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
-                    if (rc.canSenseLocation(me.add(dir))) {
-                        if (!rc.senseMapInfo(me.add(dir)).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir));
-                        }
-                    }
-                }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft())) && checkValidTrap(me.add(dir.rotateLeft()), dir)) {
-                    if (rc.canSenseLocation(me.add(dir.rotateLeft()))) {
-                        if (!rc.senseMapInfo(me.add(dir.rotateLeft())).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
-                        }
-                    }
-                }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight())) && checkValidTrap(me.add(dir.rotateRight()), dir)) {
-                    if (rc.canSenseLocation(me.add(dir.rotateRight()))) {
-                        if (!rc.senseMapInfo(me.add(dir.rotateRight())).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
-                        }
-                    }
-                }
-                else if (rc.canBuild(TrapType.EXPLOSIVE, me) && checkValidTrap(me, dir)) {
-                    if (rc.canSenseLocation(me)) {
-                        if (!rc.senseMapInfo(me).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me);
-                        }
-                    }
-                }
-            }
-            else if (oppRobotInfos.length > 0) {
-                rc.setIndicatorString("BUILDING SOME TRAPS");
-                MapLocation me = rc.getLocation();
-                Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
-                    if (rc.canSenseLocation(me.add(dir))) {
-                        if (!rc.senseMapInfo(me.add(dir)).isWater() && checkValidTrap(me.add(dir), dir)) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir));
-                        }
-                    }
-                }
-                boolean build = true;
-                for (MapLocation adj : Map.getAdjacentLocations(me)) {
-                    if (rc.canSenseLocation(adj)) {
-                        if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
-                            build = false;
-                        }
-                    }
-                }
-                if (build) {
-                    if (rc.canBuild(TrapType.STUN, me) && checkValidTrap(me, dir)) {
-                        rc.build(TrapType.STUN, me);
-                    }
-                }
-            }
+        if (!rc.isActionReady()) return;
+        if (trapTooMuchCD()) return;
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        if (oppRobotInfos.length == 0) return;
+        MapLocation me = rc.getLocation();
+        Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
+        if (rc.getLevel(SkillType.BUILD) > 3) {
+            rc.setIndicatorString("BUILDING TRAPS");
+            buildStunTrap(me, dir, dir);
+            buildExplosiveTrap(me, dir, dir);
+            buildStunTrap(me, dir.rotateLeft(), dir);
+            buildStunTrap(me, dir.rotateRight(), dir);
+            buildExplosiveTrap(me, dir.rotateLeft(), dir);
+            buildExplosiveTrap(me, dir.rotateRight(), dir);
         }
-        else {
-            RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(9, rc.getTeam().opponent());
-            if (rc.getCrumbs() > 1000) {
-                if (oppRobotInfos.length > 0) {
-                    MapLocation me = rc.getLocation();
-                    Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                    boolean build = true;
-                    for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
-                        if (rc.canSenseLocation(adj)) {
-                            if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
-                                build = false;
-                            }
-                        }
-                    }
-                    if (build) {
-                        if (rc.canBuild(TrapType.STUN, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
-                            rc.build(TrapType.STUN, me.add(dir));
-                        }
-                    }
 
-                    build = true;
-                    for (MapLocation adj : Map.getAdjacentLocations(me)) {
-                        if (rc.canSenseLocation(adj)) {
-                            if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
-                                build = false;
-                            }
-                        }
-                    }
-                    if (build) {
-                        if (rc.canBuild(TrapType.STUN, me) && checkValidTrap(me, dir)) {
-                            rc.build(TrapType.STUN, me);
-                        }
-                    }
-                }
-            }
+        if (oppRobotInfos.length >= 3) {
+            buildStunTrap(me, dir, dir);
+            buildStunTrap(me, dir.rotateLeft(), dir);
+            buildStunTrap(me, dir.rotateRight(), dir);
         }
         tryWaterTrap();
     }
 
+    private static boolean trapTooMuchCD() {
+        return rc.getActionCooldownTurns() + Math.ceil(Constants.BUILD_COOLDOWN_COST[rc.getLevel(SkillType.BUILD)]) >= 10;
+    }
+
+    private static void buildExplosiveTrap(MapLocation me, Direction dir, Direction enemy) throws GameActionException {
+        if (trapTooMuchCD()) return;
+        if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && checkValidTrap(me.add(dir), enemy)) {
+            if (rc.canSenseLocation(me.add(dir))) {
+                if (!rc.senseMapInfo(me.add(dir)).isWater()) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
+                }
+            }
+        }
+    }
+
+    private static void buildStunTrap(MapLocation me, Direction dir, Direction enemy) throws GameActionException {
+        if (trapTooMuchCD()) return;
+        if (rc.canBuild(TrapType.STUN, me.add(dir)) && checkValidTrap(me.add(dir), enemy)) {
+            boolean build = true;
+            for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
+                if (rc.canSenseLocation(adj)) {
+                    if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
+                        build = false;
+                        break;
+                    }
+                }
+            }
+            if (build)
+                rc.build(TrapType.STUN, me.add(dir));
+        }
+    }
+
     public static void tryWaterTrap() throws GameActionException {
+        if (trapTooMuchCD()) return;
         RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         for (RobotInfo opps : oppRobotInfos) {
             if (opps.hasFlag()) {
@@ -367,14 +329,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryAttack() throws GameActionException {
         if(!rc.isActionReady()) return;
-        RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-
+        RobotInfo[] enemies = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
+        RobotInfo[] allies = rc.senseNearbyRobots(-1, rc.getTeam());
         AttackTarget bestTarget = null;
-
         for (RobotInfo enemy : enemies) {
-
             if (rc.canAttack(enemy.location)){
-                AttackTarget at = new AttackTarget(enemy);
+                AttackTarget at = new AttackTarget(enemy, allies);
                 if (at.isBetterThan(bestTarget)) bestTarget = at;
             }
         }
@@ -391,7 +351,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 return;
             }
         }
-        RobotInfo[] allyRobots = rc.senseNearbyRobots(-1, rc.getTeam());
+        RobotInfo[] allyRobots = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
         HealingTarget bestTarget =  null;
         for (RobotInfo r : allyRobots) {
             if (rc.canHeal(r.getLocation())) {

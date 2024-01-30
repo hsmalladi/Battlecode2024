@@ -23,7 +23,7 @@ public class BotDuck extends Globals {
                     Explore.exploredBroadcast = false;
                 }
                 Comm.turn_starts();
-                turnCount += 1;
+                turnCount = rc.getRoundNum();
                 play();
             } catch (GameActionException e) {
                 System.out.println("GameActionException");

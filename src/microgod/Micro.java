@@ -99,15 +99,28 @@ public class Micro extends Globals {
         MicroInfo[] microInfo = new MicroInfo[9];
         for (int i = 0; i < 9; ++i) microInfo[i] = new MicroInfo(dirs[i]);
         MapLocation[] stuns = stunTrapsWentOff();
+        RobotInfo[] stunRobots = new RobotInfo[units.length];
+        int k = 0;
         for (RobotInfo unit : units) {
             if(unit.hasFlag()){
                 continue;
             }
             boolean stunned = false;
-            if (stuns != null) {
+            if (BotMainRoundAttackDuck.prevStunRobot != null) {
+                for (RobotInfo r : BotMainRoundAttackDuck.prevStunRobot) {
+                    if (r != null && unit.getID() == r.getID()) {
+                        stunned = true;
+                        break;
+                    }
+                }
+            }
+
+            if (stuns != null ) {
                 for (MapLocation trap : stuns) {
                     if (trap != null && trap.isWithinDistanceSquared(unit.getLocation(), 13)) {
                         stunned = true;
+                        stunRobots[k] = unit;
+                        k++;
                         break;
                     }
                 }
@@ -132,7 +145,7 @@ public class Micro extends Globals {
             microInfo[7].updateEnemy(unit);
             microInfo[8].updateEnemy(unit);
         }
-
+        BotMainRoundAttackDuck.prevStunRobot = stunRobots;
         units = rc.senseNearbyRobots(myVisionRange, rc.getTeam());
         for (RobotInfo unit : units) {
             if (unit.hasFlag()){

@@ -9,6 +9,7 @@ import static microgod.BotSetupExploreDuck.checkValidTrap;
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     static MapLocation[] prevStunTrap;
+    static RobotInfo[] prevStunRobot;
     public static void play() throws GameActionException {
         if (turnCount < 220 && rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0) {
             retrieveCrumbsMove();
@@ -20,28 +21,19 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 macro();
             }
             act();
+            tryTrap(20);
         }
         updateStunTraps();
     }
 
-    private static void micro() throws GameActionException {
-        if (!rc.isMovementReady()) return;
-        micro.doMicro();
-    }
 
     private static void act() throws GameActionException {
-        tryTrap();
+        tryTrap(10);
         tryAttack();
         tryAttack();
         tryHeal();
     }
 
-    private static void actNoMove() throws GameActionException {
-        tryTrap();
-        tryAttack();
-        tryAttack();
-        tryHeal();
-    }
 
     static void updateStunTraps() throws GameActionException {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
@@ -238,38 +230,35 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
 
-    public static void tryTrap() throws GameActionException {
+    public static void tryTrap(int cd) throws GameActionException {
 
         if (!rc.isActionReady()) return;
-        if (trapTooMuchCD()) return;
+        if (trapTooMuchCD(cd)) return;
         RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         if (oppRobotInfos.length == 0) return;
         MapLocation me = rc.getLocation();
         Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
         if (rc.getLevel(SkillType.BUILD) > 3) {
             rc.setIndicatorString("BUILDING TRAPS");
-            buildStunTrap(me, dir, dir);
-            buildExplosiveTrap(me, dir, dir);
-            buildStunTrap(me, dir.rotateLeft(), dir);
-            buildStunTrap(me, dir.rotateRight(), dir);
-            buildExplosiveTrap(me, dir.rotateLeft(), dir);
-            buildExplosiveTrap(me, dir.rotateRight(), dir);
+            buildStunTrap(me, dir, dir, cd);
+            buildExplosiveTrap(me, dir, dir, cd);
+            buildStunTrap(me, dir.rotateLeft(), dir, cd);
+            buildStunTrap(me, dir.rotateRight(), dir, cd);
+            buildExplosiveTrap(me, dir.rotateLeft(), dir, cd);
+            buildExplosiveTrap(me, dir.rotateRight(), dir, cd);
         }
-
-        if (oppRobotInfos.length >= 3) {
-            buildStunTrap(me, dir, dir);
-            buildStunTrap(me, dir.rotateLeft(), dir);
-            buildStunTrap(me, dir.rotateRight(), dir);
-        }
-        tryWaterTrap();
+        buildStunTrap(me, dir, dir, cd);
+        buildStunTrap(me, dir.rotateLeft(), dir, cd);
+        buildStunTrap(me, dir.rotateRight(), dir, cd);
+        tryWaterTrap(cd);
     }
 
-    private static boolean trapTooMuchCD() {
-        return rc.getActionCooldownTurns() + Math.ceil(Constants.BUILD_COOLDOWN_COST[rc.getLevel(SkillType.BUILD)]) >= 10;
+    private static boolean trapTooMuchCD(int cd) {
+        return rc.getActionCooldownTurns() + Math.ceil(Constants.BUILD_COOLDOWN_COST[rc.getLevel(SkillType.BUILD)]) >= cd;
     }
 
-    private static void buildExplosiveTrap(MapLocation me, Direction dir, Direction enemy) throws GameActionException {
-        if (trapTooMuchCD()) return;
+    private static void buildExplosiveTrap(MapLocation me, Direction dir, Direction enemy, int cd) throws GameActionException {
+        if (trapTooMuchCD(cd)) return;
         if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && checkValidTrap(me.add(dir), enemy)) {
             if (rc.canSenseLocation(me.add(dir))) {
                 if (!rc.senseMapInfo(me.add(dir)).isWater()) {
@@ -279,8 +268,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
     }
 
-    private static void buildStunTrap(MapLocation me, Direction dir, Direction enemy) throws GameActionException {
-        if (trapTooMuchCD()) return;
+    private static void buildStunTrap(MapLocation me, Direction dir, Direction enemy, int cd) throws GameActionException {
+        if (trapTooMuchCD(10)) return;
         if (rc.canBuild(TrapType.STUN, me.add(dir)) && checkValidTrap(me.add(dir), enemy)) {
             boolean build = true;
             for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
@@ -296,8 +285,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
     }
 
-    public static void tryWaterTrap() throws GameActionException {
-        if (trapTooMuchCD()) return;
+    public static void tryWaterTrap(int cd) throws GameActionException {
+        if (trapTooMuchCD(cd)) return;
         RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         for (RobotInfo opps : oppRobotInfos) {
             if (opps.hasFlag()) {

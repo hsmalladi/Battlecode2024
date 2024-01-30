@@ -18,9 +18,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         if (!gettingCrumb || turnCount >= 220) {
             act();
-            if(!micro.doMicro()){
-               macro();
-            }
+            tryMove();
             act();
             tryTrap(20);
         }
@@ -88,8 +86,19 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         return false;
     }
 
-    private static void macro() throws GameActionException {
+    private static void tryMove() throws GameActionException {
         if (!rc.isMovementReady()) return;
+        MapLocation closestEnemyFlag = getClosestVisionFlag();
+        if (closestEnemyFlag != null) {
+            pf.moveTowards(closestEnemyFlag);
+            return;
+        }
+        MapLocation closestAllyDroppedFlag = getClosestDroppedAllyFlag();
+        if(closestAllyDroppedFlag != null){
+            pf.moveTowards(closestAllyDroppedFlag);
+            return;
+        }
+        if (micro.doMicro()) return;
         MapLocation target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
@@ -239,10 +248,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
         if (rc.getLevel(SkillType.BUILD) > 3) {
             rc.setIndicatorString("BUILDING TRAPS");
-            buildStunTrap(me, dir, dir, cd);
             buildExplosiveTrap(me, dir, dir, cd);
-            buildStunTrap(me, dir.rotateLeft(), dir, cd);
-            buildStunTrap(me, dir.rotateRight(), dir, cd);
             buildExplosiveTrap(me, dir.rotateLeft(), dir, cd);
             buildExplosiveTrap(me, dir.rotateRight(), dir, cd);
         }

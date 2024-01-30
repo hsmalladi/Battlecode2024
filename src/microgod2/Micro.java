@@ -194,7 +194,6 @@ public class Micro extends Globals {
             rc.move(bestMicro.dir);
             return true;
         }
-
     }catch(Exception e){
         e.printStackTrace();
     }

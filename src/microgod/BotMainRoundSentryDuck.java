@@ -13,10 +13,7 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
         FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
         if (flags.length > 0) {
             Comm.allyFlagLocs[flagDuck-1] = flags[0].getLocation();
-            if (!rc.getLocation().equals(Comm.allyFlagLocs[flagDuck-1])) {
-                pf.moveTowards(Comm.allyFlagLocs[flagDuck - 1]);
-            }
-            else {
+            if (rc.getLocation().equals(Comm.allyFlagLocs[flagDuck-1])) {
                 tryTrap();
             }
         }
@@ -40,8 +37,6 @@ public class BotMainRoundSentryDuck extends BotSetupFlagDuck {
         else if (rc.canBuild(TrapType.WATER, rc.getLocation().add(dir.rotateRight()))) {
             rc.build(TrapType.WATER, rc.getLocation().add(dir.rotateRight()));
         }
-
-
     }
 
 }

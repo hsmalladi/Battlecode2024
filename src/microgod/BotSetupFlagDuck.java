@@ -26,10 +26,6 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             calculateOptimalFlagLocation();
             moveToLocation();
             Comm.commFlagLocationDropped(flagDuck);
-            if (rc.hasFlag() && rc.getLocation().equals(exploreLocation)) {
-                dropFlag();
-                buildDefenses();
-            }
         }
     }
 
@@ -87,11 +83,8 @@ public class BotSetupFlagDuck extends BotSetupDuck {
 
     private static void moveToLocation() throws GameActionException {
         if (rc.isMovementReady()) {
-            isExploring = true;
-            if (isExploring) {
-                if (!rc.getLocation().equals(exploreLocation)) {
-                    pf.moveTowards(exploreLocation);
-                }
+            if (!rc.getLocation().equals(exploreLocation)) {
+                OldPathFind.moveTowards(exploreLocation);
             }
         }
     }
@@ -114,20 +107,4 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             }
         }
     }
-
-
-    public static void buildDefenses() throws GameActionException {
-        MapLocation[] adj = Map.getAdjacentLocations(rc.getLocation());
-        if(rc.canBuild(TrapType.STUN, rc.getLocation())) {
-            rc.build(TrapType.STUN, rc.getLocation());
-        }
-        for (MapLocation loc : adj){
-            if(rc.canBuild(TrapType.WATER, loc)) {
-                rc.build(TrapType.WATER, loc);
-                break;
-            }
-        }
-    }
-
-
 }

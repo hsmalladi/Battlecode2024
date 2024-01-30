@@ -16,13 +16,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         if (!gettingCrumb || turnCount >= 220) {
             act();
-            micro();
-            act();
-            if (rc.isMovementReady()){
+            if(!micro.doMicro()){
                 macro();
-                act();
             }
-
+            act();
         }
         updateStunTraps();
     }
@@ -33,6 +30,13 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static void act() throws GameActionException {
+        tryTrap();
+        tryAttack();
+        tryAttack();
+        tryHeal();
+    }
+
+    private static void actNoMove() throws GameActionException {
         tryTrap();
         tryAttack();
         tryAttack();
@@ -238,7 +242,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         if (!rc.isActionReady()) return;
         if (trapTooMuchCD()) return;
-        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(9, rc.getTeam().opponent());
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         if (oppRobotInfos.length == 0) return;
         MapLocation me = rc.getLocation();
         Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
@@ -250,13 +254,13 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             buildStunTrap(me, dir.rotateRight(), dir);
             buildExplosiveTrap(me, dir.rotateLeft(), dir);
             buildExplosiveTrap(me, dir.rotateRight(), dir);
-
         }
 
-        buildStunTrap(me, dir, dir);
-        buildStunTrap(me, dir.rotateLeft(), dir);
-        buildStunTrap(me, dir.rotateRight(), dir);
-
+        if (oppRobotInfos.length >= 3) {
+            buildStunTrap(me, dir, dir);
+            buildStunTrap(me, dir.rotateLeft(), dir);
+            buildStunTrap(me, dir.rotateRight(), dir);
+        }
         tryWaterTrap();
     }
 

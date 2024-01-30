@@ -1,41 +1,49 @@
 package microgod;
 
+import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 import battlecode.common.RobotInfo;
 
 public class HealingTarget extends Globals {
-    int health, attackLvl, healLvl, buildLvl, maxLvl, score;
+    int health, attackLvl, healLvl, buildLvl, maxLvl, id;
     boolean flagHolder = false;
     MapLocation mloc;
 
-    int maxLevel(int attack, int heal, int build) {
-        return Math.max(attack, Math.max(heal, build));
-    }
-
-    int getScore(int maxLvl, int hp) { //higher scoring ducks are healed
-        return maxLvl * 100 + (800 - hp);
-    }
+    int numEnemies = 0;
 
     boolean isBetterThan(HealingTarget t) {
         if (t == null) return true;
         if (flagHolder && !t.flagHolder) return true;
         if (!flagHolder && t.flagHolder) return false;
-        if (health <= t.health) return true;
+        if (health + rc.getHealAmount() > 1000) return false;
+        if (numEnemies > t.numEnemies) return true;
         if (maxLvl > t.maxLvl) return true;
-//        if (score > t.score) return true;
-        return false;
+        if (health <= t.health) return true;
+        return id < t.id;
     }
 
 
 
-    HealingTarget(RobotInfo r){
+
+    HealingTarget(RobotInfo r, RobotInfo[] enemies){
         health = r.getHealth();
         mloc = r.getLocation();
         flagHolder = r.hasFlag();
-        attackLvl = r.getAttackLevel() + 2; // weigh attack ducks heavier than build/heal
+        attackLvl = r.getAttackLevel() + 1; // weigh attack ducks heavier than build/heal
         buildLvl = r.getBuildLevel();
         healLvl = r.getHealLevel() + 1;
-        maxLvl = maxLevel(attackLvl, healLvl, buildLvl);
-        score = getScore(maxLvl, health);
+        id = rc.getID();
+        maxLvl = attackLvl + buildLvl + healLvl;
+        numEnemies = getNumEnemies(enemies);
+    }
+
+    private int getNumEnemies(RobotInfo[] enemies) {
+        int num = 0;
+        for (RobotInfo e : enemies) {
+            if (e.getLocation().isWithinDistanceSquared(mloc, GameConstants.ATTACK_RADIUS_SQUARED)) {
+                num++;
+            }
+        }
+        return num;
     }
 }

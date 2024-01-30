@@ -18,8 +18,8 @@ public class AttackTarget extends Globals {
         if (flagHolder && !t.flagHolder) return true;
         if (!flagHolder && t.flagHolder) return false;
         if (health <= t.health) return true;
-        if (maxLvl > t.maxLvl) return true;
         if (numAllies > t.numAllies) return true;
+        if (maxLvl > t.maxLvl) return true;
         return id > t.id;
     }
 

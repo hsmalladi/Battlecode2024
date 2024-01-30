@@ -83,19 +83,17 @@ public class Micro extends Globals {
     boolean doMicro(){try{
         if (!rc.isMovementReady()) return false;
         shouldPlaySafe = false;
-        severelyHurt = Util.hurt(rc.getHealth());
+        severelyHurt = rc.getHealth() <= 300;
         RobotInfo[] units = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         if(units.length == 0) return false;
         canAttack = rc.isActionReady();
 
-        int uIndex = units.length;
-        if (uIndex-- > 0){
-            RobotInfo r = units[uIndex];
-            if (!r.hasFlag()){
-                shouldPlaySafe = true;
+        for (FlagInfo f : rc.senseNearbyFlags(-1, rc.getTeam())) {
+            if (f.isPickedUp()) {
+                return false;
             }
         }
-        if (!shouldPlaySafe) return false;
+
 
 
         alwaysInRange = false;
@@ -179,6 +177,8 @@ public class Micro extends Globals {
     }
         return false;
     }
+
+
 
 
     class MicroInfo{

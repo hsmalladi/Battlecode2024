@@ -110,7 +110,6 @@ public class Micro extends Globals {
         alwaysInRange = false;
         if(!canAttack) alwaysInRange = true;
         if(severelyHurt) alwaysInRange = true;
-        if(BotMainRoundAttackDuck.bait) alwaysInRange = true;
 
         MicroInfo[] microInfo = new MicroInfo[9];
         for (int i = 0; i < 9; ++i) microInfo[i] = new MicroInfo(dirs[i]);
@@ -163,7 +162,7 @@ public class Micro extends Globals {
         BotMainRoundAttackDuck.prevStunRobot = stunRobots;
         units = rc.senseNearbyRobots(myVisionRange, rc.getTeam());
         for (RobotInfo unit : units) {
-            if (unit.hasFlag() || BotMainRoundAttackDuck.bait){
+            if (unit.hasFlag()){
                 continue;
             }
             currentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];

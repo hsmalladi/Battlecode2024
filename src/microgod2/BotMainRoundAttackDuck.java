@@ -284,10 +284,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             buildStunTrap(me,  Direction.CENTER, dir, 20);
             buildExplosiveTrap(me, Direction.CENTER, dir, 20);
         }
-        if (bait) {
-            buildExplosiveTrap(me, dir, dir, 20);
-            buildStunTrap(me, Direction.CENTER, dir, 20);
-        }
         if (flag) {
             buildWaterTrap(me, dir, dir, 20);
             buildWaterTrap(me, dir.rotateLeft(), dir, 20);

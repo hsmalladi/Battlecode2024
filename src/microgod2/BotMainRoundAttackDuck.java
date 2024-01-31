@@ -16,17 +16,19 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     static MapInfo[] mapInfos;
     static MapLocation[] crumbLocations;
     static MapLocation me;
+    static boolean chickenBehavior = false;
     public static void play() throws GameActionException {
+        checkChickenBehavior();
         updateVars();
         if (turnCount < 220 && enemies.length == 0) {
             retrieveCrumbsMove();
-            act();
+            act(false);
         }
         else {
-            act();
+            act(true);
             tryMove();
             updateVars();
-            act();
+            act(false);
             tryTrap(20);
         }
         updateStunTraps();
@@ -39,11 +41,12 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         me = rc.getLocation();
     }
 
-    private static void act() throws GameActionException {
-        tryTrap(10);
+    private static void act(boolean before) throws GameActionException {
+        if (rc.getLevel(SkillType.ATTACK)!=6 || rc.getActionCooldownTurns() > 0)
+            tryTrap(10);
         tryAttack();
         tryAttack();
-        tryHeal();
+        tryHeal(before);
     }
 
     static void updateStunTraps() {
@@ -112,6 +115,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return;
         }
         if (micro.doMicro()) return;
+        if (healMicro.doMicro()) return;
         MapLocation target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
@@ -246,9 +250,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     public static void tryTrap(int cd) throws GameActionException {
 
         if (!rc.isActionReady()) return;
+        if (rc.getHealth() < 200) return;
         if (trapTooMuchCD(cd)) return;
         if (enemies.length == 0) return;
-        Direction dir = me.directionTo(closestEnemy(rc, enemies));
+        Direction dir = me.directionTo(closestEnemy(enemies));
         if (rc.getLevel(SkillType.BUILD) > 3) {
             rc.setIndicatorString("BUILDING TRAPS");
             buildExplosiveTrap(me, dir, dir, cd);
@@ -277,7 +282,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static void buildStunTrap(MapLocation me, Direction dir, Direction enemy, int cd) throws GameActionException {
-        if (trapTooMuchCD(10)) return;
+        if (trapTooMuchCD(cd)) return;
         if (rc.canBuild(TrapType.STUN, me.add(dir)) && checkValidTrap(me.add(dir), enemy)) {
             boolean build = true;
             for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
@@ -316,7 +321,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     }
 
-    public static MapLocation closestEnemy(RobotController rc, RobotInfo[] robotInfos) {
+    public static MapLocation closestEnemy(RobotInfo[] robotInfos) {
         MapLocation[] mapLocations = new MapLocation[robotInfos.length];
         for (int i = 0; i < robotInfos.length; i++) {
             mapLocations[i] = robotInfos[i].getLocation();
@@ -341,27 +346,30 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
     }
 
-    private static void tryHeal() throws GameActionException {
+    private static void tryHeal(boolean beforeTryMove) throws GameActionException {
         if(!rc.isActionReady()) return;
-
+        if(beforeTryMove && enemies.length > 0) return;
+        RobotInfo[] enemyRobots = rc.senseNearbyRobots(12, rc.getTeam().opponent());
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
 
-        if (enemies.length > 0) {
-            if (rng.nextInt(10) > 2)
-                return;
-        }
+        if (enemyRobots.length > 0) return;
+
         HealingTarget bestTarget =  null;
         for (RobotInfo r : healTargets) {
             if (rc.canHeal(r.getLocation())) {
-                HealingTarget hl = new HealingTarget(r, enemies);
+                HealingTarget hl = new HealingTarget(r, enemyRobots);
                 if (hl.isBetterThan(bestTarget)) bestTarget = hl;
             }
         }
-
         if(bestTarget != null && rc.canHeal(bestTarget.mloc)){
             rc.heal(bestTarget.mloc);
         }
-
     }
+    public static void checkChickenBehavior(){
+        if (!chickenBehavior && rc.getHealth() <= 600) chickenBehavior = true;
+        if (chickenBehavior && rc.getHealth() >= 900) chickenBehavior = false;
+    }
+
+
 
 }

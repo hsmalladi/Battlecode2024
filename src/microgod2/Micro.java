@@ -69,6 +69,7 @@ public class Micro extends Globals {
     static double currentHPS = 0;
 
     static double currentOpponentDPS = 0;
+    static double currentOpponentHPS = 0;
     static boolean canAttack;
 
     static MapLocation[] stunTrapsWentOff() throws GameActionException {
@@ -91,7 +92,7 @@ public class Micro extends Globals {
     boolean doMicro(){try{
         if (!rc.isMovementReady()) return false;
 
-        severelyHurt = rc.getHealth() <= 150 + 10 * (rc.getLevel(SkillType.BUILD) + rc.getLevel(SkillType.ATTACK) + rc.getLevel(SkillType.HEAL));
+        severelyHurt = rc.getHealth() <= 150;
         RobotInfo[] units = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         if(units.length == 0) return false;
         canAttack = rc.isActionReady();
@@ -145,6 +146,11 @@ public class Micro extends Globals {
             currentOpponentDPS = DPS[unit.getAttackLevel()] / ATTACK_COOLDOWN_COST[unit.getAttackLevel()];
             if(opponentAttackUpgrade){
                 currentOpponentDPS += Constants.GLOBAL_ATTACK_UPGRADE;
+            }
+
+            currentOpponentHPS = HPS[unit.getHealLevel()] / HEAL_COOLDOWN_COST[unit.getHealLevel()];
+            if(opponentHealingUpgrade){
+                currentOpponentHPS += Constants.GLOBAL_HEALING_UPGRADE;
             }
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
@@ -231,7 +237,7 @@ public class Micro extends Globals {
             if(!canMove) return;
             int dist = unit.getLocation().distanceSquaredTo(location);
             if (dist < minDistanceToEnemy)  minDistanceToEnemy = dist;
-            if (dist <= ATTACK_RADIUS_SQUARED) DPSreceived += currentOpponentDPS;
+            if (dist <= ATTACK_RADIUS_SQUARED) DPSreceived += currentOpponentHPS;
             if (dist <= VISION_RADIUS_SQUARED) enemiesTargeting += currentOpponentDPS;
         }
 

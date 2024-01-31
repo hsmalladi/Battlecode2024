@@ -12,8 +12,8 @@ public class HealingTarget extends Globals {
 
     boolean isBetterThan(HealingTarget t) {
         if (t == null) return true;
-        if (flagHolder && !t.flagHolder) return true;
-        if (!flagHolder && t.flagHolder) return false;
+        if (flagHolder && !t.flagHolder) return false;
+        if (!flagHolder && t.flagHolder) return true;
         if (numEnemies > t.numEnemies) return true;
         if (health <= t.health) return true;
         if (maxLvl > t.maxLvl) return true;

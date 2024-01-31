@@ -11,18 +11,46 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     static MapLocation[] prevStunTrap;
     static RobotInfo[] prevStunRobot;
+
+    static RobotInfo[] enemies;
+    static MapInfo[] mapInfos;
+    static MapLocation[] crumbLocations;
+    static MapLocation me;
     public static void play() throws GameActionException {
-        if (turnCount < 220 && rc.senseNearbyRobots(-1, rc.getTeam().opponent()).length == 0) {
+        updateVars();
+        if (turnCount < 220 && enemies.length == 0) {
             retrieveCrumbsMove();
+            updateVars();
+            if (!gettingCrumb) {
+                act();
+                tryMove();
+                updateVars();
+                act();
+                tryTrap(20);
+            }
+        }
+        else if (turnCount <= 202) {
+            act();
+        }
+        else {
+            if (!gettingCrumb || turnCount >= 220) {
+                act();
+                tryMove();
+                updateVars();
+                act();
+                tryTrap(20);
+            }
         }
 
-        if (!gettingCrumb || turnCount >= 220) {
-            act();
-            tryMove();
-            act();
-            tryTrap(20);
-        }
+
         updateStunTraps();
+    }
+
+    private static void updateVars() throws GameActionException {
+        enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        mapInfos = rc.senseNearbyMapInfos(-1);
+        crumbLocations = rc.senseNearbyCrumbs(-1);
+        me = rc.getLocation();
     }
 
     private static void act() throws GameActionException {
@@ -32,8 +60,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         tryHeal();
     }
 
-    static void updateStunTraps() throws GameActionException {
-        MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
+    static void updateStunTraps() {
+
         ArrayList<MapLocation> stunTraps = new ArrayList<>();
         for (MapInfo map : mapInfos) {
             if (map.getTrapType() == TrapType.STUN) {
@@ -46,9 +74,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static MapLocation retrieveCrumbs() throws GameActionException {
         //Retrieve all crumb locations within robot vision radius
-        MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
+
         if (crumbLocations.length > 0) {
-            MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
+            MapLocation closestCrumb = Map.getClosestLocation(me, crumbLocations);
             if (reachable(closestCrumb)) {
                 rc.setIndicatorString("Getting Crumb");
                 return closestCrumb;
@@ -59,9 +87,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void retrieveCrumbsMove() throws GameActionException {
         //Retrieve all crumb locations within robot vision radius
-        MapLocation[] crumbLocations = rc.senseNearbyCrumbs(-1);
         if (crumbLocations.length > 0) {
-            MapLocation closestCrumb = Map.getClosestLocation(rc.getLocation(), crumbLocations);
+            MapLocation closestCrumb = Map.getClosestLocation(me, crumbLocations);
             if (reachable(closestCrumb)) {
                 rc.setIndicatorString("Getting Crumb");
                 gettingCrumb = true;
@@ -129,8 +156,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         target = Explore.getFlagTarget();
         if (target !=  null){
             if (Explore.randomBroadCast == null || (Explore.randomBroadCast != null &&
-                    rc.getLocation().distanceSquaredTo(target)
-                            < rc.getLocation().distanceSquaredTo(Explore.randomBroadCast)
+                    me.distanceSquaredTo(target)
+                            < me.distanceSquaredTo(Explore.randomBroadCast)
                             + GameConstants.FLAG_BROADCAST_NOISE_RADIUS + 1)) {
                 Explore.exploredBroadcast = false;
                 Explore.exploredCorner = false;
@@ -162,9 +189,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
 
         if(!Explore.exploredCorner){
-            target = Map.getClosestLocation(rc.getLocation(), Map.corners);
+            target = Map.getClosestLocation(me, Map.corners);
             if(target != null){
-                if(rc.getLocation().distanceSquaredTo(target) <= 5){
+                if(me.distanceSquaredTo(target) <= 20){
                     Explore.exploredCorner = true;
                 }
                 rc.setIndicatorString("GOING TO CORNER");
@@ -184,10 +211,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
 
-    private static MapLocation getBestTarget() throws GameActionException{
+    private static MapLocation getBestTarget() {
         MoveTarget bestTarget = null;
 
-        RobotInfo[] enemies = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         for(RobotInfo enemy: enemies){
             MoveTarget mt = new MoveTarget(enemy);
             if (mt.isBetterThan(bestTarget)) bestTarget = mt;
@@ -204,10 +230,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         MapLocation closestFlag = null;
         FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam().opponent());
         for (FlagInfo flag : flags) {
-            if (!flag.isPickedUp() && rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist)
+            if (!flag.isPickedUp() && me.distanceSquaredTo(flag.getLocation()) < dist)
             {
                 closestFlag = flag.getLocation();
-                dist = rc.getLocation().distanceSquaredTo(flag.getLocation());
+                dist = me.distanceSquaredTo(flag.getLocation());
             }
         }
         return closestFlag;
@@ -217,7 +243,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     private static MapLocation getClosestDroppedAllyFlag()  throws GameActionException {
         int dist = 10000;
         MapLocation[] initialAllyFlagLocations = Comm.allyFlagLocs;
-        FlagInfo[] flags = rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED, rc.getTeam());
+        FlagInfo[] flags = rc.senseNearbyFlags(-1, rc.getTeam());
 
         MapLocation closestDroppedAllyFlag = null;
         for (FlagInfo flag: flags){
@@ -228,9 +254,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 }
             }
             if(!isInitialLoc && !flag.isPickedUp()){
-                if(rc.getLocation().distanceSquaredTo(flag.getLocation()) < dist){
+                if(me.distanceSquaredTo(flag.getLocation()) < dist){
                     closestDroppedAllyFlag = flag.getLocation();
-                    dist = rc.getLocation().distanceSquaredTo(flag.getLocation());
+                    dist = me.distanceSquaredTo(flag.getLocation());
                 }
             }
         }
@@ -242,10 +268,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
         if (!rc.isActionReady()) return;
         if (trapTooMuchCD(cd)) return;
-        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-        if (oppRobotInfos.length == 0) return;
-        MapLocation me = rc.getLocation();
-        Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
+        if (enemies.length == 0) return;
+        Direction dir = me.directionTo(closestEnemy(rc, enemies));
         if (rc.getLevel(SkillType.BUILD) > 3) {
             rc.setIndicatorString("BUILDING TRAPS");
             buildExplosiveTrap(me, dir, dir, cd);
@@ -292,10 +316,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     public static void tryWaterTrap(int cd) throws GameActionException {
         if (trapTooMuchCD(cd)) return;
-        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
-        for (RobotInfo opps : oppRobotInfos) {
+        for (RobotInfo opps : enemies) {
             if (opps.hasFlag()) {
-                MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(opps.getLocation());
                 if (rc.canBuild(TrapType.WATER, me.add(dir))) {
                     rc.build(TrapType.WATER, me.add(dir));
@@ -321,7 +343,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             mapLocations[i] = robotInfos[i].getLocation();
         }
 
-        return Map.getClosestLocation(rc.getLocation(), mapLocations);
+        return Map.getClosestLocation(me, mapLocations);
     }
 
     private static void tryAttack() throws GameActionException {
@@ -342,18 +364,17 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryHeal() throws GameActionException {
         if(!rc.isActionReady()) return;
-        RobotInfo[] enemyRobots = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         RobotInfo[] allies = rc.senseNearbyRobots(-1, rc.getTeam());
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
 
         if(rc.isMovementReady()) {
-            if (enemyRobots.length > 0) {
+            if (enemies.length > 0) {
                 return;
             }
             HealingTarget bestTarget =  null;
             for (RobotInfo r : healTargets) {
                 if (rc.canHeal(r.getLocation())) {
-                    HealingTarget hl = new HealingTarget(r, enemyRobots);
+                    HealingTarget hl = new HealingTarget(r, enemies);
                     if (hl.isBetterThan(bestTarget)) bestTarget = hl;
                 }
             }
@@ -363,17 +384,17 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             }
         }
         else {
-            if (dontHeal(enemyRobots, allies)) return;
+            if (dontHeal(enemies, allies)) return;
 
             HealingTarget bestTarget =  null;
             for (RobotInfo r : healTargets) {
                 if (rc.canHeal(r.getLocation())) {
-                    HealingTarget hl = new HealingTarget(r, enemyRobots);
+                    HealingTarget hl = new HealingTarget(r, enemies);
                     if (hl.isBetterThan(bestTarget)) bestTarget = hl;
                 }
             }
             if(bestTarget != null &&  rc.canHeal(bestTarget.mloc)){
-                if (enemyRobots.length == 0) {
+                if (enemies.length == 0) {
                     rc.heal(bestTarget.mloc);
                 }
                 else{
@@ -386,7 +407,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static boolean dontHeal(RobotInfo[] enemies, RobotInfo[] allies) throws GameActionException {
-        MapLocation me = rc.getLocation();
         for (RobotInfo enemy : enemies) {
             if (enemy.getLocation().isWithinDistanceSquared(me, GameConstants.ATTACK_RADIUS_SQUARED)) {
                 return true;
@@ -404,7 +424,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                                 allyInFront = true;
                                 break;
                             }
-
                         }
                     }
                 }
@@ -412,7 +431,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     return true;
                 }
             }
-
         }
         return false;
     }

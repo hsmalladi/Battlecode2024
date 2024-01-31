@@ -29,8 +29,6 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             act();
             tryTrap(20);
         }
-
-
         updateStunTraps();
     }
 

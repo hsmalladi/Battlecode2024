@@ -15,7 +15,6 @@ public class Globals {
     static boolean isExploring = false;
     static boolean gettingCrumb = false;
     static boolean reachedTarget = false;
-    static boolean buildDefenses = false;
     static boolean amHoldingFlag = false;
     static boolean escaping = false;
     public static RobotController rc;

@@ -38,7 +38,7 @@ public class HealingTarget extends Globals {
     private int getNumEnemies(RobotInfo[] enemies) {
         int num = 0;
         for (RobotInfo e : enemies) {
-            if (e.getLocation().isWithinDistanceSquared(mloc, 9)) {
+            if (e.getLocation().isWithinDistanceSquared(mloc, 12)) {
                 num++;
             }
         }

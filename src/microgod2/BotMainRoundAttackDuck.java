@@ -29,7 +29,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             tryMove();
             updateVars();
             act(false);
-            tryTrap(20);
+            //tryTrap(20);
         }
         updateStunTraps();
     }
@@ -42,8 +42,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static void act(boolean before) throws GameActionException {
-        if (rc.getLevel(SkillType.ATTACK)!=6 || rc.getActionCooldownTurns() > 0)
-            tryTrap(10);
+        //if (rc.getLevel(SkillType.ATTACK)!=6 || rc.getActionCooldownTurns() > 0)
+            //tryTrap(10);
         tryAttack();
         tryAttack();
         tryHeal(before);
@@ -348,16 +348,11 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryHeal(boolean beforeTryMove) throws GameActionException {
         if(!rc.isActionReady()) return;
+        if(beforeTryMove && enemies.length > 0) return;
+        RobotInfo[] enemyRobots = rc.senseNearbyRobots(12, rc.getTeam().opponent());
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
 
-        if (rc.getLevel(SkillType.HEAL) <= 4 && enemies.length > 0) {
-            if (rc.getLevel(SkillType.ATTACK) >= 4) {
-                return;
-            }
-            if (rng.nextInt(10) > 2) {
-                return;
-            }
-        }
+        if (enemyRobots.length > 0) return;
 
         HealingTarget bestTarget =  null;
         for (RobotInfo r : healTargets) {

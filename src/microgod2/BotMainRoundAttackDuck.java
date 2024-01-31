@@ -394,8 +394,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             else {
                 boolean allyInFront = false;
                 Direction dir = me.directionTo(enemy.getLocation());
-                if (rc.canSenseLocation(me.add(dir))) {
-                    if (rc.senseMapInfo(me.add(dir)).isWall()) {
+                if (rc.canSenseLocation(me.add(dir)) && rc.canSenseLocation(me.add(dir).add(dir))) {
+                    if (rc.senseMapInfo(me.add(dir)).isWall() || rc.senseMapInfo(me.add(dir).add(dir)).isWall()) {
                         allyInFront = true;
                     }
                     else {

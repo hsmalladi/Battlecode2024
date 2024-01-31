@@ -23,15 +23,15 @@ public class BotDuck extends Globals {
                     Explore.exploredBroadcast = false;
                 }
                 Comm.turn_starts();
-                turnCount = rc.getRoundNum();
+                turnCount++;
                 play();
             } catch (GameActionException e) {
-                //System.out.println("GameActionException");
-                //e.printStackTrace();
+                System.out.println("GameActionException");
+                e.printStackTrace();
 
             } catch (Exception e) {
-                //System.out.println("Exception");
-                //e.printStackTrace();
+                System.out.println("Exception");
+                e.printStackTrace();
 
             } finally {
                 Clock.yield();

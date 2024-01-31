@@ -43,7 +43,7 @@ public class Globals {
     public static void init(RobotController r) {
         rc = r;
         Map.init(rc);
-        rng = new Random(rc.getID());
+        rng = new Random(rc.getID() + 1);
         id = rc.getID();
         exploreLocation = new MapLocation(0, 0);
         micro = new Micro();

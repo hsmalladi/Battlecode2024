@@ -5,6 +5,8 @@ import battlecode.common.GameActionException;
 import battlecode.common.MapInfo;
 import battlecode.common.MapLocation;
 
+import java.util.Arrays;
+
 public class BotSetupFlagDuck extends BotSetupDuck {
 
     public static final int
@@ -19,9 +21,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             if (initFlagDuck()) {
                 flags = rc.senseNearbyFlags(-1, rc.getTeam());
                 holdFlag();
-
                 Comm.commFlagLocation(rc.getLocation(), flagDuck);
-
             }
         }
         else {
@@ -36,7 +36,6 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         if (rc.canSpawn(Map.flagSpawnLocations[flagDuck-1])) {
             rc.spawn(Map.flagSpawnLocations[flagDuck-1]);
             exploreLocation = Map.allyFlagLocations[flagDuck-1];
-//            rc.setIndicatorString(String.valueOf(Map.flagSpawnLocations[flagDuck-1]));
             return true;
         }
         return false;
@@ -87,7 +86,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     private static void moveToLocation() throws GameActionException {
         if (rc.isMovementReady()) {
             if (!rc.getLocation().equals(exploreLocation)) {
-                OldPathFind.moveTowards(exploreLocation);
+                pf.moveTowards(exploreLocation);
             }
         }
     }

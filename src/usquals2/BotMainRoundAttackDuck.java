@@ -2,7 +2,7 @@ package usquals2;
 
 import battlecode.common.*;
 
-import static usquals.BotSetupExploreDuck.checkValidTrap;
+import static usquals2.BotSetupExploreDuck.checkValidTrap;
 
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
@@ -238,59 +238,17 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
 
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
-                    if (rc.canSenseLocation(me.add(dir))) {
-                        if (!rc.senseMapInfo(me.add(dir)).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir));
-                        }
-                    }
-                }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateLeft())) && checkValidTrap(me.add(dir.rotateLeft()), dir)) {
-                    if (rc.canSenseLocation(me.add(dir.rotateLeft()))) {
-                        if (!rc.senseMapInfo(me.add(dir.rotateLeft())).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateLeft()));
-                        }
-                    }
-                }
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir.rotateRight())) && checkValidTrap(me.add(dir.rotateRight()), dir)) {
-                    if (rc.canSenseLocation(me.add(dir.rotateRight()))) {
-                        if (!rc.senseMapInfo(me.add(dir.rotateRight())).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir.rotateRight()));
-                        }
-                    }
-                }
-                else if (rc.canBuild(TrapType.EXPLOSIVE, me) && checkValidTrap(me, dir)) {
-                    if (rc.canSenseLocation(me)) {
-                        if (!rc.senseMapInfo(me).isWater()) {
-                            rc.build(TrapType.EXPLOSIVE, me);
-                        }
-                    }
-                }
+                buildExplosiveTrap(me, dir, dir, 20);
+                buildExplosiveTrap(me, dir.rotateLeft(), dir, 20);
+                buildExplosiveTrap(me, dir.rotateRight(), dir, 20);
+                buildExplosiveTrap(me, Direction.CENTER, dir, 20);
             }
             else if (oppRobotInfos.length > 0) {
                 rc.setIndicatorString("BUILDING SOME TRAPS");
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir))) {
-                    if (rc.canSenseLocation(me.add(dir))) {
-                        if (!rc.senseMapInfo(me.add(dir)).isWater() && checkValidTrap(me.add(dir), dir)) {
-                            rc.build(TrapType.EXPLOSIVE, me.add(dir));
-                        }
-                    }
-                }
-                boolean build = true;
-                for (MapLocation adj : Map.getAdjacentLocations(me)) {
-                    if (rc.canSenseLocation(adj)) {
-                        if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
-                            build = false;
-                        }
-                    }
-                }
-                if (build) {
-                    if (rc.canBuild(TrapType.STUN, me) && checkValidTrap(me, dir)) {
-                        rc.build(TrapType.STUN, me);
-                    }
-                }
+                buildExplosiveTrap(me, dir, dir, 20);
+                buildStunTrap(me, Direction.CENTER, dir, 20);
             }
         }
         else {
@@ -299,33 +257,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                 if (oppRobotInfos.length > 0) {
                     MapLocation me = rc.getLocation();
                     Direction dir = me.directionTo(closestEnemy(rc, oppRobotInfos));
-                    boolean build = true;
-                    for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
-                        if (rc.canSenseLocation(adj)) {
-                            if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
-                                build = false;
-                            }
-                        }
-                    }
-                    if (build) {
-                        if (rc.canBuild(TrapType.STUN, me.add(dir)) && checkValidTrap(me.add(dir), dir)) {
-                            rc.build(TrapType.STUN, me.add(dir));
-                        }
-                    }
-
-                    build = true;
-                    for (MapLocation adj : Map.getAdjacentLocations(me)) {
-                        if (rc.canSenseLocation(adj)) {
-                            if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
-                                build = false;
-                            }
-                        }
-                    }
-                    if (build) {
-                        if (rc.canBuild(TrapType.STUN, me) && checkValidTrap(me, dir)) {
-                            rc.build(TrapType.STUN, me);
-                        }
-                    }
+                    buildStunTrap(me, dir, dir, 10);
+                    buildStunTrap(me, Direction.CENTER, dir, 10);
                 }
             }
         }
@@ -338,23 +271,66 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             if (opps.hasFlag()) {
                 MapLocation me = rc.getLocation();
                 Direction dir = me.directionTo(opps.getLocation());
-                if (rc.canBuild(TrapType.WATER, me.add(dir))) {
-                    rc.build(TrapType.WATER, me.add(dir));
-                }
-                else if (rc.canBuild(TrapType.WATER, me.add(dir.rotateLeft()))) {
-                    rc.build(TrapType.WATER, me.add(dir.rotateLeft()));
-                }
-                else if (rc.canBuild(TrapType.WATER, me.add(dir.rotateRight()))) {
-                    rc.build(TrapType.WATER, me.add(dir.rotateRight()));
-                }
-                else if (rc.canBuild(TrapType.WATER, me)) {
-                    rc.build(TrapType.WATER, me);
-                }
+                buildWaterTrap(me, dir, dir, 10);
+                buildWaterTrap(me, dir.rotateRight(), dir, 10);
+                buildWaterTrap(me, dir.rotateLeft(), dir, 10);
+                buildWaterTrap(me, Direction.CENTER, dir, 10);
             }
         }
 
 
     }
+
+    private static boolean trapTooMuchCD(int cd) {
+        return rc.getActionCooldownTurns() + Math.ceil(Constants.BUILD_COOLDOWN_COST[rc.getLevel(SkillType.BUILD)]) >= cd;
+    }
+
+    private static void buildExplosiveTrap(MapLocation me, Direction dir, Direction enemy, int cd) throws GameActionException {
+        if (trapTooMuchCD(cd)) return;
+        if (rc.canBuild(TrapType.EXPLOSIVE, me.add(dir)) && BotSetupExploreDuck.checkValidTrap(me.add(dir), enemy)) {
+            if (rc.canSenseLocation(me.add(dir))) {
+                if (!rc.senseMapInfo(me.add(dir)).isWater()) {
+                    rc.build(TrapType.EXPLOSIVE, me.add(dir));
+                }
+            }
+        }
+    }
+
+    private static void buildStunTrap(MapLocation me, Direction dir, Direction enemy, int cd) throws GameActionException {
+        if (trapTooMuchCD(cd)) return;
+        if (rc.canBuild(TrapType.STUN, me.add(dir)) && BotSetupExploreDuck.checkValidTrap(me.add(dir), enemy)) {
+            boolean build = true;
+            for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
+                if (rc.canSenseLocation(adj)) {
+                    if (rc.senseMapInfo(adj).getTrapType() == TrapType.STUN){
+                        build = false;
+                        break;
+                    }
+                }
+            }
+            if (build)
+                rc.build(TrapType.STUN, me.add(dir));
+        }
+    }
+
+    private static void buildWaterTrap(MapLocation me, Direction dir, Direction enemy, int cd) throws GameActionException {
+        if (trapTooMuchCD(cd)) return;
+        if (rc.canBuild(TrapType.WATER, me.add(dir)) && BotSetupExploreDuck.checkValidTrap(me.add(dir), enemy)) {
+            boolean build = true;
+            for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
+                if (rc.canSenseLocation(adj)) {
+                    if (rc.senseMapInfo(adj).getTrapType() == TrapType.WATER){
+                        build = false;
+                        break;
+                    }
+                }
+            }
+            if (build)
+                rc.build(TrapType.WATER, me.add(dir));
+        }
+    }
+
+
 
     public static MapLocation closestEnemy(RobotController rc, RobotInfo[] robotInfos) {
         MapLocation[] mapLocations = new MapLocation[robotInfos.length];

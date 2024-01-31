@@ -1,4 +1,4 @@
-package microgod2;
+package HealMicro;
 
 import battlecode.common.*;
 

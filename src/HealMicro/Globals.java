@@ -22,6 +22,9 @@ public class Globals {
     public static MapLocation[] broadcastLocs;
 
     public static Micro micro;
+
+    public static HealMicro healMicro;
+
     public static MicroFlag flagMicro;
 
     static int turnCount = 0;
@@ -47,6 +50,7 @@ public class Globals {
         id = rc.getID();
         exploreLocation = new MapLocation(0, 0);
         micro = new Micro();
+        healMicro = new HealMicro();
         flagMicro = new MicroFlag();
         indicator = "";
     }

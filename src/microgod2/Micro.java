@@ -146,7 +146,6 @@ public class Micro extends Globals {
             if(opponentAttackUpgrade){
                 currentOpponentDPS += Constants.GLOBAL_ATTACK_UPGRADE;
             }
-            System.out.println(currentOpponentDPS);
             microInfo[0].updateEnemy(unit);
             microInfo[1].updateEnemy(unit);
             microInfo[2].updateEnemy(unit);

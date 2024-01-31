@@ -4,7 +4,7 @@ import battlecode.common.*;
 
 import java.util.ArrayList;
 
-import static microgod2.BotSetupExploreDuck.checkValidTrap;
+import static HealMicro.BotSetupExploreDuck.checkValidTrap;
 
 
 public class BotMainRoundAttackDuck extends BotMainRoundDuck {
@@ -16,7 +16,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     static MapInfo[] mapInfos;
     static MapLocation[] crumbLocations;
     static MapLocation me;
+
+    static boolean chickenBehavior = false;
     public static void play() throws GameActionException {
+        checkChickenBehavior();
         updateVars();
         if (turnCount < 220 && enemies.length == 0) {
             retrieveCrumbsMove();
@@ -115,23 +118,27 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryMove() throws GameActionException {
         if (!rc.isMovementReady()) return;
-        MapLocation closestEnemyFlag = getClosestVisionFlag();
-        if (closestEnemyFlag != null) {
-            pf.moveTowards(closestEnemyFlag);
-            return;
-        }
-        MapLocation closestAllyDroppedFlag = getClosestDroppedAllyFlag();
-        if(closestAllyDroppedFlag != null){
-            pf.moveTowards(closestAllyDroppedFlag);
+        MapLocation flagTarget = getSomeFlagTarget();
+        if(flagTarget != null){
+            pf.moveTowards(flagTarget);
             return;
         }
         if (micro.doMicro()) return;
+        if(chickenBehavior && healMicro.doMicro()) return;
         MapLocation target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
     }
 
-    private static MapLocation getTarget() throws GameActionException{
+    private static MapLocation getSomeFlagTarget() throws GameActionException {
+        MapLocation closestEnemyFlag = getClosestVisionFlag();
+        if (closestEnemyFlag != null) {
+            return closestEnemyFlag;
+        }
+        MapLocation closestAllyDroppedFlag = getClosestDroppedAllyFlag();
+        if(closestAllyDroppedFlag != null){
+            return closestAllyDroppedFlag;
+        }
         MapLocation target = getClosestVisionFlag();
         if (target != null) {
             return target;
@@ -147,6 +154,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             return target;
         }
 
+        return null;
+    }
+    private static MapLocation getTarget() throws GameActionException{
+        MapLocation target;
         target = getBestTarget();
         if (target != null){
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
@@ -433,5 +444,10 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             }
         }
         return false;
+    }
+
+    public static void checkChickenBehavior(){
+        if (!chickenBehavior && rc.getHealth() <= 400) chickenBehavior = true;
+        if (chickenBehavior && rc.getHealth() >= GameConstants.DEFAULT_HEALTH) chickenBehavior = false;
     }
 }

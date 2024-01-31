@@ -135,10 +135,13 @@ public class PathFind extends Globals {
                 if (dirCanPass || dirRightCanPass || dirLeftCanPass) {
                     if (dirCanPass && rc.canMove(dir) && !escaping) {
                         rc.move(dir);
+                        updateQueue(rc.getLocation().add(dir));
                     } else if (dirRightCanPass && rc.canMove(dir.rotateRight()) && !escaping) {
                         rc.move(dir.rotateRight());
+                        updateQueue(rc.getLocation().add(dir.rotateRight()));
                     }  else if (dirLeftCanPass && rc.canMove(dir.rotateLeft()) && !escaping) {
                         rc.move(dir.rotateLeft());
+                        updateQueue(rc.getLocation().add(dir.rotateLeft()));
                     } else {
                         if (rc.hasFlag() && rc.canDropFlag(rc.getLocation()) && rc.getRoundNum() > 200) {
                             // if (rc.senseNearbyRobots(-1, rc.getTeam()).length == 0) {
@@ -426,6 +429,17 @@ public class PathFind extends Globals {
         if (dx == -1 && dy == -1) return Direction.SOUTHWEST;
         assert false; // shouldn't reach here
         return null;
+    }
+
+    public static void updateQueue(MapLocation loc) {
+        if (firstBackUp) {
+            Debug.log("I AM BACKING UP");
+            return;
+        }
+        if (prevLocs.size() == 10) {
+            prevLocs.removeFirst();
+        }
+        prevLocs.add(loc);
     }
 
 }

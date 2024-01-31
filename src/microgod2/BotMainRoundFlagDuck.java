@@ -5,6 +5,8 @@ import battlecode.common.GameActionException;
 import battlecode.common.GameConstants;
 import battlecode.common.MapLocation;
 
+import java.util.LinkedList;
+
 
 public class BotMainRoundFlagDuck extends BotMainRoundDuck {
 
@@ -21,6 +23,15 @@ public class BotMainRoundFlagDuck extends BotMainRoundDuck {
             return;
         }
         if(!rc.isMovementReady()) return;
+        if (prevLocs.size() != 0 && rc.getLocation().equals(prevLocs.getFirst())) {
+            prevLocs = new LinkedList<>();
+            firstBackUp = false;
+        }
+        if (firstBackUp) {
+            Debug.log("FIRST FLAG GUY BACKING UP");
+            pf.moveTowards(prevLocs.getFirst());
+            return;
+        }
         if(closestSpawn.distanceSquaredTo(rc.getLocation()) <= GameConstants.VISION_RADIUS_SQUARED){
             pf.moveTowards(closestSpawn());
             return;

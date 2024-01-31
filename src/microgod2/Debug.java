@@ -2,7 +2,7 @@ package microgod2;
 
 public class Debug extends Globals {
 
-    public static boolean DEBUGGING = false;
+    public static boolean DEBUGGING = true;
 
 
     public static void log(String s) {

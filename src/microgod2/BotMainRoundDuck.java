@@ -28,6 +28,7 @@ public class BotMainRoundDuck extends BotDuck {
         tryFlagDropOff();
         if (!rc.isSpawned()) {
             smartSpawn();
+            firstBackUp = false;
         }
         if (rc.isSpawned()) {
             if (Comm.needSymmetryReport && rc.canWriteSharedArray(0, 0)) {
@@ -124,15 +125,24 @@ public class BotMainRoundDuck extends BotDuck {
             return;
         for (FlagInfo loc : rc.senseNearbyFlags(GameConstants.VISION_RADIUS_SQUARED)) {
             if (rc.canPickupFlag(loc.getLocation())) {
+
                 myFlagHolding = Comm.flagIDToIdx(loc.getID(), rc.getTeam().opponent());
+                int helpNum = rc.readSharedArray(myFlagHolding) >> 1;
+                MapLocation flagLoc = Comm.int2loc(helpNum);
+                if (flagLoc.equals(loc.getLocation())) {
+                    firstBackUp = true;
+                    Debug.log("I AM THE FIRST DUCK");
+                }
+
                 rc.pickupFlag(loc.getLocation());
                 if (contains(Map.allySpawnLocations, rc.getLocation())) {
                     Debug.log("PICKED UP FLAG " + myFlagHolding + " AND DROPPED IT OFF");
                     Comm.updateFlagInfo(null, false, myFlagHolding);
                     return;
                 }
+
                 amHoldingFlag = true;
-                Comm.updateFlagInfo(rc.getLocation(), true, myFlagHolding);
+                Comm.carry(myFlagHolding);
                 Debug.log("PICKED UP FLAG " + myFlagHolding);
                 goingToFlag = false;
                 // rc.writeSharedArray(Comm.ENEMY_FLAG_HELD, 1);

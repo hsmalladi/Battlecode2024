@@ -142,7 +142,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         if(!Explore.exploredCorner){
             target = Map.getClosestLocation(rc.getLocation(), Map.corners);
             if(target != null){
-                if(rc.getLocation().distanceSquaredTo(target) <= 5){
+                if(rc.getLocation().distanceSquaredTo(target) <= GameConstants.VISION_RADIUS_SQUARED){
                     Explore.exploredCorner = true;
                 }
                 rc.setIndicatorString("GOING TO CORNER");

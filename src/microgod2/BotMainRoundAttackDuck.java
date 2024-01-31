@@ -348,16 +348,21 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryHeal(boolean beforeTryMove) throws GameActionException {
         if(!rc.isActionReady()) return;
-        if(beforeTryMove && enemies.length > 0) return;
-        RobotInfo[] enemyRobots = rc.senseNearbyRobots(12, rc.getTeam().opponent());
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
 
-        if (enemyRobots.length > 0) return;
+        if (rc.getLevel(SkillType.HEAL) <= 4 && enemies.length > 0) {
+            if (rc.getLevel(SkillType.ATTACK) >= 4) {
+                return;
+            }
+            if (rng.nextInt(10) > 2) {
+                return;
+            }
+        }
 
         HealingTarget bestTarget =  null;
         for (RobotInfo r : healTargets) {
             if (rc.canHeal(r.getLocation())) {
-                HealingTarget hl = new HealingTarget(r, enemyRobots);
+                HealingTarget hl = new HealingTarget(r, enemies);
                 if (hl.isBetterThan(bestTarget)) bestTarget = hl;
             }
         }
@@ -366,8 +371,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
     }
     public static void checkChickenBehavior(){
-        if (!chickenBehavior && rc.getHealth() <= 600) chickenBehavior = true;
-        if (chickenBehavior && rc.getHealth() >= 900) chickenBehavior = false;
+        if (!chickenBehavior && rc.getHealth() <= 700) chickenBehavior = true;
+        if (chickenBehavior && rc.getHealth() >= 950) chickenBehavior = false;
     }
 
 

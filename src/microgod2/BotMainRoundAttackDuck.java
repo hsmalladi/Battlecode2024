@@ -20,26 +20,14 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         updateVars();
         if (turnCount < 220 && enemies.length == 0) {
             retrieveCrumbsMove();
-            updateVars();
-            if (!gettingCrumb) {
-                act();
-                tryMove();
-                updateVars();
-                act();
-                tryTrap(20);
-            }
-        }
-        else if (turnCount <= 202) {
             act();
         }
         else {
-            if (!gettingCrumb || turnCount >= 220) {
-                act();
-                tryMove();
-                updateVars();
-                act();
-                tryTrap(20);
-            }
+            act();
+            tryMove();
+            updateVars();
+            act();
+            tryTrap(20);
         }
 
 
@@ -132,16 +120,9 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static MapLocation getTarget() throws GameActionException{
-        MapLocation target = getClosestVisionFlag();
-        if (target != null) {
-            return target;
-        }
-        target = getClosestDroppedAllyFlag();
-        if(target != null){
-            return target;
-        }
 
-        target = Explore.protectFlagHolder();
+
+        MapLocation target = Explore.protectFlagHolder();
         if (target != null){
             rc.setIndicatorString("PROTECT FlAG IN VISION");
             return target;
@@ -346,7 +327,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         return Map.getClosestLocation(me, mapLocations);
     }
 
-    private static void tryAttack() throws GameActionException {
+    public static void tryAttack() throws GameActionException {
         if(!rc.isActionReady()) return;
         RobotInfo[] enemies = rc.senseNearbyRobots(GameConstants.ATTACK_RADIUS_SQUARED, rc.getTeam().opponent());
         RobotInfo[] allies = rc.senseNearbyRobots(-1, rc.getTeam());
@@ -364,74 +345,25 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryHeal() throws GameActionException {
         if(!rc.isActionReady()) return;
-        RobotInfo[] allies = rc.senseNearbyRobots(-1, rc.getTeam());
+
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
 
-        if(rc.isMovementReady()) {
-            if (enemies.length > 0) {
+        if (enemies.length > 0) {
+            if (rng.nextInt(10) > 2)
                 return;
-            }
-            HealingTarget bestTarget =  null;
-            for (RobotInfo r : healTargets) {
-                if (rc.canHeal(r.getLocation())) {
-                    HealingTarget hl = new HealingTarget(r, enemies);
-                    if (hl.isBetterThan(bestTarget)) bestTarget = hl;
-                }
-            }
-
-            if(bestTarget != null && rc.canHeal(bestTarget.mloc)){
-                rc.heal(bestTarget.mloc);
+        }
+        HealingTarget bestTarget =  null;
+        for (RobotInfo r : healTargets) {
+            if (rc.canHeal(r.getLocation())) {
+                HealingTarget hl = new HealingTarget(r, enemies);
+                if (hl.isBetterThan(bestTarget)) bestTarget = hl;
             }
         }
-        else {
-            if (dontHeal(enemies, allies)) return;
 
-            HealingTarget bestTarget =  null;
-            for (RobotInfo r : healTargets) {
-                if (rc.canHeal(r.getLocation())) {
-                    HealingTarget hl = new HealingTarget(r, enemies);
-                    if (hl.isBetterThan(bestTarget)) bestTarget = hl;
-                }
-            }
-            if(bestTarget != null &&  rc.canHeal(bestTarget.mloc)){
-                if (enemies.length == 0) {
-                    rc.heal(bestTarget.mloc);
-                }
-                else{
-                    if (bestTarget.numEnemies > 0)
-                        rc.heal(bestTarget.mloc);
-                }
-
-            }
+        if(bestTarget != null && rc.canHeal(bestTarget.mloc)){
+            rc.heal(bestTarget.mloc);
         }
+
     }
 
-    private static boolean dontHeal(RobotInfo[] enemies, RobotInfo[] allies) throws GameActionException {
-        for (RobotInfo enemy : enemies) {
-            if (enemy.getLocation().isWithinDistanceSquared(me, GameConstants.ATTACK_RADIUS_SQUARED)) {
-                return true;
-            }
-            else {
-                boolean allyInFront = false;
-                Direction dir = me.directionTo(enemy.getLocation());
-                if (rc.canSenseLocation(me.add(dir)) && rc.canSenseLocation(me.add(dir).add(dir))) {
-                    if (rc.senseMapInfo(me.add(dir)).isWall() || rc.senseMapInfo(me.add(dir).add(dir)).isWall()) {
-                        allyInFront = true;
-                    }
-                    else {
-                        for (RobotInfo ally : allies) {
-                            if (ally.getLocation().equals(me.add(dir)) || ally.getLocation().equals(me.add(dir).add(dir))){
-                                allyInFront = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (!allyInFront) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 }

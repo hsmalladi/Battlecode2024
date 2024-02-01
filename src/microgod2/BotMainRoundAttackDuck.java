@@ -21,8 +21,14 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         checkChickenBehavior();
         updateVars();
         if (turnCount < 220 && enemies.length == 0) {
-            retrieveCrumbsMove();
-            act(false);
+            if (crumbLocations.length != 0) {
+                retrieveCrumbsMove();
+                act(false);
+            } else {
+                tryMove();
+                act(false);
+            }
+
         }
         else {
             act(true);
@@ -114,23 +120,24 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             pf.moveTowards(closestAllyDroppedFlag);
             return;
         }
+
+        MapLocation target = Explore.protectFlagHolder();
+        if (target != null) {
+            rc.setIndicatorString("PROTECT FlAG IN VISION");
+            pf.moveTowards(target);
+            return;
+        }
+
         if (micro.doMicro()) return;
-        if (healMicro.doMicro()) return;
-        MapLocation target = getTarget();
+        if (chickenBehavior && healMicro.doMicro()) return;
+        target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
     }
 
     private static MapLocation getTarget() throws GameActionException{
 
-
-        MapLocation target = Explore.protectFlagHolder();
-        if (target != null){
-            rc.setIndicatorString("PROTECT FlAG IN VISION");
-            return target;
-        }
-
-        target = getBestTarget();
+        MapLocation target = getBestTarget();
         if (target != null){
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             return target;

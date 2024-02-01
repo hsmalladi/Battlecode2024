@@ -74,11 +74,13 @@ public class BotSetupFlagDuck extends BotSetupDuck {
             }
         }
         for (MapLocation enemySpawn : Map.enemyFlagSpawnLocations) {
-            int distFromEnemySpawn = (int) Math.sqrt(enemySpawn.distanceSquaredTo(mapInfo.getMapLocation()));
-            score += distFromEnemySpawn;
+            score += (int) Math.sqrt(enemySpawn.distanceSquaredTo(mapInfo.getMapLocation()));
         }
-        if(numWalls(mapInfo) == 7) {
-            score *= 2;
+        if(rc.getLocation().distanceSquaredTo(mapInfo.getMapLocation()) < 10) {
+            if(numWalls(mapInfo) == 7) {
+                System.out.println("SEVEN WALLS");
+                score *= 2;
+            }
         }
         return score;
     }
@@ -90,7 +92,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     private static void moveToLocation() throws GameActionException {
         if (rc.isMovementReady()) {
             if (!rc.getLocation().equals(exploreLocation)) {
-                OldPathFind.moveTowards(exploreLocation);
+                PathFind.moveTowards(exploreLocation);
             }
         }
     }
@@ -126,15 +128,13 @@ public class BotSetupFlagDuck extends BotSetupDuck {
                 }
             }
         }
-        if(targetSquare.x == 0 && targetSquare.y == 0) {
-            total += 5;
-        } else if(targetSquare.x == 0 && targetSquare.y == Map.mapHeight - 1) {
-            total += 5;
-        } else if(targetSquare.x == Map.mapWidth - 1 && targetSquare.y == 0) {
-            total += 5;
-        } else if(targetSquare.x == Map.mapWidth - 1 && targetSquare.y == Map.mapHeight - 1) {
-            total += 5;
-        } else if(targetSquare.x == Map.mapWidth-1 || targetSquare.x == 0 || targetSquare.y == Map.mapHeight-1 || targetSquare.y == 0) {
+        if(targetSquare.x == 0 || targetSquare.x == Map.mapHeight-1) {
+            if(targetSquare.y == 0 || targetSquare.y == Map.mapHeight-1) {
+                total += 5;
+            } else {
+                total += 3;
+            }
+        } else if(targetSquare.y == 0 || targetSquare.y == Map.mapHeight-1) {
             total += 3;
         }
         if(total == 8) {

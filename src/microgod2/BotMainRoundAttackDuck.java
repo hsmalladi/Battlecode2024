@@ -314,22 +314,29 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         for (RobotInfo opps : enemies) {
             if (opps.hasFlag()) {
                 Direction dir = me.directionTo(opps.getLocation());
-                if (rc.canBuild(TrapType.WATER, me.add(dir))) {
-                    rc.build(TrapType.WATER, me.add(dir));
-                }
-                else if (rc.canBuild(TrapType.WATER, me.add(dir.rotateLeft()))) {
-                    rc.build(TrapType.WATER, me.add(dir.rotateLeft()));
-                }
-                else if (rc.canBuild(TrapType.WATER, me.add(dir.rotateRight()))) {
-                    rc.build(TrapType.WATER, me.add(dir.rotateRight()));
-                }
-                else if (rc.canBuild(TrapType.WATER, me)) {
-                    rc.build(TrapType.WATER, me);
-                }
+                buildWaterTrap(me, dir, cd);
+                buildWaterTrap(me, dir.rotateLeft(), cd);
+                buildWaterTrap(me, dir.rotateRight(), cd);
+                buildWaterTrap(me, Direction.CENTER, cd);
             }
         }
+    }
 
-
+    private static void buildWaterTrap(MapLocation me, Direction dir, int cd) throws GameActionException {
+        if (trapTooMuchCD(cd)) return;
+        if (rc.canBuild(TrapType.WATER, me.add(dir))) {
+            boolean build = true;
+            for (MapLocation adj : Map.getAdjacentLocations(me.add(dir))) {
+                if (rc.canSenseLocation(adj)) {
+                    if (rc.senseMapInfo(adj).getTrapType() == TrapType.WATER){
+                        build = false;
+                        break;
+                    }
+                }
+            }
+            if (build)
+                rc.build(TrapType.WATER, me.add(dir));
+        }
     }
 
     public static MapLocation closestEnemy(RobotInfo[] robotInfos) {

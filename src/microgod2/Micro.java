@@ -92,7 +92,7 @@ public class Micro extends Globals {
     boolean doMicro(){try{
         if (!rc.isMovementReady()) return false;
 
-        severelyHurt = rc.getHealth() <= 150;
+        severelyHurt = rc.getHealth() <= 150 + 10 * (rc.getLevel(SkillType.ATTACK) + rc.getLevel(SkillType.BUILD) + rc.getLevel(SkillType.HEAL));
         RobotInfo[] units = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
         if(units.length == 0) return false;
         canAttack = rc.isActionReady();

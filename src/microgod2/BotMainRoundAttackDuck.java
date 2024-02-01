@@ -359,11 +359,21 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryHeal(boolean beforeTryMove) throws GameActionException {
         if(!rc.isActionReady()) return;
-        if(beforeTryMove && enemies.length > 0) return;
+
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
         RobotInfo[] allies = rc.senseNearbyRobots(-1, rc.getTeam());
 
-        if (dontHeal(enemies, allies)) return;
+        if (enemies.length > 0) {
+            if (rc.getLevel(SkillType.ATTACK) >= 4) {
+                return;
+            }
+            if (rc.getLevel(SkillType.HEAL) < 4 || rc.getLevel(SkillType.BUILD) < 4) {
+                if (rc.getHealth() >= 300) {
+                    if (dontHeal(enemies, healTargets))
+                        return;
+                }
+            }
+        }
 
 
         HealingTarget bestTarget =  null;
@@ -393,7 +403,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     }
                     else {
                         for (RobotInfo ally : allies) {
-                            if (ally.getLocation().equals(me.add(dir)) || ally.getLocation().equals(me.add(dir).add(dir))){
+                            if (ally.getLocation().equals(me.add(dir))
+                                    || ally.getLocation().equals(me.add(dir).add(dir))) {
                                 allyInFront = true;
                                 break;
                             }

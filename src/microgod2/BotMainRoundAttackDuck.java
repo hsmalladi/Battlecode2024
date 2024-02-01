@@ -113,34 +113,35 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
 
         if (micro.doMicro()) return;
+        MapLocation target = getClosestDroppedAllyFlag();
+        if (target != null) {
+            rc.setIndicatorString("PROTECT DROPPED FlAG IN VISION");
+            pf.moveTowards(target);
+        }
+        target = getClosestVisionFlag();
+        if(target != null){
+            rc.setIndicatorString("SEE FlAG IN VISION");
+            pf.moveTowards(target);
+        }
+
+        target = Explore.protectFlagHolder();
+        if (target != null) {
+            rc.setIndicatorString("PROTECT ALLY FlAG IN VISION");
+            pf.moveTowards(target);
+        }
+        target = getBestTarget();
+        if (target != null){
+            rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
+            pf.moveTowards(target);
+        }
         if (chickenBehavior && healMicro.doMicro()) return;
-        MapLocation target = getTarget();
+        target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
     }
 
     private static MapLocation getTarget() throws GameActionException{
-        MapLocation target = getClosestVisionFlag();
-        if (target != null) {
-            return target;
-        }
-        target = getClosestDroppedAllyFlag();
-        if(target != null){
-            return target;
-        }
-
-        target = Explore.protectFlagHolder();
-        if (target != null) {
-            rc.setIndicatorString("PROTECT FlAG IN VISION");
-            return target;
-        }
-        target = getBestTarget();
-        if (target != null){
-            rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
-            return target;
-        }
-
-        target = Explore.getFlagTarget();
+        MapLocation target = Explore.getFlagTarget();
         if (target !=  null){
             if (Explore.randomBroadCast == null || (Explore.randomBroadCast != null &&
                     me.distanceSquaredTo(target)
@@ -240,7 +241,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
                     isInitialLoc = true;
                 }
             }
-            if(!isInitialLoc && !flag.isPickedUp()){
+            if(!isInitialLoc){
                 if(me.distanceSquaredTo(flag.getLocation()) < dist){
                     closestDroppedAllyFlag = flag.getLocation();
                     dist = me.distanceSquaredTo(flag.getLocation());

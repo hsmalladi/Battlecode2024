@@ -1,17 +1,18 @@
 package microgod2;
 
-import battlecode.common.FlagInfo;
-import battlecode.common.GameActionException;
-import battlecode.common.MapInfo;
-import battlecode.common.MapLocation;
+import battlecode.common.*;
 
 public class BotSetupFlagDuck extends BotSetupDuck {
 
     public static final int
-                MOVE_FLAG = 10,
-                DEFEND_FLAG = 11;
+            MOVE_FLAG = 10,
+            DEFEND_FLAG = 11;
 
     private static FlagInfo[] flags = null;
+
+    private static Direction[] directions = new Direction[]{Direction.EAST, Direction.NORTHEAST, Direction.NORTH,
+            Direction.NORTHWEST, Direction.WEST, Direction.SOUTHWEST,
+            Direction.SOUTH, Direction.SOUTHEAST};
 
     public static void play() throws GameActionException {
         updateGlobals();
@@ -42,9 +43,6 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         return false;
     }
 
-
-
-
     public static void calculateOptimalFlagLocation() throws GameActionException {
         MapInfo[] mapInfos = rc.senseNearbyMapInfos(-1);
 
@@ -62,7 +60,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         exploreLocation = best;
     }
 
-    private static int getScore(MapInfo mapInfo, MapLocation[] flags) {
+    private static int getScore(MapInfo mapInfo, MapLocation[] flags) throws GameActionException {
         int score = 0;
         for (MapLocation flag : flags) {
             if (!flag.equals(rc.getLocation())) {
@@ -77,6 +75,12 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         for (MapLocation enemySpawn : Map.enemyFlagSpawnLocations) {
             score += (int) Math.sqrt(enemySpawn.distanceSquaredTo(mapInfo.getMapLocation()));
         }
+        if(rc.getLocation().distanceSquaredTo(mapInfo.getMapLocation()) < 11) {
+            if(numWalls(mapInfo) == 7) {
+//                System.out.println("SEVEN WALLS" + mapInfo.getMapLocation().toString());
+                score *= 2;
+            }
+        }
         return score;
     }
 
@@ -87,7 +91,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     private static void moveToLocation() throws GameActionException {
         if (rc.isMovementReady()) {
             if (!rc.getLocation().equals(exploreLocation)) {
-                OldPathFind.moveTowards(exploreLocation);
+                PathFind.moveTowards(exploreLocation);
             }
         }
     }
@@ -109,5 +113,32 @@ public class BotSetupFlagDuck extends BotSetupDuck {
                 rc.dropFlag(rc.getLocation());
             }
         }
+    }
+
+    private static int numWalls(MapInfo info) throws GameActionException {
+        int total = 0;
+        MapLocation targetSquare = info.getMapLocation();
+        for (Direction dir : directions) {
+            MapLocation adjacentSquare = targetSquare.add(dir);
+            if(rc.canSenseLocation(adjacentSquare)) {
+                MapInfo adjSquare = rc.senseMapInfo(adjacentSquare);
+                if(adjSquare.isWall()) {
+                    total++;
+                }
+            }
+        }
+        if(targetSquare.x == 0 || targetSquare.x == Map.mapHeight-1) {
+            if(targetSquare.y == 0 || targetSquare.y == Map.mapHeight-1) {
+                total += 5;
+            } else {
+                total += 3;
+            }
+        } else if(targetSquare.y == 0 || targetSquare.y == Map.mapHeight-1) {
+            total += 3;
+        }
+        if(total == 8) {
+            total = 0;
+        }
+        return total;
     }
 }

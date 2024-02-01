@@ -11,7 +11,9 @@ public class BotSetupFlagDuck extends BotSetupDuck {
 
     private static FlagInfo[] flags = null;
 
-    private static Direction[] checked = Direction.allDirections();
+    private static Direction[] directions = new Direction[]{Direction.EAST, Direction.NORTHEAST, Direction.NORTH,
+                                                            Direction.NORTHWEST, Direction.WEST, Direction.SOUTHWEST,
+                                                            Direction.SOUTH, Direction.SOUTHEAST};
 
     public static void play() throws GameActionException {
         updateGlobals();
@@ -74,9 +76,9 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         for (MapLocation enemySpawn : Map.enemyFlagSpawnLocations) {
             int distFromEnemySpawn = (int) Math.sqrt(enemySpawn.distanceSquaredTo(mapInfo.getMapLocation()));
             score += distFromEnemySpawn;
-            if(isBlockingWall(mapInfo, enemySpawn)) {
-                score += (int) distFromEnemySpawn / 3;
-            }
+        }
+        if(numWalls(mapInfo) == 7) {
+            score *= 2;
         }
         return score;
     }
@@ -112,14 +114,32 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         }
     }
 
-    private static Boolean isBlockingWall(MapInfo info, MapLocation enSpawn) throws GameActionException {
-
+    private static int numWalls(MapInfo info) throws GameActionException {
+        int total = 0;
         MapLocation targetSquare = info.getMapLocation();
-        MapLocation adjacentSquare = targetSquare.add(targetSquare.directionTo(enSpawn));
-        if(rc.canSenseLocation(adjacentSquare)) {
-            MapInfo adjSquare = rc.senseMapInfo(adjacentSquare);
-            return adjSquare.isWall();
+        for (Direction dir : directions) {
+            MapLocation adjacentSquare = targetSquare.add(dir);
+            if(rc.canSenseLocation(adjacentSquare)) {
+                MapInfo adjSquare = rc.senseMapInfo(adjacentSquare);
+                if(adjSquare.isWall()) {
+                    total++;
+                }
+            }
         }
-        return false;
+        if(targetSquare.x == 0 && targetSquare.y == 0) {
+            total += 5;
+        } else if(targetSquare.x == 0 && targetSquare.y == Map.mapHeight - 1) {
+            total += 5;
+        } else if(targetSquare.x == Map.mapWidth - 1 && targetSquare.y == 0) {
+            total += 5;
+        } else if(targetSquare.x == Map.mapWidth - 1 && targetSquare.y == Map.mapHeight - 1) {
+            total += 5;
+        } else if(targetSquare.x == Map.mapWidth-1 || targetSquare.x == 0 || targetSquare.y == Map.mapHeight-1 || targetSquare.y == 0) {
+            total += 3;
+        }
+        if(total == 8) {
+            total = 0;
+        }
+        return total;
     }
 }

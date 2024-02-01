@@ -356,10 +356,11 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     private static void tryHeal(boolean beforeTryMove) throws GameActionException {
         if(!rc.isActionReady()) return;
         if(beforeTryMove && enemies.length > 0) return;
-        RobotInfo[] enemyRobots = rc.senseNearbyRobots(12, rc.getTeam().opponent());
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
+        RobotInfo[] allies = rc.senseNearbyRobots(-1, rc.getTeam());
 
-        if (enemyRobots.length > 0) return;
+        if (dontHeal(enemies, allies)) return;
+
 
         HealingTarget bestTarget =  null;
         for (RobotInfo r : healTargets) {
@@ -371,6 +372,38 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         if(bestTarget != null && rc.canHeal(bestTarget.mloc)){
             rc.heal(bestTarget.mloc);
         }
+    }
+
+    private static boolean dontHeal(RobotInfo[] enemies, RobotInfo[] allies) throws GameActionException {
+        MapLocation me = rc.getLocation();
+        for (RobotInfo enemy : enemies) {
+            if (enemy.getLocation().isWithinDistanceSquared(me, GameConstants.ATTACK_RADIUS_SQUARED)) {
+                return true;
+            }
+            else {
+                boolean allyInFront = false;
+                Direction dir = me.directionTo(enemy.getLocation());
+                if (rc.canSenseLocation(me.add(dir)) &&  rc.canSenseLocation(me.add(dir).add(dir))) {
+                    if (rc.senseMapInfo(me.add(dir)).isWall() || rc.senseMapInfo(me.add(dir).add(dir)).isWall()) {
+                        allyInFront = true;
+                    }
+                    else {
+                        for (RobotInfo ally : allies) {
+                            if (ally.getLocation().equals(me.add(dir)) || ally.getLocation().equals(me.add(dir).add(dir))){
+                                allyInFront = true;
+                                break;
+                            }
+
+                        }
+                    }
+                }
+                if (!allyInFront) {
+                    return true;
+                }
+            }
+
+        }
+        return false;
     }
     public static void checkChickenBehavior(){
         if (!chickenBehavior && rc.getHealth() <= 400) chickenBehavior = true;

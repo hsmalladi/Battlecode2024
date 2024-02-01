@@ -17,9 +17,9 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             }
             MapRecorder.recordSym(500);
 
-            if (builderDuck != 0){
+            if (builderDuck != 0 && rc.getLevel(SkillType.BUILD ) < 6){
                 if (turnCount == 2 || reachedTarget){
-                    exploreLocation = Map.getRandomLocation(rng);
+                    exploreLocation = Map.allySpawnLocations[rng.nextInt(Map.allySpawnLocations.length)];
                     reachedTarget = false;
                 }
                 if (rc.getCrumbs() > 2000) {

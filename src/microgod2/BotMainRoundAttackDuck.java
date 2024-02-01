@@ -262,14 +262,18 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         if (enemies.length == 0) return;
         Direction dir = me.directionTo(closestEnemy(enemies));
         if (rc.getLevel(SkillType.BUILD) > 3) {
-            rc.setIndicatorString("BUILDING TRAPS");
-            buildExplosiveTrap(me, dir, dir, cd);
-            buildExplosiveTrap(me, dir.rotateLeft(), dir, cd);
-            buildExplosiveTrap(me, dir.rotateRight(), dir, cd);
+            if (enemies.length >= 5) {
+                rc.setIndicatorString("BUILDING TRAPS");
+                buildExplosiveTrap(me, dir, dir, cd);
+                buildExplosiveTrap(me, dir.rotateLeft(), dir, cd);
+                buildExplosiveTrap(me, dir.rotateRight(), dir, cd);
+            }
         }
-        buildStunTrap(me, dir, dir, cd);
-        buildStunTrap(me, dir.rotateLeft(), dir, cd);
-        buildStunTrap(me, dir.rotateRight(), dir, cd);
+        if (enemies.length >= 3) {
+            buildStunTrap(me, dir, dir, cd);
+            buildStunTrap(me, dir.rotateLeft(), dir, cd);
+            buildStunTrap(me, dir.rotateRight(), dir, cd);
+        }
         tryWaterTrap(cd);
     }
 

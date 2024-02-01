@@ -257,7 +257,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     public static void tryTrap(int cd) throws GameActionException {
 
         if (!rc.isActionReady()) return;
-        if (rc.getCrumbs() < 100) return;
+        if (rc.getCrumbs() < 160) return;
         if (trapTooMuchCD(cd)) return;
         if (enemies.length == 0) return;
         Direction dir = me.directionTo(closestEnemy(enemies));

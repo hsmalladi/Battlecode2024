@@ -5,9 +5,12 @@ import battlecode.common.MapLocation;
 import battlecode.common.RobotController;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 
 public class Globals {
+
+    static LinkedList<MapLocation> prevLocs;
 
     static int id;
      //0 for not a flag duck, 1-3 to represent the flags.
@@ -17,6 +20,7 @@ public class Globals {
     static boolean reachedTarget = false;
     static boolean amHoldingFlag = false;
     static boolean escaping = false;
+    static boolean firstBackUp = false;
     public static RobotController rc;
     public static MapLocation[] broadcastLocs;
 
@@ -50,6 +54,7 @@ public class Globals {
         healMicro = new HealMicro();
         flagMicro = new MicroFlag();
         indicator = "";
+        prevLocs = new LinkedList<>();
     }
 
     public static void updateGlobals() {

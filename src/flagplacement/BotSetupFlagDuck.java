@@ -76,9 +76,9 @@ public class BotSetupFlagDuck extends BotSetupDuck {
         for (MapLocation enemySpawn : Map.enemyFlagSpawnLocations) {
             score += (int) Math.sqrt(enemySpawn.distanceSquaredTo(mapInfo.getMapLocation()));
         }
-        if(rc.getLocation().distanceSquaredTo(mapInfo.getMapLocation()) < 10) {
+        if(rc.getLocation().distanceSquaredTo(mapInfo.getMapLocation()) < 11) {
             if(numWalls(mapInfo) == 7) {
-                System.out.println("SEVEN WALLS");
+//                System.out.println("SEVEN WALLS" + mapInfo.getMapLocation().toString());
                 score *= 2;
             }
         }

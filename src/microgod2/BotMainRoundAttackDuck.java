@@ -363,7 +363,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         RobotInfo[] healTargets = rc.senseNearbyRobots(GameConstants.HEAL_RADIUS_SQUARED, rc.getTeam());
 
         if (enemies.length > 0) {
-            if (rc.getLevel(SkillType.ATTACK) >= 4) {
+            if (rc.getLevel(SkillType.ATTACK) > rc.getLevel(SkillType.HEAL)) {
                 return;
             }
             if (rc.getLevel(SkillType.HEAL) < 4 || rc.getLevel(SkillType.BUILD) < 4) {

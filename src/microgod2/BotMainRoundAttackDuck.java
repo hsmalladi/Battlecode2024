@@ -110,34 +110,31 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryMove() throws GameActionException {
         if (!rc.isMovementReady()) return;
-        MapLocation closestEnemyFlag = getClosestVisionFlag();
-        if (closestEnemyFlag != null) {
-            pf.moveTowards(closestEnemyFlag);
-            return;
-        }
-        MapLocation closestAllyDroppedFlag = getClosestDroppedAllyFlag();
-        if(closestAllyDroppedFlag != null){
-            pf.moveTowards(closestAllyDroppedFlag);
-            return;
-        }
 
-        MapLocation target = Explore.protectFlagHolder();
-        if (target != null) {
-            rc.setIndicatorString("PROTECT FlAG IN VISION");
-            pf.moveTowards(target);
-            return;
-        }
 
         if (micro.doMicro()) return;
         if (chickenBehavior && healMicro.doMicro()) return;
-        target = getTarget();
+        MapLocation target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);
     }
 
     private static MapLocation getTarget() throws GameActionException{
+        MapLocation target = getClosestVisionFlag();
+        if (target != null) {
+            return target;
+        }
+        target = getClosestDroppedAllyFlag();
+        if(target != null){
+            return target;
+        }
 
-        MapLocation target = getBestTarget();
+        target = Explore.protectFlagHolder();
+        if (target != null) {
+            rc.setIndicatorString("PROTECT FlAG IN VISION");
+            return target;
+        }
+        target = getBestTarget();
         if (target != null){
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             return target;

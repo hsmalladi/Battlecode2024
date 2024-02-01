@@ -18,6 +18,7 @@ public class HealMicro extends Globals {
         for(RobotInfo unit : units){
             if (unit.getHealth() < DEFAULT_HEALTH){
                 hurtAlliesNearby = true;
+                break;
             }
         }
         if(!hurtAlliesNearby) return false;

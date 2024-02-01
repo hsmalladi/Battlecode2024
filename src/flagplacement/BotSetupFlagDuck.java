@@ -1,18 +1,19 @@
-package microgod2;
+package flagplacement;
 
 import battlecode.common.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class BotSetupFlagDuck extends BotSetupDuck {
 
     public static final int
-            MOVE_FLAG = 10,
-            DEFEND_FLAG = 11;
+                MOVE_FLAG = 10,
+                DEFEND_FLAG = 11;
 
     private static FlagInfo[] flags = null;
 
     private static Direction[] directions = new Direction[]{Direction.EAST, Direction.NORTHEAST, Direction.NORTH,
-            Direction.NORTHWEST, Direction.WEST, Direction.SOUTHWEST,
-            Direction.SOUTH, Direction.SOUTHEAST};
+                                                            Direction.NORTHWEST, Direction.WEST, Direction.SOUTHWEST,
+                                                            Direction.SOUTH, Direction.SOUTHEAST};
 
     public static void play() throws GameActionException {
         updateGlobals();
@@ -91,7 +92,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     private static void moveToLocation() throws GameActionException {
         if (rc.isMovementReady()) {
             if (!rc.getLocation().equals(exploreLocation)) {
-                pf.moveTowards(exploreLocation);
+                PathFind.moveTowards(exploreLocation);
             }
         }
     }

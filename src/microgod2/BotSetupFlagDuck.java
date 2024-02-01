@@ -91,7 +91,7 @@ public class BotSetupFlagDuck extends BotSetupDuck {
     private static void moveToLocation() throws GameActionException {
         if (rc.isMovementReady()) {
             if (!rc.getLocation().equals(exploreLocation)) {
-                PathFind.moveTowards(exploreLocation);
+                pf.moveTowards(exploreLocation);
             }
         }
     }

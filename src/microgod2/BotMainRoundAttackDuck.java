@@ -29,7 +29,7 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
             tryMove();
             updateVars();
             act(false);
-            //tryTrap(20);
+            tryTrap(20);
         }
         updateStunTraps();
     }
@@ -42,8 +42,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
     }
 
     private static void act(boolean before) throws GameActionException {
-        //if (rc.getLevel(SkillType.ATTACK)!=6 || rc.getActionCooldownTurns() > 0)
-            //tryTrap(10);
+        if (rc.getLevel(SkillType.ATTACK)!=6 || rc.getActionCooldownTurns() > 0)
+            tryTrap(10);
         tryAttack();
         tryAttack();
         tryHeal(before);
@@ -366,8 +366,8 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         }
     }
     public static void checkChickenBehavior(){
-        if (!chickenBehavior && rc.getHealth() <= 700) chickenBehavior = true;
-        if (chickenBehavior && rc.getHealth() >= 950) chickenBehavior = false;
+        if (!chickenBehavior && rc.getHealth() <= 400) chickenBehavior = true;
+        if (chickenBehavior && rc.getHealth() >= 800) chickenBehavior = false;
     }
 
 

@@ -110,31 +110,33 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
 
     private static void tryMove() throws GameActionException {
         if (!rc.isMovementReady()) return;
-
-
         if (micro.doMicro()) return;
+        if (chickenBehavior && healMicro.doMicro()) return;
         MapLocation target = getClosestDroppedAllyFlag();
         if (target != null) {
             rc.setIndicatorString("PROTECT DROPPED FlAG IN VISION");
             pf.moveTowards(target);
+            return;
         }
         target = getClosestVisionFlag();
         if(target != null){
             rc.setIndicatorString("SEE FlAG IN VISION");
             pf.moveTowards(target);
+            return;
         }
 
         target = Explore.protectFlagHolder();
         if (target != null) {
             rc.setIndicatorString("PROTECT ALLY FlAG IN VISION");
             pf.moveTowards(target);
+            return;
         }
         target = getBestTarget();
         if (target != null){
             rc.setIndicatorString("FOUND A GOOD TARGET IN VISION");
             pf.moveTowards(target);
+            return;
         }
-        if (chickenBehavior && healMicro.doMicro()) return;
         target = getTarget();
         rc.setIndicatorLine(rc.getLocation(), target, 255,0,0);
         pf.moveTowards(target);

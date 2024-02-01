@@ -35,13 +35,13 @@ public class BotSetupExploreDuck extends BotSetupDuck {
                     if (!isNextToDam()) {
                         pf.moveTowards(Map.center);
                     }
+                    if (isNextToDam() && rc.getCrumbs() > 680 && turnCount > 195) {
+                        buildTrapsAtDam();
+                    }
                     BotMainRoundAttackDuck.tryAttack();
                 }
                 else {
                     lineUpAtDam();
-                    if (isNextToDam() && rc.getCrumbs() > 680) {
-                        buildTrapsAtDam();
-                    }
                 }
             }
         }
@@ -176,7 +176,7 @@ public class BotSetupExploreDuck extends BotSetupDuck {
     }
 
     private static void buildTrapsAtDam() throws GameActionException {
-        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(-1, rc.getTeam().opponent());
+        RobotInfo[] oppRobotInfos = rc.senseNearbyRobots(4, rc.getTeam().opponent());
         if (oppRobotInfos.length > 0) {
             if (rc.canBuild(TrapType.STUN, rc.getLocation())) {
                 boolean build = true;

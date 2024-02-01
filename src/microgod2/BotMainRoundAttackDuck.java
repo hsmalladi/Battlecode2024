@@ -423,7 +423,4 @@ public class BotMainRoundAttackDuck extends BotMainRoundDuck {
         if (!chickenBehavior && rc.getHealth() <= 400) chickenBehavior = true;
         if (chickenBehavior && rc.getHealth() >= 800) chickenBehavior = false;
     }
-
-
-
 }

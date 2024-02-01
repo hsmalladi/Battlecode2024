@@ -15,8 +15,8 @@ public class AttackTarget extends Globals {
 
     boolean isBetterThan(AttackTarget t){
         if (t == null) return true;
-        if (flagHolder && !t.flagHolder) return true;
-        if (!flagHolder && t.flagHolder) return false;
+        if (flagHolder && !t.flagHolder) return false;
+        if (!flagHolder && t.flagHolder) return true;
         if (health <= t.health) return true;
         if (numAllies > t.numAllies) return true;
         if (maxLvl > t.maxLvl) return true;

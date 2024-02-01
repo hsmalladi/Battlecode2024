@@ -389,9 +389,7 @@ public class PathFind extends Globals {
     }
 
     static boolean canDigMod2(MapLocation location) throws GameActionException {
-        if (turnCount > 250) {
-            return true;
-        }
+
         if ((location.x + location.y) % 2 == 1) {
             return true;
         }

@@ -33,9 +33,10 @@ public class BotSetupExploreDuck extends BotSetupDuck {
             else {
                 if (turnCount > 180) {
                     if (!isNextToDam()) {
+                        micro.doMicro();
                         pf.moveTowards(Map.center);
                     }
-                    if (isNextToDam() && rc.getCrumbs() > 680 && turnCount > 195) {
+                    if (rc.getCrumbs() > 680 && turnCount > 195) {
                         buildTrapsAtDam();
                     }
                     BotMainRoundAttackDuck.tryAttack();
